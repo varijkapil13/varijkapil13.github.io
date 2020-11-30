@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d36fd513-c125-4b0d-968f-eeed374f0efb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/CNAME" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_config.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +59,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1606693178573</updated>
-      <workItem from="1606693179845" duration="6680000" />
+      <workItem from="1606693179845" duration="7143000" />
     </task>
     <task id="LOCAL-00001" summary="feat: added content for website">
       <created>1606699462271</created>
@@ -74,7 +75,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606699496855</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="chore: added CNAME">
+      <created>1606700366950</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1606700366950</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -83,7 +91,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat: added content for website" />
     <MESSAGE value="chore: intelliJ files" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: intelliJ files" />
+    <MESSAGE value="chore: added CNAME" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: added CNAME" />
   </component>
   <component name="WindowStateProjectService">
     <state x="1287" y="-743" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1606700226164">
@@ -91,9 +100,10 @@
     </state>
     <state x="1287" y="-743" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1280.800/-1284.-1080.1920.1080/636.-1080.1920.1080/1280.0.1116.820@636.-1080.1920.1080" timestamp="1606700226164" />
     <state x="1287" y="-743" key="#com.intellij.fileTypes.FileTypeChooser/0.25.1280.775/-1284.-1055.1920.1055/636.-1080.1920.1080/1280.25.1116.795@636.-1080.1920.1080" timestamp="1606696005531" />
-    <state x="1096" y="-1037" key="CommitChangelistDialog2" timestamp="1606699495961">
+    <state x="1096" y="-1037" key="CommitChangelistDialog2" timestamp="1606700365305">
       <screen x="636" y="-1080" width="1920" height="1080" />
     </state>
+    <state x="1096" y="-1037" key="CommitChangelistDialog2/0.0.1280.800/-1284.-1080.1920.1080/636.-1080.1920.1080/1280.0.1116.820@636.-1080.1920.1080" timestamp="1606700365305" />
     <state x="1096" y="-1037" key="CommitChangelistDialog2/0.25.1280.775/-1284.-1055.1920.984/636.-1080.1920.1080/1280.25.1116.795@636.-1080.1920.1080" timestamp="1606699495961" />
     <state width="1878" height="300" key="GridCell.Tab.0.bottom" timestamp="1606693982561">
       <screen x="636" y="-1080" width="1920" height="1080" />
@@ -111,9 +121,10 @@
       <screen x="636" y="-1080" width="1920" height="1080" />
     </state>
     <state width="1878" height="300" key="GridCell.Tab.0.right/0.25.1280.775/-1284.-1055.1920.1055/636.-1080.1920.1080/1280.25.1116.795@636.-1080.1920.1080" timestamp="1606693982554" />
-    <state x="1196" y="-807" key="Vcs.Push.Dialog.v2" timestamp="1606699498793">
+    <state x="1196" y="-807" key="Vcs.Push.Dialog.v2" timestamp="1606700368572">
       <screen x="636" y="-1080" width="1920" height="1080" />
     </state>
+    <state x="1196" y="-807" key="Vcs.Push.Dialog.v2/0.0.1280.800/-1284.-1080.1920.1080/636.-1080.1920.1080/1280.0.1116.820@636.-1080.1920.1080" timestamp="1606700368572" />
     <state x="1196" y="-807" key="Vcs.Push.Dialog.v2/0.25.1280.775/-1284.-1055.1920.984/636.-1080.1920.1080/1280.25.1116.795@636.-1080.1920.1080" timestamp="1606699498793" />
     <state x="1296" y="-932" width="728" height="783" key="find.popup" timestamp="1606699366056">
       <screen x="636" y="-1080" width="1920" height="1080" />
