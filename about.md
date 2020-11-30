@@ -2,73 +2,106 @@
 layout: article
 titles:
   # @start locale config
-  en      : &EN       About
+  en      : &EN       About Me
   en-GB   : *EN
   en-US   : *EN
   en-CA   : *EN
   en-AU   : *EN
-  zh-Hans : &ZH_HANS  关于
-  zh      : *ZH_HANS
-  zh-CN   : *ZH_HANS
-  zh-SG   : *ZH_HANS
-  zh-Hant : &ZH_HANT  關於
-  zh-TW   : *ZH_HANT
-  zh-HK   : *ZH_HANT
-  ko      : &KO       소개
-  ko-KR   : *KO
-  fr      : &FR       À propos
-  fr-BE   : *FR
-  fr-CA   : *FR
-  fr-CH   : *FR
-  fr-FR   : *FR
-  fr-LU   : *FR
   # @end locale config
+
 key: page-about
+show_excerpt: true
+show_readmore: true
+show_info: true
 ---
 
-![TeXt Theme](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/TeXt-home.jpg)
+Hi I am Varij. I am currently employed as Software Developer at IT Manufactory GmbH in a beautiful city of Passau, Germany.
 
-TeXt is a super customizable Jekyll theme for personal site, team site, blog, project, documentation, etc. Similar to iOS 11 style, it has large and prominent titles, round buttons and cards.
+I like programming and building new stuff and trying out new technologies. When I am not programming, I like to cycle and play Badminton, Cricket etc.
 
-```javascript
-(() => console.log('Hello, World!'))();
-```
+Recently I have started this new blog where I am planning to write about things I care about, and solutions to some common problems. This is not a typical Blog for tutorials or solutions to other problems, I write here about problems that I face, things that I have tried, or things that I want to remember.
 
-## Features
+A little more about me and a very basic resume:
 
-- Responsive
-- Semantic HTML
-- Skins
-- Highlight Theme
-- Internationalization
-- Search
-- Table of contents
-- Authors
-- Additional styles (alert, tag, image, icon, button, grid, etc)
-- Extensions (audios, videos, slides, demos)
-- Markdown enhancements ([MathJax](https://www.mathjax.org/), [mermaid](https://mermaidjs.github.io/), [chartjs](http://www.chartjs.org/))
-- Sharing ([AddToAny](https://www.addtoany.com/), [AddThis](https://www.addthis.com/))
-- Comments ([Disqus](https://disqus.com/), [Gitalk](https://gitalk.github.io/), [Valine](https://valine.js.org/en/))
-- Pageview ([LeanCloud](https://leancloud.cn/))
-- Analytics ([Google Analytics](https://analytics.google.com/analytics/web/))
-- RSS ([jekyll-feed](https://github.com/jekyll/jekyll-feed))
 
-## Skins
+## Technical
 
-TeXt has 6 built-in skins, you can also set up your own skin.
+Here is a small info of my technical competence and knowledge.
 
-| `default` | `dark` | `forest` |
-| --- |  --- | --- |
-| ![Default](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/skins_default.jpg) | ![Dark](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/skins_dark.jpg) | ![Forest](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/skins_forest.jpg) |
+> I do not believe that one can show her/his competence/knowledge in a certain area in percentage, here is legend of the data you will see below
+> &nbsp;
 
-| `ocean` | `chocolate` | `orange` |
-| --- |  --- | --- |
-| ![Ocean](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/skins_ocean.jpg) | ![Chocolate](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/skins_chocolate.jpg) | ![Orange](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/skins_orange.jpg) |
 
-### Highlight Theme
+> Legend:
+> &nbsp;
+> **Things in bold are the ones that I use almost daily or the most comfortable with**
+> &nbsp;
+> _Things in italics are the ones that I like using in my free time_
+> &nbsp;
+> All others are things that I know or have used but need some time getting used to again
 
-TeXt use [Tomorrow](https://github.com/chriskempson/tomorrow-theme) as the highlight theme.
+### Programming Languages
+- **Java**
+- **JavaScript**
+- _Python_
+- _Swift_
+- Objective-C
 
-| `tomorrow` | `tomorrow-night` | `tomorrow-night-eighties` | `tomorrow-night-blue` | `tomorrow-night-bright` |
-| --- |  --- | --- | --- |  --- |
-| ![Tomorrow](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/highlight_tomorrow.png) | ![Tomorrow Night](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/highlight_tomorrow-night.png) | ![Tomorrow Night Eighties](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/highlight_tomorrow-night-eighties.png) | ![Tomorrow Night Blue](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/highlight_tomorrow-night-blue.png) | ![Tomorrow Night Bright](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/highlight_tomorrow-night-bright.png) |
+### Frameworks
+- **React**
+- **JavaEE/JakartaEE**
+- **JAX-RS**
+- _Angular_
+- _Cocoa Touch_
+- _Cocoa_
+
+### Databases
+- **PostgreSQL**
+- MongoDB
+- Oracle
+
+
+## Employment
+
+### IT Manufactory GmbH, Nov. 2017 -- present, Passau, Germany
+
+Software Developer, Involved and responsible for development and improvement of Digital Automotive.
+
+**Key points**
+
+- Implemented OAuth and OpenID Connect for Digital Automotive
+- Responsible for development of task and todo management module for Digital Automotive, "Task Manager" in a team of 4.
+- Developed Reporting modules for Strategy, Acquisition, Business and Claim Management for Digital Automotive.
+- Co-ordinated database migration from Oracle to PostgreSQL.
+- Co-ordinated JavaEE server migration from Glassfish to Payara.
+- Built Continuous Integration, Delivery and Development workflows with Gitlab.
+
+### NetSet Software Solutions Pvt Ltd, Aug. 2014 -- Jul. 2015, Mohali, India.
+
+iOS Application Developer, Involved and responsible for development of various iOS application for variety of customers.
+
+**Key points**
+
+- Developed 2 corporate applications for in-house deployment.
+- Developed 2 social media application.
+- Developed 1 dating application.
+
+> Due to the nature of the company, I am not at the liberty to publish the names of those applications.
+
+### RF Silicon Pvt Ltd, Dec. 2013 -- May. 2014, New Delhi/Noida, India.
+
+Intern, Involved in development and testing of a Bluetooth Low Energy(BLE) stacks and Application Development.
+
+**Key points**
+- Developed BLE Stack for Health Thermometer and Proximity Sensor.
+- Developed an iOS Application for the above stacks
+- Developed an Android Application for the above stacks
+
+## Education
+
+### Msc. Informatik, University of Passau, Sep. 2015 -- Oct. 2017, Passau, Germany.
+- **Master Thesis:** _Towards an Assembly Line for the Construction of Complex Machine Learning Algorithms_
+
+### B.Tech Computer Science, IET Bhaddal (Punjab Technical University), Aug. 2010 -- May. 2014, Ropar, India.
+- _Bachelor Internship at RF Silicon Pvt Ltd_
+

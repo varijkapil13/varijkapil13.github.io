@@ -22,10 +22,11 @@ default:
       align: left
       theme: light
     articles:
+      type: item
       show_cover: true
-      show_excerpt: false
-      show_readmore: false
-      show_info: false
+      show_excerpt: true
+      show_readmore: true
+      show_info: true
     show_title: true
     show_edit_on_github: false
     show_date: true
@@ -34,7 +35,7 @@ default:
     show_subscribe: false
     full_width: false
     sharing: false
-    comment: true
+    comment: false
     license: false
     pageview: false
     search: default
