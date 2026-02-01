@@ -1,11 +1,11 @@
 ---
-title: "Building a Robust CI/CD Pipeline with GitLab for Java and React"
-description: "How we built continuous integration and deployment workflows for a full-stack application using GitLab CI/CD."
+title: "Building a Robust CI/CD Pipeline with GitLab for Java Applications"
+description: "How we built continuous integration and deployment workflows for enterprise Java applications using GitLab CI/CD."
 date: 2024-07-10
-tags: ["devops", "gitlab", "cicd", "java", "react"]
+tags: ["devops", "gitlab", "cicd", "java", "enterprise"]
 ---
 
-A well-designed CI/CD pipeline can dramatically improve your team's productivity and code quality. I'll share how we built our GitLab CI/CD pipeline for a full-stack application with a Jakarta EE backend and React frontend.
+A well-designed CI/CD pipeline can dramatically improve your team's productivity and code quality. I'll share how we built our GitLab CI/CD pipeline for enterprise Java applications with Jakarta EE.
 
 ## Pipeline Overview
 
@@ -29,12 +29,11 @@ Here's our `.gitlab-ci.yml` configuration:
 ```yaml
 variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
-  NODE_VERSION: "20"
+  JAVA_VERSION: "21"
 
 cache:
   paths:
     - .m2/repository/
-    - frontend/node_modules/
 
 # ============== BUILD STAGE ==============
 
@@ -42,28 +41,24 @@ build-backend:
   stage: build
   image: maven:3.9-eclipse-temurin-21
   script:
-    - cd backend
     - mvn clean compile -DskipTests
   artifacts:
     paths:
-      - backend/target/
-    expire_in: 1 hour
-
-build-frontend:
-  stage: build
-  image: node:20-alpine
-  script:
-    - cd frontend
-    - npm ci
-    - npm run build
-  artifacts:
-    paths:
-      - frontend/dist/
+      - target/
     expire_in: 1 hour
 
 # ============== TEST STAGE ==============
 
-test-backend:
+unit-tests:
+  stage: test
+  image: maven:3.9-eclipse-temurin-21
+  script:
+    - mvn test -Dtest=*UnitTest
+  artifacts:
+    reports:
+      junit: target/surefire-reports/*.xml
+
+integration-tests:
   stage: test
   image: maven:3.9-eclipse-temurin-21
   services:
@@ -75,29 +70,13 @@ test-backend:
     POSTGRES_PASSWORD: test
     DATABASE_URL: "jdbc:postgresql://postgres:5432/testdb"
   script:
-    - cd backend
-    - mvn test
+    - mvn test -Dtest=*IntegrationTest
   artifacts:
     reports:
-      junit: backend/target/surefire-reports/*.xml
+      junit: target/surefire-reports/*.xml
     paths:
-      - backend/target/jacoco.exec
+      - target/jacoco.exec
   coverage: '/Total.*?([0-9]{1,3})%/'
-
-test-frontend:
-  stage: test
-  image: node:20-alpine
-  script:
-    - cd frontend
-    - npm ci
-    - npm run test:ci
-  artifacts:
-    reports:
-      junit: frontend/junit.xml
-      coverage_report:
-        coverage_format: cobertura
-        path: frontend/coverage/cobertura-coverage.xml
-  coverage: '/Lines\s*:\s*(\d+\.?\d*)%/'
 
 # ============== QUALITY STAGE ==============
 
@@ -111,7 +90,6 @@ sonarqube:
     paths:
       - .sonar/cache
   script:
-    - cd backend
     - mvn sonar:sonar
         -Dsonar.projectKey=$CI_PROJECT_NAME
         -Dsonar.host.url=$SONAR_HOST_URL
@@ -120,26 +98,27 @@ sonarqube:
     - main
     - develop
 
-lint-frontend:
+dependency-check:
   stage: quality
-  image: node:20-alpine
+  image: maven:3.9-eclipse-temurin-21
   script:
-    - cd frontend
-    - npm ci
-    - npm run lint
-    - npm run type-check
+    - mvn org.owasp:dependency-check-maven:check
+  artifacts:
+    paths:
+      - target/dependency-check-report.html
+    expire_in: 1 week
+  allow_failure: true
 
 # ============== PACKAGE STAGE ==============
 
-package-backend:
+package-war:
   stage: package
   image: maven:3.9-eclipse-temurin-21
   script:
-    - cd backend
     - mvn package -DskipTests
   artifacts:
     paths:
-      - backend/target/*.war
+      - target/*.war
     expire_in: 1 week
   only:
     - main
@@ -204,15 +183,23 @@ deploy-production:
 
 ## Key Pipeline Features
 
-### 1. Parallel Execution
+### 1. Separate Unit and Integration Tests
 
-Frontend and backend builds run in parallel, significantly reducing pipeline time:
+We split tests for faster feedback:
 
+```yaml
+unit-tests:
+  script:
+    - mvn test -Dtest=*UnitTest
+
+integration-tests:
+  services:
+    - postgres:16-alpine
+  script:
+    - mvn test -Dtest=*IntegrationTest
 ```
-build-backend ─┬─ test-backend ─┬─ package-backend
-               │                │
-build-frontend ─┴─ test-frontend ─┴─ build-docker
-```
+
+Unit tests run quickly without external dependencies, while integration tests get their own database container.
 
 ### 2. Database Testing with Services
 
@@ -229,16 +216,28 @@ variables:
 
 ### 3. Caching for Speed
 
-Proper caching dramatically improves build times:
+Maven dependency caching dramatically improves build times:
 
 ```yaml
 cache:
   paths:
-    - .m2/repository/    # Maven dependencies
-    - frontend/node_modules/  # npm packages
+    - .m2/repository/
 ```
 
-### 4. Environment-Specific Deployments
+With caching, subsequent builds skip downloading dependencies entirely.
+
+### 4. OWASP Dependency Check
+
+Security scanning for vulnerable dependencies:
+
+```yaml
+dependency-check:
+  script:
+    - mvn org.owasp:dependency-check-maven:check
+  allow_failure: true  # Don't block pipeline, but report
+```
+
+### 5. Environment-Specific Deployments
 
 We use GitLab environments for deployment tracking:
 
@@ -253,6 +252,26 @@ This gives us:
 - Easy rollbacks
 - Environment-specific variables
 
+## Dockerfile for Java Applications
+
+Our Dockerfile for Payara deployment:
+
+```dockerfile
+FROM payara/server-full:6.2024.1-jdk21
+
+# Copy post-boot commands for configuration
+COPY post-boot-commands.asadmin ${POSTBOOT_COMMANDS}
+
+# Deploy application
+COPY target/*.war ${DEPLOY_DIR}/
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
+
+EXPOSE 8080 4848
+```
+
 ## Merge Request Pipelines
 
 For merge requests, we run a lighter pipeline:
@@ -266,7 +285,6 @@ test-mr:
   extends: .mr-rules
   stage: test
   script:
-    - npm test
     - mvn test
 ```
 
@@ -287,18 +305,35 @@ dependency_scanning:
   stage: quality
 ```
 
+## Multi-Module Maven Projects
+
+For complex multi-module projects:
+
+```yaml
+build:
+  script:
+    - mvn clean install -DskipTests -T 1C  # Parallel build
+
+test:
+  parallel:
+    matrix:
+      - MODULE: [module-api, module-service, module-persistence]
+  script:
+    - mvn test -pl $MODULE -am
+```
+
 ## Monitoring Pipeline Performance
 
 We track pipeline metrics:
 
-- **Average pipeline duration**: ~12 minutes
+- **Average pipeline duration**: ~8 minutes
 - **Build success rate**: 94%
-- **Time to first feedback**: 3 minutes (lint + compile)
+- **Time to first feedback**: 2 minutes (compile + unit tests)
 
 ## Tips for Optimization
 
 1. **Use `needs` keyword** for dependency-based execution instead of stage-based
-2. **Parallelize test suites** using test splitting
+2. **Parallelize test suites** using Maven Surefire's parallel execution
 3. **Use shallow clones** for faster checkout: `GIT_DEPTH: 10`
 4. **Cache aggressively** but invalidate when needed
 
@@ -312,14 +347,30 @@ build:
       - .m2/repository/
 ```
 
+## Database Migration in CI/CD
+
+For Flyway migrations:
+
+```yaml
+migrate-database:
+  stage: deploy
+  image: flyway/flyway:10
+  script:
+    - flyway -url=$DATABASE_URL -user=$DB_USER -password=$DB_PASSWORD migrate
+  only:
+    - main
+  when: manual
+```
+
 ## Conclusion
 
 A well-designed CI/CD pipeline pays dividends in developer productivity and code quality. The initial investment in setting it up properly is worth it.
 
 Key takeaways:
-- Run jobs in parallel where possible
-- Fail fast with quick feedback loops
-- Use caching strategically
+- Separate unit and integration tests for fast feedback
+- Use database containers for realistic testing
+- Implement security scanning early
+- Cache dependencies aggressively
 - Automate everything, including deployments
 - Monitor and continuously improve
 
