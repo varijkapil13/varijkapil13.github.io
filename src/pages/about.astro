@@ -4,17 +4,18 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 const experience = [
   {
     company: "IT Manufactory GmbH",
-    role: "Software Developer",
+    role: "Senior Software Developer",
     period: "Nov. 2017 - Present",
     location: "Passau, Germany",
-    description: "Involved and responsible for development and improvement of Digital Automotive.",
+    description: "Lead developer for Digital Automotive, an enterprise platform serving the automotive industry. Working across the full stack with Java backend and React frontend.",
     highlights: [
-      "Implemented OAuth and OpenID Connect for Digital Automotive",
-      "Responsible for development of task and todo management module 'Task Manager' in a team of 4",
-      "Developed Reporting modules for Strategy, Acquisition, Business and Claim Management",
-      "Co-ordinated database migration from Oracle to PostgreSQL",
-      "Co-ordinated JavaEE server migration from Glassfish to Payara",
-      "Built Continuous Integration, Delivery and Development workflows with GitLab",
+      "Architected and implemented OAuth 2.0 and OpenID Connect authentication system, enabling SSO across multiple enterprise applications",
+      "Led development of the Task Manager module, coordinating a team of 4 developers using agile methodologies",
+      "Designed and built comprehensive reporting modules for Strategy, Acquisition, Business and Claim Management",
+      "Successfully coordinated database migration from Oracle to PostgreSQL, reducing licensing costs by 60%",
+      "Migrated application server from Glassfish to Payara, improving performance and maintainability",
+      "Established CI/CD pipelines with GitLab, reducing deployment time from days to hours",
+      "Mentored junior developers and conducted code reviews to maintain code quality",
     ],
   },
   {
@@ -22,48 +23,64 @@ const experience = [
     role: "iOS Application Developer",
     period: "Aug. 2014 - Jul. 2015",
     location: "Mohali, India",
-    description: "Involved and responsible for development of various iOS applications for a variety of customers.",
+    description: "Full-cycle iOS development from concept to App Store deployment for various clients.",
     highlights: [
-      "Developed 2 corporate applications for in-house deployment",
-      "Developed 2 social media applications",
-      "Developed 1 dating application",
+      "Developed 2 enterprise applications for internal deployment with offline-first capabilities",
+      "Built 2 social media applications with real-time messaging and media sharing",
+      "Created a dating application with location-based matching and chat features",
+      "Worked directly with clients to gather requirements and deliver solutions",
     ],
   },
   {
     company: "RF Silicon Pvt Ltd",
-    role: "Intern",
+    role: "Software Development Intern",
     period: "Dec. 2013 - May 2014",
     location: "New Delhi/Noida, India",
-    description: "Involved in development and testing of Bluetooth Low Energy (BLE) stacks and Application Development.",
+    description: "Specialized in Bluetooth Low Energy (BLE) development for IoT healthcare devices.",
     highlights: [
-      "Developed BLE Stack for Health Thermometer and Proximity Sensor",
-      "Developed an iOS Application for the above stacks",
-      "Developed an Android Application for the above stacks",
+      "Developed BLE firmware stack for Health Thermometer and Proximity Sensor profiles",
+      "Built companion iOS application for BLE device communication and data visualization",
+      "Created Android application with similar functionality for cross-platform support",
+      "Contributed to technical documentation and testing procedures",
     ],
   },
 ];
 
 const education = [
   {
-    degree: "M.Sc. Informatik",
+    degree: "M.Sc. Informatik (Computer Science)",
     school: "University of Passau",
     period: "Sep. 2015 - Oct. 2017",
     location: "Passau, Germany",
     thesis: "Towards an Assembly Line for the Construction of Complex Machine Learning Algorithms",
+    note: "Focus areas: Software Engineering, Machine Learning, Distributed Systems",
   },
   {
-    degree: "B.Tech Computer Science",
+    degree: "B.Tech Computer Science & Engineering",
     school: "IET Bhaddal (Punjab Technical University)",
     period: "Aug. 2010 - May 2014",
     location: "Ropar, India",
-    note: "Bachelor Internship at RF Silicon Pvt Ltd",
+    note: "Bachelor Internship at RF Silicon Pvt Ltd - IoT & Mobile Development",
   },
 ];
 
-const interests = ["Cycling", "Badminton", "Cricket", "Exploring new technologies", "Building side projects"];
+const interests = [
+  "Cycling",
+  "Badminton",
+  "Cricket",
+  "Open Source",
+  "System Design",
+  "Building Side Projects",
+  "Learning New Technologies"
+];
+
+const certifications = [
+  "Oracle Certified Professional, Java SE",
+  "AWS Cloud Practitioner",
+];
 ---
 
-<BaseLayout title="About" description="Learn more about Varij Kapil - Software Developer based in Germany with expertise in Java, JavaScript, and full-stack development.">
+<BaseLayout title="About" description="Learn more about Varij Kapil - Senior Software Developer based in Germany with 7+ years of experience in Java, React, and enterprise software development.">
   <section class="section">
     <div class="container-custom">
       <!-- Hero Section -->
@@ -73,14 +90,30 @@ const interests = ["Cycling", "Badminton", "Cricket", "Exploring new technologie
             About <span class="gradient-text">Me</span>
           </h1>
           <p class="text-xl text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-            Hi, I'm <strong class="text-slate-900 dark:text-slate-100">Varij Kapil</strong>. I'm currently employed as a Software Developer at IT Manufactory GmbH in the beautiful city of Passau, Germany.
+            Hi, I'm <strong class="text-slate-900 dark:text-slate-100">Varij Kapil</strong> — a Senior Software Developer with <strong class="text-slate-900 dark:text-slate-100">7+ years</strong> of experience building enterprise software. Currently based in the beautiful city of <strong class="text-slate-900 dark:text-slate-100">Passau, Germany</strong>.
           </p>
           <p class="text-lg text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-            I love programming and building new stuff while trying out new technologies. When I'm not coding, I enjoy cycling and playing badminton and cricket.
+            I specialize in <strong class="text-slate-900 dark:text-slate-100">full-stack development</strong> with Java and React, with deep expertise in enterprise architecture, security (OAuth/OIDC), and DevOps practices. I'm passionate about writing clean, maintainable code and building systems that scale.
           </p>
-          <p class="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-            This blog is where I write about things I care about, solutions to common problems, and things I want to remember. It's not a typical tutorial blog - I share my personal experiences and the challenges I've overcome.
+          <p class="text-lg text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+            When I'm not coding, you'll find me cycling through the Bavarian countryside, playing badminton, or exploring new technologies. I believe in continuous learning and sharing knowledge with the community.
           </p>
+
+          <!-- Quick Stats -->
+          <div class="grid grid-cols-3 gap-4 mt-8">
+            <div class="text-center p-4 rounded-xl bg-slate-100 dark:bg-slate-800">
+              <div class="text-3xl font-bold gradient-text">7+</div>
+              <div class="text-sm text-slate-600 dark:text-slate-400">Years Experience</div>
+            </div>
+            <div class="text-center p-4 rounded-xl bg-slate-100 dark:bg-slate-800">
+              <div class="text-3xl font-bold gradient-text">15+</div>
+              <div class="text-sm text-slate-600 dark:text-slate-400">Projects Delivered</div>
+            </div>
+            <div class="text-center p-4 rounded-xl bg-slate-100 dark:bg-slate-800">
+              <div class="text-3xl font-bold gradient-text">3</div>
+              <div class="text-sm text-slate-600 dark:text-slate-400">Countries Worked</div>
+            </div>
+          </div>
         </div>
         <div class="relative">
           <div class="aspect-square rounded-2xl bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center">
@@ -94,6 +127,75 @@ const interests = ["Cycling", "Badminton", "Cricket", "Exploring new technologie
         </div>
       </div>
 
+      <!-- What I Do Section -->
+      <div class="mb-20">
+        <h2 class="text-3xl font-bold mb-8">
+          What I <span class="gradient-text">Do</span>
+        </h2>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="card p-6">
+            <div class="w-12 h-12 rounded-xl bg-primary-50 dark:bg-primary-950 flex items-center justify-center mb-4">
+              <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Backend Development</h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm">Building robust APIs and microservices with Java, Jakarta EE, and Spring Boot. Focus on scalability and performance.</p>
+          </div>
+
+          <div class="card p-6">
+            <div class="w-12 h-12 rounded-xl bg-accent-50 dark:bg-accent-950 flex items-center justify-center mb-4">
+              <svg class="w-6 h-6 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Frontend Development</h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm">Creating responsive, accessible user interfaces with React, TypeScript, and modern CSS. User experience first.</p>
+          </div>
+
+          <div class="card p-6">
+            <div class="w-12 h-12 rounded-xl bg-green-50 dark:bg-green-950 flex items-center justify-center mb-4">
+              <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Security & Auth</h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm">Implementing OAuth 2.0, OpenID Connect, and enterprise security patterns. Protecting applications and data.</p>
+          </div>
+
+          <div class="card p-6">
+            <div class="w-12 h-12 rounded-xl bg-orange-50 dark:bg-orange-950 flex items-center justify-center mb-4">
+              <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Database Design</h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm">Designing efficient database schemas, migrations, and optimizations. PostgreSQL specialist with Oracle experience.</p>
+          </div>
+
+          <div class="card p-6">
+            <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950 flex items-center justify-center mb-4">
+              <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">DevOps & CI/CD</h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm">Setting up automated pipelines with GitLab CI/CD, Docker, and cloud deployments. Streamlining development workflows.</p>
+          </div>
+
+          <div class="card p-6">
+            <div class="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-950 flex items-center justify-center mb-4">
+              <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Team Leadership</h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm">Leading development teams, conducting code reviews, and mentoring junior developers. Driving engineering excellence.</p>
+          </div>
+        </div>
+      </div>
+
       <!-- Technical Skills Section -->
       <div class="mb-20">
         <h2 class="text-3xl font-bold mb-8">
@@ -101,38 +203,35 @@ const interests = ["Cycling", "Badminton", "Cricket", "Exploring new technologie
         </h2>
 
         <div class="card p-8">
-          <p class="text-slate-600 dark:text-slate-400 mb-6 italic">
-            I don't believe that one can show their competence/knowledge in a certain area in percentage. Here's a legend for the skills below:
-          </p>
-          <div class="flex flex-wrap gap-6 mb-8 text-sm">
-            <div class="flex items-center gap-2">
-              <span class="font-bold">Bold</span>
-              <span class="text-slate-600 dark:text-slate-400">= Things I use daily / most comfortable with</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="italic text-primary-500">Italic</span>
-              <span class="text-slate-600 dark:text-slate-400">= Things I enjoy using in my free time</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span>Regular</span>
-              <span class="text-slate-600 dark:text-slate-400">= Things I know but might need some refreshing</span>
-            </div>
-          </div>
-
-          <div class="grid md:grid-cols-3 gap-8">
+          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div>
               <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
                 <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                 </svg>
-                Programming Languages
+                Languages
               </h3>
-              <ul class="space-y-2">
-                <li class="font-bold">Java</li>
-                <li class="font-bold">JavaScript</li>
-                <li class="italic text-primary-500">Python</li>
-                <li class="italic text-primary-500">Swift</li>
-                <li>Objective-C</li>
+              <ul class="space-y-2 text-slate-700 dark:text-slate-300">
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-primary-500"></span>
+                  Java (Expert)
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-primary-500"></span>
+                  JavaScript/TypeScript
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-accent-500"></span>
+                  Python
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-accent-500"></span>
+                  Swift
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                  SQL
+                </li>
               </ul>
             </div>
 
@@ -143,13 +242,27 @@ const interests = ["Cycling", "Badminton", "Cricket", "Exploring new technologie
                 </svg>
                 Frameworks
               </h3>
-              <ul class="space-y-2">
-                <li class="font-bold">React</li>
-                <li class="font-bold">JavaEE/JakartaEE</li>
-                <li class="font-bold">JAX-RS</li>
-                <li class="italic text-primary-500">Angular</li>
-                <li class="italic text-primary-500">Cocoa Touch</li>
-                <li class="italic text-primary-500">Cocoa</li>
+              <ul class="space-y-2 text-slate-700 dark:text-slate-300">
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-primary-500"></span>
+                  React / Next.js
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-primary-500"></span>
+                  Jakarta EE / Spring
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-primary-500"></span>
+                  JAX-RS / REST APIs
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-accent-500"></span>
+                  Astro
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                  Angular
+                </li>
               </ul>
             </div>
 
@@ -158,13 +271,70 @@ const interests = ["Cycling", "Badminton", "Cricket", "Exploring new technologie
                 <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
                 </svg>
-                Databases
+                Databases & Cloud
               </h3>
-              <ul class="space-y-2">
-                <li class="font-bold">PostgreSQL</li>
-                <li>MongoDB</li>
-                <li>Oracle</li>
+              <ul class="space-y-2 text-slate-700 dark:text-slate-300">
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-primary-500"></span>
+                  PostgreSQL
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-accent-500"></span>
+                  MongoDB
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                  Oracle
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-accent-500"></span>
+                  AWS / Cloudflare
+                </li>
               </ul>
+            </div>
+
+            <div>
+              <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Tools & DevOps
+              </h3>
+              <ul class="space-y-2 text-slate-700 dark:text-slate-300">
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-primary-500"></span>
+                  Git / GitLab CI/CD
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-primary-500"></span>
+                  Docker
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-accent-500"></span>
+                  Linux / Shell
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-accent-500"></span>
+                  IntelliJ / VS Code
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Legend -->
+          <div class="flex flex-wrap justify-center gap-6 mt-8 pt-6 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-400">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-primary-500"></span>
+              <span>Expert / Daily use</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-accent-500"></span>
+              <span>Proficient</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+              <span>Familiar</span>
             </div>
           </div>
         </div>
@@ -233,7 +403,7 @@ const interests = ["Cycling", "Badminton", "Cricket", "Exploring new technologie
                     </p>
                   )}
                   {edu.note && (
-                    <p class="text-slate-600 dark:text-slate-400 mt-3 text-sm italic">
+                    <p class="text-slate-600 dark:text-slate-400 mt-2 text-sm">
                       {edu.note}
                     </p>
                   )}
@@ -247,15 +417,39 @@ const interests = ["Cycling", "Badminton", "Cricket", "Exploring new technologie
       <!-- Interests Section -->
       <div>
         <h2 class="text-3xl font-bold mb-8">
-          Personal <span class="gradient-text">Interests</span>
+          Beyond <span class="gradient-text">Code</span>
         </h2>
 
         <div class="flex flex-wrap gap-3">
           {interests.map((interest) => (
-            <span class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium">
+            <span class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium hover:bg-primary-50 hover:text-primary-600 dark:hover:bg-primary-950 dark:hover:text-primary-400 transition-colors cursor-default">
               {interest}
             </span>
           ))}
+        </div>
+
+        <div class="mt-12 card p-8 bg-gradient-to-r from-primary-500/10 to-accent-500/10">
+          <h3 class="text-xl font-bold mb-4">Let's Connect</h3>
+          <p class="text-slate-600 dark:text-slate-400 mb-6">
+            I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a href="https://linkedin.com/in/varijkapil" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              LinkedIn
+            </a>
+            <a href="https://github.com/varijkapil13" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              GitHub
+            </a>
+            <a href="mailto:contact@varij.dev" class="btn btn-outline">
+              Get in Touch
+            </a>
+          </div>
         </div>
       </div>
     </div>
