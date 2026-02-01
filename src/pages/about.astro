@@ -1,0 +1,263 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const experience = [
+  {
+    company: "IT Manufactory GmbH",
+    role: "Software Developer",
+    period: "Nov. 2017 - Present",
+    location: "Passau, Germany",
+    description: "Involved and responsible for development and improvement of Digital Automotive.",
+    highlights: [
+      "Implemented OAuth and OpenID Connect for Digital Automotive",
+      "Responsible for development of task and todo management module 'Task Manager' in a team of 4",
+      "Developed Reporting modules for Strategy, Acquisition, Business and Claim Management",
+      "Co-ordinated database migration from Oracle to PostgreSQL",
+      "Co-ordinated JavaEE server migration from Glassfish to Payara",
+      "Built Continuous Integration, Delivery and Development workflows with GitLab",
+    ],
+  },
+  {
+    company: "NetSet Software Solutions Pvt Ltd",
+    role: "iOS Application Developer",
+    period: "Aug. 2014 - Jul. 2015",
+    location: "Mohali, India",
+    description: "Involved and responsible for development of various iOS applications for a variety of customers.",
+    highlights: [
+      "Developed 2 corporate applications for in-house deployment",
+      "Developed 2 social media applications",
+      "Developed 1 dating application",
+    ],
+  },
+  {
+    company: "RF Silicon Pvt Ltd",
+    role: "Intern",
+    period: "Dec. 2013 - May 2014",
+    location: "New Delhi/Noida, India",
+    description: "Involved in development and testing of Bluetooth Low Energy (BLE) stacks and Application Development.",
+    highlights: [
+      "Developed BLE Stack for Health Thermometer and Proximity Sensor",
+      "Developed an iOS Application for the above stacks",
+      "Developed an Android Application for the above stacks",
+    ],
+  },
+];
+
+const education = [
+  {
+    degree: "M.Sc. Informatik",
+    school: "University of Passau",
+    period: "Sep. 2015 - Oct. 2017",
+    location: "Passau, Germany",
+    thesis: "Towards an Assembly Line for the Construction of Complex Machine Learning Algorithms",
+  },
+  {
+    degree: "B.Tech Computer Science",
+    school: "IET Bhaddal (Punjab Technical University)",
+    period: "Aug. 2010 - May 2014",
+    location: "Ropar, India",
+    note: "Bachelor Internship at RF Silicon Pvt Ltd",
+  },
+];
+
+const interests = ["Cycling", "Badminton", "Cricket", "Exploring new technologies", "Building side projects"];
+---
+
+<BaseLayout title="About" description="Learn more about Varij Kapil - Software Developer based in Germany with expertise in Java, JavaScript, and full-stack development.">
+  <section class="section">
+    <div class="container-custom">
+      <!-- Hero Section -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+        <div>
+          <h1 class="text-4xl md:text-5xl font-bold mb-6">
+            About <span class="gradient-text">Me</span>
+          </h1>
+          <p class="text-xl text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+            Hi, I'm <strong class="text-slate-900 dark:text-slate-100">Varij Kapil</strong>. I'm currently employed as a Software Developer at IT Manufactory GmbH in the beautiful city of Passau, Germany.
+          </p>
+          <p class="text-lg text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+            I love programming and building new stuff while trying out new technologies. When I'm not coding, I enjoy cycling and playing badminton and cricket.
+          </p>
+          <p class="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+            This blog is where I write about things I care about, solutions to common problems, and things I want to remember. It's not a typical tutorial blog - I share my personal experiences and the challenges I've overcome.
+          </p>
+        </div>
+        <div class="relative">
+          <div class="aspect-square rounded-2xl bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center">
+            <div class="w-48 h-48 rounded-full bg-gradient-to-r from-primary-500 to-accent-500 flex items-center justify-center text-white text-7xl font-bold shadow-2xl">
+              VK
+            </div>
+          </div>
+          <!-- Floating elements -->
+          <div class="absolute -top-4 -right-4 w-24 h-24 bg-primary-500/10 rounded-2xl rotate-12 animate-float"></div>
+          <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-accent-500/10 rounded-2xl -rotate-12 animate-float" style="animation-delay: -2s;"></div>
+        </div>
+      </div>
+
+      <!-- Technical Skills Section -->
+      <div class="mb-20">
+        <h2 class="text-3xl font-bold mb-8">
+          Technical <span class="gradient-text">Skills</span>
+        </h2>
+
+        <div class="card p-8">
+          <p class="text-slate-600 dark:text-slate-400 mb-6 italic">
+            I don't believe that one can show their competence/knowledge in a certain area in percentage. Here's a legend for the skills below:
+          </p>
+          <div class="flex flex-wrap gap-6 mb-8 text-sm">
+            <div class="flex items-center gap-2">
+              <span class="font-bold">Bold</span>
+              <span class="text-slate-600 dark:text-slate-400">= Things I use daily / most comfortable with</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="italic text-primary-500">Italic</span>
+              <span class="text-slate-600 dark:text-slate-400">= Things I enjoy using in my free time</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span>Regular</span>
+              <span class="text-slate-600 dark:text-slate-400">= Things I know but might need some refreshing</span>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-3 gap-8">
+            <div>
+              <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+                Programming Languages
+              </h3>
+              <ul class="space-y-2">
+                <li class="font-bold">Java</li>
+                <li class="font-bold">JavaScript</li>
+                <li class="italic text-primary-500">Python</li>
+                <li class="italic text-primary-500">Swift</li>
+                <li>Objective-C</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+                Frameworks
+              </h3>
+              <ul class="space-y-2">
+                <li class="font-bold">React</li>
+                <li class="font-bold">JavaEE/JakartaEE</li>
+                <li class="font-bold">JAX-RS</li>
+                <li class="italic text-primary-500">Angular</li>
+                <li class="italic text-primary-500">Cocoa Touch</li>
+                <li class="italic text-primary-500">Cocoa</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                </svg>
+                Databases
+              </h3>
+              <ul class="space-y-2">
+                <li class="font-bold">PostgreSQL</li>
+                <li>MongoDB</li>
+                <li>Oracle</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experience Section -->
+      <div class="mb-20">
+        <h2 class="text-3xl font-bold mb-8">
+          Work <span class="gradient-text">Experience</span>
+        </h2>
+
+        <div class="space-y-6">
+          {experience.map((job, index) => (
+            <div class="card p-6 md:p-8 relative overflow-hidden">
+              <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary-500 to-accent-500"></div>
+              <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
+                <div>
+                  <h3 class="text-xl font-bold">{job.role}</h3>
+                  <p class="text-primary-500 font-medium">{job.company}</p>
+                </div>
+                <div class="text-slate-600 dark:text-slate-400 mt-2 md:mt-0 md:text-right">
+                  <p class="font-medium">{job.period}</p>
+                  <p class="text-sm">{job.location}</p>
+                </div>
+              </div>
+              <p class="text-slate-600 dark:text-slate-400 mb-4">{job.description}</p>
+              <ul class="space-y-2">
+                {job.highlights.map((highlight) => (
+                  <li class="flex items-start gap-2 text-slate-700 dark:text-slate-300">
+                    <svg class="w-5 h-5 text-primary-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    {highlight}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Education Section -->
+      <div class="mb-20">
+        <h2 class="text-3xl font-bold mb-8">
+          <span class="gradient-text">Education</span>
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          {education.map((edu) => (
+            <div class="card p-6 md:p-8">
+              <div class="flex items-start gap-4">
+                <div class="p-3 rounded-xl bg-primary-50 dark:bg-primary-950">
+                  <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                    <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold">{edu.degree}</h3>
+                  <p class="text-primary-500 font-medium">{edu.school}</p>
+                  <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">{edu.period} | {edu.location}</p>
+                  {edu.thesis && (
+                    <p class="text-slate-600 dark:text-slate-400 mt-3 text-sm">
+                      <strong>Thesis:</strong> <em>{edu.thesis}</em>
+                    </p>
+                  )}
+                  {edu.note && (
+                    <p class="text-slate-600 dark:text-slate-400 mt-3 text-sm italic">
+                      {edu.note}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Interests Section -->
+      <div>
+        <h2 class="text-3xl font-bold mb-8">
+          Personal <span class="gradient-text">Interests</span>
+        </h2>
+
+        <div class="flex flex-wrap gap-3">
+          {interests.map((interest) => (
+            <span class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium">
+              {interest}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
