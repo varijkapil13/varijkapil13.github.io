@@ -11,28 +11,27 @@ const latestPosts = allPosts
 const skills = {
   languages: [
     { name: "Java", level: "expert" },
-    { name: "JavaScript", level: "expert" },
+    { name: "SQL", level: "expert" },
     { name: "TypeScript", level: "advanced" },
     { name: "Python", level: "intermediate" },
-    { name: "Swift", level: "intermediate" },
   ],
   frameworks: [
-    { name: "React", level: "expert" },
-    { name: "JavaEE/JakartaEE", level: "expert" },
-    { name: "JAX-RS", level: "expert" },
-    { name: "Angular", level: "intermediate" },
-    { name: "Astro", level: "intermediate" },
+    { name: "Spring Framework", level: "expert" },
+    { name: "Quarkus", level: "expert" },
+    { name: "Jakarta EE", level: "expert" },
+    { name: "JAX-RS", level: "advanced" },
   ],
-  databases: [
+  platform: [
+    { name: "Kubernetes", level: "expert" },
     { name: "PostgreSQL", level: "expert" },
-    { name: "MongoDB", level: "intermediate" },
-    { name: "Oracle", level: "intermediate" },
+    { name: "Docker", level: "advanced" },
+    { name: "HashiCorp Vault", level: "advanced" },
   ],
   tools: [
-    { name: "Git", level: "expert" },
-    { name: "Docker", level: "advanced" },
-    { name: "GitLab CI/CD", level: "advanced" },
-    { name: "Linux", level: "advanced" },
+    { name: "Pulumi / Helm", level: "expert" },
+    { name: "GitLab CI/CD", level: "expert" },
+    { name: "SonarQube / Qodana", level: "advanced" },
+    { name: "Liquibase", level: "advanced" },
   ],
 };
 
@@ -48,7 +47,7 @@ const getLevelColor = (level: string) => {
 };
 ---
 
-<BaseLayout title="Home" description="Varij Kapil - Software Developer based in Germany. Building great software with Java, JavaScript, React, and more.">
+<BaseLayout title="Home" description="Varij Kapil - Head of Backend Engineering & Operations based in Bonn, Germany. Specializing in multi-tenant SaaS, Kubernetes, and platform modernization.">
   <!-- Hero Section -->
   <section class="relative min-h-[90vh] flex items-center overflow-hidden">
     <!-- Background decoration -->
@@ -65,8 +64,8 @@ const getLevelColor = (level: string) => {
         </h1>
 
         <p class="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-8 leading-relaxed max-w-2xl">
-          Software Developer based in <strong class="text-slate-900 dark:text-slate-100">Bonn, Germany</strong>.
-          I love building great software, exploring new technologies, and turning complex problems into elegant solutions.
+          <strong class="text-slate-900 dark:text-slate-100">Head of Backend Engineering & Operations</strong> based in <strong class="text-slate-900 dark:text-slate-100">Bonn, Germany</strong>.
+          I transform legacy systems into scalable, multi-tenant SaaS platforms using Kubernetes and cloud-native architecture.
         </p>
 
         <div class="flex flex-wrap gap-4">
@@ -182,13 +181,13 @@ const getLevelColor = (level: string) => {
           <div class="flex items-center gap-3 mb-4">
             <div class="p-2 rounded-lg bg-green-50 dark:bg-green-950">
               <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
               </svg>
             </div>
-            <h3 class="font-semibold text-lg">Databases</h3>
+            <h3 class="font-semibold text-lg">Platform & Cloud</h3>
           </div>
           <div class="space-y-3">
-            {skills.databases.map((skill) => (
+            {skills.platform.map((skill) => (
               <div class="flex items-center justify-between">
                 <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
                 <span class={`w-2 h-2 rounded-full ${getLevelColor(skill.level)}`}></span>
