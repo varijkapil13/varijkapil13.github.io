@@ -111,6 +111,38 @@ const interests = [
 
 const certifications = [
   "Liquibase Certified Practitioner",
+  "Microsoft Certified: Azure Fundamentals",
+];
+
+const projects = [
+  {
+    name: "Visualisation of BFT-SMaRt",
+    period: "Mar 2017 - May 2017",
+    association: "Universität Passau",
+    description: "A visualization library for BFT-SmaRt distributed system that shows system diagram, system statistics, messages exchanges and total number of message exchanges between the servers and the client. Visualizations built in D3.js.",
+    technologies: ["Apache Kafka", "D3.js", "Python", "Node.js", "Java"],
+  },
+  {
+    name: "BETO: Better Together",
+    period: "Feb 2017 - Apr 2017",
+    association: "Universität Passau",
+    description: "A community app where people can offer help and time in various categories—companionship, language instruction, cooking nights, or band formation. Organizations can host events like football tournaments or parties. Features integrated chat with automated translation.",
+    technologies: ["Mobile Development", "Real-time Chat", "Translation API"],
+  },
+  {
+    name: "CoRE Directories: Web Of Things",
+    period: "Oct 2016 - Feb 2017",
+    association: "Universität Passau",
+    description: "Implemented CoRE Directory discovery method for Web of Things initiative using COAP protocol. IoT devices connecting to the network are automatically added to a directory with descriptions of their functions and services.",
+    technologies: ["COAP", "Node.js", "PostgreSQL", "Intel Galileo", "Java"],
+  },
+  {
+    name: "FriendFinder",
+    period: "Oct 2015 - Feb 2016",
+    association: "Universität Passau",
+    description: "An iOS application to find people with similar interests near you. Backed by a Machine Learning backend using NLP algorithms to match interests from Facebook profiles and user descriptions.",
+    technologies: ["Swift", "Python", "Apache Lucene", "NLP", "iOS"],
+  },
 ];
 ---
 
@@ -449,6 +481,33 @@ const certifications = [
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
               </svg>
               <span class="font-medium text-slate-700 dark:text-slate-300">{cert}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- University Projects Section -->
+      <div class="mb-20">
+        <h2 class="text-3xl font-bold mb-8">
+          University <span class="gradient-text">Projects</span>
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          {projects.map((project) => (
+            <div class="card p-6">
+              <div class="flex items-start justify-between mb-3">
+                <h3 class="text-lg font-bold">{project.name}</h3>
+                <span class="text-sm text-slate-500 dark:text-slate-400 whitespace-nowrap ml-2">{project.period}</span>
+              </div>
+              <p class="text-sm text-primary-500 mb-3">{project.association}</p>
+              <p class="text-slate-600 dark:text-slate-400 text-sm mb-4">{project.description}</p>
+              <div class="flex flex-wrap gap-2">
+                {project.technologies.map((tech) => (
+                  <span class="px-2 py-1 text-xs rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                    {tech}
+                  </span>
+                ))}
+              </div>
             </div>
           ))}
         </div>
