@@ -1,7 +1,7 @@
 ---
 title: "Java Logging Best Practices for Production Systems"
 description: "Effective logging strategies that help you debug issues faster and monitor application health in production."
-date: 2024-05-10
+date: 2021-06-15
 tags: ["java", "logging", "monitoring", "best-practices"]
 ---
 

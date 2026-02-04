@@ -1,7 +1,7 @@
 ---
 title: "Migrating from Java EE to Jakarta EE: What You Need to Know"
 description: "A practical guide to migrating enterprise applications from Java EE 8 to Jakarta EE 10, including namespace changes and common pitfalls."
-date: 2024-04-01
+date: 2024-05-10
 tags: ["java", "jakarta-ee", "enterprise", "migration"]
 ---
 

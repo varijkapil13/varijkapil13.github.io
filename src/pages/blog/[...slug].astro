@@ -32,6 +32,9 @@ const relatedPosts = allPosts
   title={post.data.title}
   description={post.data.description || `Read ${post.data.title} on Varij Kapil's blog.`}
   image={post.data.image}
+  article={true}
+  publishedDate={post.data.date.toISOString()}
+  tags={post.data.tags || []}
 >
   <article class="section">
     <div class="container-custom max-w-4xl">
@@ -110,7 +113,7 @@ const relatedPosts = allPosts
             </div>
             <div>
               <p class="font-semibold">Varij Kapil</p>
-              <p class="text-slate-600 dark:text-slate-400 text-sm">Software Developer</p>
+              <p class="text-slate-600 dark:text-slate-400 text-sm">Head of Backend Engineering</p>
             </div>
           </div>
 

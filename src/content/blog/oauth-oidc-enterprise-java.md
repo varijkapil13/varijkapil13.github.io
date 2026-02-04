@@ -1,7 +1,7 @@
 ---
 title: "Implementing OAuth 2.0 and OpenID Connect in Enterprise Java Applications"
 description: "A practical guide to securing enterprise applications with OAuth 2.0 and OIDC, based on real-world implementation experience."
-date: 2024-11-15
+date: 2024-07-22
 tags: ["java", "security", "oauth", "enterprise"]
 ---
 

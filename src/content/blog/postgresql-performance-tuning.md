@@ -1,7 +1,7 @@
 ---
 title: "PostgreSQL Performance Tuning: A Practical Guide"
 description: "Real-world PostgreSQL optimization techniques that made a significant difference in our enterprise applications."
-date: 2024-08-15
+date: 2023-02-10
 tags: ["postgresql", "database", "performance", "optimization"]
 ---
 

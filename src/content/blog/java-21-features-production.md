@@ -1,7 +1,7 @@
 ---
 title: "Java 21 Features We're Actually Using in Production"
 description: "A look at the Java 21 features that have made a real difference in our enterprise applications."
-date: 2025-01-10
+date: 2024-11-20
 tags: ["java", "enterprise", "backend"]
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: "Docker for Java Developers: From Development to Production"
 description: "Practical guide to containerizing Java applications with optimized Dockerfiles and production-ready configurations."
-date: 2024-06-20
+date: 2022-03-25
 tags: ["docker", "java", "devops", "containers"]
 ---
 

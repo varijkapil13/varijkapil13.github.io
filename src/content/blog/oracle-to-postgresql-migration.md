@@ -1,7 +1,7 @@
 ---
 title: "Migrating from Oracle to PostgreSQL: A Practical Guide"
 description: "Lessons learned from coordinating a large-scale database migration from Oracle to PostgreSQL in an enterprise environment."
-date: 2024-09-20
+date: 2023-04-18
 tags: ["postgresql", "oracle", "database", "migration"]
 ---
 

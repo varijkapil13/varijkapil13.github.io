@@ -1,7 +1,7 @@
 ---
 title: "Building Production-Ready REST APIs with JAX-RS"
 description: "Best practices and patterns for building robust, maintainable REST APIs using JAX-RS in enterprise Java applications."
-date: 2024-10-05
+date: 2021-11-08
 tags: ["java", "jax-rs", "rest-api", "enterprise"]
 ---
 

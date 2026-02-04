@@ -7,11 +7,72 @@ interface Props {
   title: string;
   description?: string;
   image?: string;
+  article?: boolean;
+  publishedDate?: string;
+  modifiedDate?: string;
+  tags?: string[];
 }
 
-const { title, description = "Varij Kapil - Software Developer", image = "/og-image.png" } = Astro.props;
+const {
+  title,
+  description = "Varij Kapil - Head of Backend Engineering based in Germany. Writing about Java, Kubernetes, and platform engineering.",
+  image = "/og-image.png",
+  article = false,
+  publishedDate,
+  modifiedDate,
+  tags = []
+} = Astro.props;
+
 const currentPath = Astro.url.pathname;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const siteTitle = "Varij Kapil";
+const fullTitle = title === "Home" ? siteTitle : `${title} | ${siteTitle}`;
+
+// JSON-LD structured data
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Varij Kapil",
+  "url": Astro.site?.toString(),
+  "jobTitle": "Head of Backend Engineering & Operations",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Digital Automotive"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Bonn",
+    "addressCountry": "Germany"
+  },
+  "sameAs": [
+    "https://linkedin.com/in/varijkapil13",
+    "https://github.com/varijkapil13"
+  ]
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": siteTitle,
+  "url": Astro.site?.toString(),
+  "author": personSchema
+};
+
+const articleSchema = article ? {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description,
+  "url": canonicalURL.toString(),
+  "datePublished": publishedDate,
+  "dateModified": modifiedDate || publishedDate,
+  "author": personSchema,
+  "publisher": {
+    "@type": "Person",
+    "name": "Varij Kapil"
+  },
+  "keywords": tags.join(", ")
+} : null;
 ---
 
 <!doctype html>
@@ -19,28 +80,40 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="generator" content={Astro.generator} />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Varij Kapil" />
+    <meta name="keywords" content="Java, Kubernetes, Backend Engineering, Platform Engineering, SaaS, Microservices, DevOps, {tags.join(', ')}" />
 
     <!-- Primary Meta Tags -->
-    <title>{title} | Varij Kapil</title>
-    <meta name="title" content={`${title} | Varij Kapil`} />
+    <title>{fullTitle}</title>
+    <meta name="title" content={fullTitle} />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
 
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={article ? "article" : "website"} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:title" content={`${title} | Varij Kapil`} />
+    <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta property="og:site_name" content={siteTitle} />
+    <meta property="og:locale" content="en_US" />
+    {article && publishedDate && <meta property="article:published_time" content={publishedDate} />}
+    {article && modifiedDate && <meta property="article:modified_time" content={modifiedDate} />}
+    {article && tags.map(tag => <meta property="article:tag" content={tag} />)}
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={`${title} | Varij Kapil`} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL(image, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL.toString()} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(image, Astro.site)} />
     <meta name="twitter:creator" content="@varijkapil13" />
+    <meta name="twitter:site" content="@varijkapil13" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+    {article && articleSchema && <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />}
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
