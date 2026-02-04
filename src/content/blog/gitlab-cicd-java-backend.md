@@ -1,7 +1,7 @@
 ---
 title: "Building a Robust CI/CD Pipeline with GitLab for Java Applications"
 description: "How we built continuous integration and deployment workflows for enterprise Java applications using GitLab CI/CD."
-date: 2024-07-10
+date: 2022-07-14
 tags: ["devops", "gitlab", "cicd", "java", "enterprise"]
 ---
 

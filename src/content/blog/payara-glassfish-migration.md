@@ -1,7 +1,7 @@
 ---
 title: "Migrating from GlassFish to Payara Server"
 description: "Lessons learned from migrating enterprise Java applications from GlassFish to Payara Server in production."
-date: 2024-03-15
+date: 2021-02-20
 tags: ["java", "payara", "glassfish", "enterprise"]
 ---
 
