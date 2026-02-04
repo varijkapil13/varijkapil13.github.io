@@ -7,9 +7,12 @@ export default defineConfig({
   integrations: [
     tailwind(),
     sitemap({
-      changefreq: 'weekly',
-      priority: 0.7,
-      lastmod: new Date(),
+      serialize(item) {
+        // Set default values for sitemap entries
+        item.changefreq = 'weekly';
+        item.priority = item.url.includes('/blog/') ? 0.8 : 0.7;
+        return item;
+      }
     })
   ],
   output: 'static',
