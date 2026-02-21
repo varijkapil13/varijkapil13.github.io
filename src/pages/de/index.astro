@@ -1,7 +1,7 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
-import { getLangFromUrl, useTranslations, getLocalizedPath } from "../i18n/translations";
+import { getLangFromUrl, useTranslations, getLocalizedPath } from "../../i18n/translations";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -51,7 +51,7 @@ const getLevelColor = (level: string) => {
 };
 ---
 
-<BaseLayout title="Home" description="Varij Kapil - Head of Backend Engineering & Operations based in Bonn, Germany. Specializing in multi-tenant SaaS, Kubernetes, and platform modernization.">
+<BaseLayout title="Startseite" description="Varij Kapil - Head of Backend Engineering & Operations in Bonn, Deutschland. Spezialisiert auf mandantenfähige SaaS-Plattformen, Kubernetes und Plattformmodernisierung.">
   <!-- Hero Section -->
   <section class="relative min-h-[90vh] flex items-center overflow-hidden">
     <!-- Background decoration -->
@@ -68,7 +68,7 @@ const getLevelColor = (level: string) => {
         </h1>
 
         <p class="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-8 leading-relaxed max-w-2xl">
-          <strong class="text-slate-900 dark:text-slate-100">{t('hero.title')}</strong> based in <strong class="text-slate-900 dark:text-slate-100">{t('hero.location')}</strong>.
+          <strong class="text-slate-900 dark:text-slate-100">{t('hero.title')}</strong> in <strong class="text-slate-900 dark:text-slate-100">{t('hero.location')}</strong>.
           {t('hero.description')}
         </p>
 
@@ -135,7 +135,7 @@ const getLevelColor = (level: string) => {
           {t('skills.title')} <span class="gradient-text">{t('skills.titleHighlight')}</span>
         </h2>
         <p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-          Technologies and tools I work with to bring ideas to life
+          Technologien und Tools, mit denen ich Ideen zum Leben erwecke
         </p>
       </div>
 
@@ -249,7 +249,7 @@ const getLevelColor = (level: string) => {
             {t('blog.title')} <span class="gradient-text">{t('blog.titleHighlight')}</span>
           </h2>
           <p class="text-slate-600 dark:text-slate-400 max-w-xl">
-            Thoughts, tutorials, and solutions to problems I've encountered
+            Gedanken, Tutorials und Lösungen zu Problemen, auf die ich gestoßen bin
           </p>
         </div>
         <a href={getLocalizedPath("/blog", lang)} class="mt-4 md:mt-0 text-primary-500 hover:text-primary-600 font-medium inline-flex items-center gap-2">
@@ -275,10 +275,10 @@ const getLevelColor = (level: string) => {
                 {post.data.title}
               </h3>
               <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-2">
-                {post.data.description || "Click to read more..."}
+                {post.data.description || "Klicken Sie, um mehr zu lesen..."}
               </p>
               <time class="text-sm text-slate-500 dark:text-slate-500">
-                {new Date(post.data.date).toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-US', {
+                {new Date(post.data.date).toLocaleDateString('de-DE', {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
@@ -289,7 +289,7 @@ const getLevelColor = (level: string) => {
         </div>
       ) : (
         <div class="text-center py-12 text-slate-600 dark:text-slate-400">
-          <p>Blog posts coming soon...</p>
+          <p>Blogbeiträge kommen bald...</p>
         </div>
       )}
     </div>

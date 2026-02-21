@@ -9,6 +9,13 @@ export default defineConfig({
     sitemap()
   ],
   output: 'static',
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'de'],
+    routing: {
+      prefixDefaultLocale: false
+    }
+  },
   markdown: {
     shikiConfig: {
       theme: 'github-dark',
