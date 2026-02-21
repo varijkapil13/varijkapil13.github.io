@@ -5,24 +5,24 @@ const currentLang = getLangFromUrl(Astro.url);
 const currentPath = Astro.url.pathname.replace(/^\/(en|de)/, '') || '/';
 ---
 
-<div class="relative">
+<div class="lang-switcher relative">
   <button
-    id="lang-toggle"
-    class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+    type="button"
+    class="lang-toggle flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
     aria-label="Select language"
+    aria-expanded="false"
   >
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
     </svg>
     <span class="uppercase">{currentLang}</span>
-    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg class="w-3 h-3 lang-chevron transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
     </svg>
   </button>
 
   <div
-    id="lang-dropdown"
-    class="hidden absolute right-0 mt-2 w-32 rounded-lg bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700 py-1 z-50"
+    class="lang-dropdown hidden absolute right-0 mt-2 w-32 rounded-lg bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700 py-1 z-50"
   >
     {Object.entries(languages).map(([lang, label]) => (
       <a
@@ -41,16 +41,75 @@ const currentPath = Astro.url.pathname.replace(/^\/(en|de)/, '') || '/';
 </div>
 
 <script>
-  const toggle = document.getElementById('lang-toggle');
-  const dropdown = document.getElementById('lang-dropdown');
+  function initLanguageSwitchers() {
+    const switchers = document.querySelectorAll('.lang-switcher');
 
-  toggle?.addEventListener('click', () => {
-    dropdown?.classList.toggle('hidden');
-  });
+    switchers.forEach((switcher) => {
+      const toggle = switcher.querySelector('.lang-toggle') as HTMLButtonElement;
+      const dropdown = switcher.querySelector('.lang-dropdown') as HTMLElement;
+      const chevron = switcher.querySelector('.lang-chevron') as HTMLElement;
 
-  document.addEventListener('click', (e) => {
-    if (!toggle?.contains(e.target as Node) && !dropdown?.contains(e.target as Node)) {
-      dropdown?.classList.add('hidden');
-    }
-  });
+      if (!toggle || !dropdown) return;
+
+      // Handle click on toggle button
+      toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const isHidden = dropdown.classList.contains('hidden');
+
+        // Close all other dropdowns first
+        document.querySelectorAll('.lang-dropdown').forEach((d) => {
+          d.classList.add('hidden');
+        });
+        document.querySelectorAll('.lang-toggle').forEach((t) => {
+          t.setAttribute('aria-expanded', 'false');
+        });
+        document.querySelectorAll('.lang-chevron').forEach((c) => {
+          c.classList.remove('rotate-180');
+        });
+
+        // Toggle this dropdown
+        if (isHidden) {
+          dropdown.classList.remove('hidden');
+          toggle.setAttribute('aria-expanded', 'true');
+          chevron?.classList.add('rotate-180');
+        }
+      });
+
+      // Handle touch events for better mobile support
+      toggle.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        toggle.click();
+      });
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+      const target = e.target as Node;
+      const isInsideSwitcher = (target as Element)?.closest?.('.lang-switcher');
+
+      if (!isInsideSwitcher) {
+        document.querySelectorAll('.lang-dropdown').forEach((dropdown) => {
+          dropdown.classList.add('hidden');
+        });
+        document.querySelectorAll('.lang-toggle').forEach((toggle) => {
+          toggle.setAttribute('aria-expanded', 'false');
+        });
+        document.querySelectorAll('.lang-chevron').forEach((chevron) => {
+          chevron.classList.remove('rotate-180');
+        });
+      }
+    });
+  }
+
+  // Initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLanguageSwitchers);
+  } else {
+    initLanguageSwitchers();
+  }
+
+  // Re-initialize after Astro page transitions (if using View Transitions)
+  document.addEventListener('astro:page-load', initLanguageSwitchers);
 </script>
