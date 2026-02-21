@@ -1,15 +1,20 @@
 ---
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { getLangFromUrl, useTranslations, getLocalizedPath } from '../i18n/translations';
+
 interface Props {
   currentPath?: string;
 }
 
 const { currentPath = "/" } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/projects", label: "Projects" },
-  { href: "/blog", label: "Blog" },
+  { href: getLocalizedPath("/", lang), label: t('nav.home') },
+  { href: getLocalizedPath("/about", lang), label: t('nav.about') },
+  { href: getLocalizedPath("/projects", lang), label: t('nav.projects') },
+  { href: getLocalizedPath("/blog", lang), label: t('nav.blog') },
 ];
 ---
 
@@ -38,8 +43,11 @@ const navLinks = [
         ))}
       </div>
 
-      <!-- Theme Toggle & Mobile Menu -->
+      <!-- Language Switcher, Theme Toggle & Mobile Menu -->
       <div class="flex items-center gap-2">
+        <div class="hidden md:block">
+          <LanguageSwitcher />
+        </div>
         <button
           id="theme-toggle"
           class="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
@@ -82,6 +90,9 @@ const navLinks = [
             {link.label}
           </a>
         ))}
+        <div class="mt-2 px-4">
+          <LanguageSwitcher />
+        </div>
       </div>
     </div>
   </nav>
