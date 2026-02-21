@@ -10,11 +10,11 @@ const { currentPath = "/" } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// Only homepage has German translation, other pages link to English versions
+// Homepage, About, and Projects have German translations; Blog stays English only
 const navLinks = [
   { href: getLocalizedPath("/", lang), label: t('nav.home') },
-  { href: "/about", label: t('nav.about') },
-  { href: "/projects", label: t('nav.projects') },
+  { href: getLocalizedPath("/about", lang), label: t('nav.about') },
+  { href: getLocalizedPath("/projects", lang), label: t('nav.projects') },
   { href: "/blog", label: t('nav.blog') },
 ];
 ---
