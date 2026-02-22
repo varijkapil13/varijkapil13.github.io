@@ -1,6 +1,7 @@
 export const languages = {
   en: 'English',
   de: 'Deutsch',
+  hi: 'हिन्दी',
 };
 
 export const defaultLang = 'en';
@@ -209,6 +210,108 @@ export const translations = {
     'projects.wantMore': 'Mehr sehen?',
     'projects.ctaText': 'Schau dir mein GitHub-Profil für weitere Projekte, Beiträge und Code-Beispiele an.',
     'projects.viewGithub': 'GitHub-Profil ansehen',
+  },
+  hi: {
+    // Navigation
+    'nav.home': 'होम',
+    'nav.about': 'मेरे बारे में',
+    'nav.blog': 'ब्लॉग',
+    'nav.projects': 'प्रोजेक्ट्स',
+
+    // Hero section
+    'hero.greeting': 'नमस्ते, मैं हूँ',
+    'hero.name': 'वारिज कपिल',
+    'hero.title': 'Head of Backend Engineering & Operations',
+    'hero.location': 'बॉन, जर्मनी',
+    'hero.description': 'मैं Kubernetes और क्लाउड-नेटिव आर्किटेक्चर का उपयोग करके लीगेसी सिस्टम को स्केलेबल, मल्टी-टेनेंट SaaS प्लेटफॉर्म में बदलता हूँ।',
+    'hero.cta.about': 'मेरे बारे में जानें',
+    'hero.cta.blog': 'ब्लॉग पढ़ें',
+    'hero.social': 'मुझे यहाँ खोजें',
+
+    // Skills section
+    'skills.title': 'तकनीकी',
+    'skills.titleHighlight': 'कौशल',
+    'skills.languages': 'भाषाएं',
+    'skills.frameworks': 'फ्रेमवर्क',
+    'skills.platform': 'प्लेटफॉर्म और क्लाउड',
+    'skills.tools': 'टूल्स',
+    'skills.legend.expert': 'विशेषज्ञ / दैनिक उपयोग',
+    'skills.legend.advanced': 'उन्नत',
+    'skills.legend.intermediate': 'परिचित',
+
+    // Blog section
+    'blog.title': 'नवीनतम',
+    'blog.titleHighlight': 'ब्लॉग पोस्ट',
+    'blog.viewAll': 'सभी पोस्ट देखें',
+
+    // CTA section
+    'cta.title': 'संपर्क करें',
+    'cta.description': 'अगर आप तकनीक पर चर्चा करना चाहते हैं, विचार साझा करना चाहते हैं, या बस नमस्ते कहना चाहते हैं, तो बेझिझक संपर्क करें।',
+    'cta.contact': 'संपर्क करें',
+    'cta.github': 'GitHub देखें',
+
+    // Footer
+    'footer.rights': 'सर्वाधिकार सुरक्षित।',
+
+    // About page
+    'about.title': 'मेरे',
+    'about.titleHighlight': 'बारे में',
+    'about.intro': 'नमस्ते, मैं हूँ',
+    'about.experience': 'के साथ',
+    'about.yearsExp': '10+ वर्षों',
+    'about.expText': 'का सॉफ्टवेयर डेवलपमेंट का अनुभव। वर्तमान में',
+    'about.location': 'बॉन, जर्मनी',
+    'about.description1': 'मैं बैकएंड इंजीनियरिंग और ऑपरेशंस टीमों का नेतृत्व करता हूँ जटिल प्लेटफॉर्म ट्रांसफॉर्मेशन के माध्यम से—लीगेसी, सिंगल-टेनेंट सिस्टम को स्केलेबल, वैश्विक रूप से वितरित',
+    'about.multiTenant': 'मल्टी-टेनेंट SaaS आर्किटेक्चर',
+    'about.description2': 'मेरे फोकस क्षेत्रों में शामिल हैं',
+    'about.cloudNative': 'क्लाउड-नेटिव आर्किटेक्चर',
+    'about.description3': ', मल्टी-टेनेंसी पैटर्न,',
+    'about.kubernetes': 'Kubernetes',
+    'about.description4': ', प्लेटफॉर्म ऑपरेशंस, और टीमों को SaaSification के लिए आवश्यक तकनीकी और संगठनात्मक बदलावों के माध्यम से मार्गदर्शन।',
+    'about.yearsExperience': 'वर्षों का अनुभव',
+    'about.engineersLed': 'इंजीनियरों का नेतृत्व',
+    'about.countriesWorked': 'देशों में काम किया',
+    'about.whatIDo': 'मैं क्या',
+    'about.do': 'करता हूँ',
+    'about.platformMod': 'प्लेटफॉर्म आधुनिकीकरण',
+    'about.platformModDesc': 'डोमेन-ड्रिवन डिज़ाइन, स्ट्रैंगलर फिग पैटर्न, और Quarkus जैसे आधुनिक फ्रेमवर्क का उपयोग करके लीगेसी मोनोलिथ को माइक्रोसर्विसेज में बदलना।',
+    'about.k8sCloud': 'Kubernetes और क्लाउड-नेटिव',
+    'about.k8sCloudDesc': 'नेमस्पेस-प्रति-टेनेंट आइसोलेशन, वैश्विक उपलब्धता के लिए जियो-रेप्लिकेटेड इन्फ्रास्ट्रक्चर के साथ Kubernetes पर मल्टी-टेनेंट SaaS बनाना।',
+    'about.security': 'सुरक्षा और अनुपालन',
+    'about.securityDesc': 'सीक्रेट्स मैनेजमेंट के लिए HashiCorp Vault, स्वचालित क्रेडेंशियल रोटेशन। GDPR, TISAX, और ISO 27001 अनुपालन।',
+    'about.gitops': 'GitOps और Observability',
+    'about.gitopsDesc': 'Pulumi और Helm के साथ GitOps प्रैक्टिस। सभी सर्विसेज में डिस्ट्रिब्यूटेड ट्रेसिंग और मेट्रिक्स के साथ व्यापक observability।',
+    'about.engineering': 'इंजीनियरिंग एक्सीलेंस',
+    'about.engineeringDesc': 'Claude और Qodana के साथ AI-ड्रिवन कोड रिव्यू। आर्किटेक्चर निर्णयों के लिए ADRs। arc42 का उपयोग करके प्लेटफॉर्म डॉक्यूमेंटेशन।',
+    'about.teamDev': 'टीम और संगठन विकास',
+    'about.teamDevDesc': 'Team Topologies का उपयोग करके संगठनों का पुनर्गठन। डायरेक्ट और ऑफशोर हायरिंग के माध्यम से टीमों का स्केलिंग। टीम लीड्स का नेतृत्व।',
+    'about.techSkills': 'तकनीकी',
+    'about.skills': 'कौशल',
+    'about.languages': 'भाषाएं',
+    'about.frameworks': 'फ्रेमवर्क',
+    'about.platformCloud': 'प्लेटफॉर्म और क्लाउड',
+    'about.toolsDevops': 'टूल्स और DevOps',
+    'about.expert': 'विशेषज्ञ / दैनिक उपयोग',
+    'about.proficient': 'कुशल',
+    'about.workExp': 'कार्य',
+    'about.experience2': 'अनुभव',
+    'about.education': 'शिक्षा',
+    'about.certifications': 'प्रमाणपत्र',
+    'about.uniProjects': 'विश्वविद्यालय',
+    'about.projects': 'प्रोजेक्ट्स',
+    'about.beyondCode': 'कोड से',
+    'about.code': 'परे',
+    'about.letsConnect': 'संपर्क करें',
+    'about.connectText': 'LinkedIn पर मुझसे जुड़ें या GitHub पर मेरे प्रोजेक्ट्स देखें। मुझे तकनीक पर चर्चा करना और समुदाय के साथ ज्ञान साझा करना पसंद है।',
+    'about.getInTouch': 'संपर्क करें',
+
+    // Projects page
+    'projects.title': 'व्यक्तिगत',
+    'projects.titleHighlight': 'प्रोजेक्ट्स',
+    'projects.description': 'वर्षों में समस्याओं को हल करने या नई तकनीकों को सीखने के लिए बनाए गए साइड प्रोजेक्ट्स और प्रयोगों का संग्रह।',
+    'projects.wantMore': 'और देखना चाहते हैं?',
+    'projects.ctaText': 'अधिक प्रोजेक्ट्स, योगदान, और कोड सैंपल्स के लिए मेरी GitHub प्रोफाइल देखें।',
+    'projects.viewGithub': 'GitHub प्रोफाइल देखें',
   },
 } as const;
 

@@ -1,0 +1,328 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import { getLangFromUrl, useTranslations, getLocalizedPath } from "../../i18n/translations";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Get the latest 3 blog posts
+const allPosts = await getCollection("blog");
+const latestPosts = allPosts
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 3);
+
+const skills = {
+  languages: [
+    { name: "Java", level: "expert" },
+    { name: "SQL", level: "expert" },
+    { name: "TypeScript", level: "advanced" },
+    { name: "Python", level: "intermediate" },
+  ],
+  frameworks: [
+    { name: "Spring Framework", level: "expert" },
+    { name: "Quarkus", level: "expert" },
+    { name: "Jakarta EE", level: "expert" },
+    { name: "JAX-RS", level: "advanced" },
+  ],
+  platform: [
+    { name: "Kubernetes", level: "expert" },
+    { name: "PostgreSQL", level: "expert" },
+    { name: "Docker", level: "advanced" },
+    { name: "HashiCorp Vault", level: "advanced" },
+  ],
+  tools: [
+    { name: "Pulumi / Helm", level: "expert" },
+    { name: "GitLab CI/CD", level: "expert" },
+    { name: "SonarQube / Qodana", level: "advanced" },
+    { name: "Liquibase", level: "advanced" },
+  ],
+};
+
+const getLevelColor = (level: string) => {
+  switch (level) {
+    case "expert":
+      return "bg-primary-500";
+    case "advanced":
+      return "bg-accent-500";
+    default:
+      return "bg-slate-400";
+  }
+};
+---
+
+<BaseLayout title="होम" description="वारिज कपिल - Head of Backend Engineering & Operations, बॉन, जर्मनी में स्थित। मल्टी-टेनेंट SaaS, Kubernetes, और प्लेटफॉर्म आधुनिकीकरण में विशेषज्ञता।">
+  <!-- Hero Section -->
+  <section class="relative min-h-[90vh] flex items-center overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute top-20 left-10 w-72 h-72 bg-primary-500/10 rounded-full blur-3xl animate-float"></div>
+      <div class="absolute bottom-20 right-10 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl animate-float" style="animation-delay: -3s;"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-primary-500/5 to-accent-500/5 rounded-full blur-3xl"></div>
+    </div>
+
+    <div class="container-custom">
+      <div class="max-w-4xl">
+        <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+          {t('hero.greeting')} <span class="gradient-text">{t('hero.name')}</span>
+        </h1>
+
+        <p class="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-8 leading-relaxed max-w-2xl">
+          <strong class="text-slate-900 dark:text-slate-100">{t('hero.title')}</strong>, <strong class="text-slate-900 dark:text-slate-100">{t('hero.location')}</strong> में स्थित।
+          {t('hero.description')}
+        </p>
+
+        <div class="flex flex-wrap gap-4">
+          <a href={getLocalizedPath("/about", lang)} class="btn btn-primary">
+            {t('hero.cta.about')}
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+          <a href="/blog" class="btn btn-secondary">
+            {t('hero.cta.blog')}
+          </a>
+        </div>
+
+        <!-- Social Links -->
+        <div class="flex items-center gap-4 mt-10">
+          <span class="text-sm text-slate-500 dark:text-slate-500">{t('hero.social')}</span>
+          <div class="flex gap-3">
+            <a
+              href="https://github.com/varijkapil13"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              aria-label="GitHub"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+              </svg>
+            </a>
+            <a
+              href="https://twitter.com/varijkapil13"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              aria-label="Twitter"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+            </a>
+            <a
+              href="https://linkedin.com/in/varijkapil"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              aria-label="LinkedIn"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="section bg-white dark:bg-slate-900">
+    <div class="container-custom">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">
+          {t('skills.title')} <span class="gradient-text">{t('skills.titleHighlight')}</span>
+        </h2>
+        <p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+          तकनीकें और टूल्स जिनका उपयोग मैं विचारों को जीवन में लाने के लिए करता हूँ
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Languages -->
+        <div class="card p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="p-2 rounded-lg bg-primary-50 dark:bg-primary-950">
+              <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-lg">{t('skills.languages')}</h3>
+          </div>
+          <div class="space-y-3">
+            {skills.languages.map((skill) => (
+              <div class="flex items-center justify-between">
+                <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
+                <span class={`w-2 h-2 rounded-full ${getLevelColor(skill.level)}`}></span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Frameworks -->
+        <div class="card p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="p-2 rounded-lg bg-accent-50 dark:bg-accent-950">
+              <svg class="w-6 h-6 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-lg">{t('skills.frameworks')}</h3>
+          </div>
+          <div class="space-y-3">
+            {skills.frameworks.map((skill) => (
+              <div class="flex items-center justify-between">
+                <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
+                <span class={`w-2 h-2 rounded-full ${getLevelColor(skill.level)}`}></span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Platform -->
+        <div class="card p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="p-2 rounded-lg bg-green-50 dark:bg-green-950">
+              <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-lg">{t('skills.platform')}</h3>
+          </div>
+          <div class="space-y-3">
+            {skills.platform.map((skill) => (
+              <div class="flex items-center justify-between">
+                <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
+                <span class={`w-2 h-2 rounded-full ${getLevelColor(skill.level)}`}></span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Tools -->
+        <div class="card p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="p-2 rounded-lg bg-orange-50 dark:bg-orange-950">
+              <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-lg">{t('skills.tools')}</h3>
+          </div>
+          <div class="space-y-3">
+            {skills.tools.map((skill) => (
+              <div class="flex items-center justify-between">
+                <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
+                <span class={`w-2 h-2 rounded-full ${getLevelColor(skill.level)}`}></span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="flex justify-center gap-6 mt-8 text-sm text-slate-600 dark:text-slate-400">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-primary-500"></span>
+          <span>{t('skills.legend.expert')}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-accent-500"></span>
+          <span>{t('skills.legend.advanced')}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+          <span>{t('skills.legend.intermediate')}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest Blog Posts -->
+  <section class="section">
+    <div class="container-custom">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">
+            {t('blog.title')} <span class="gradient-text">{t('blog.titleHighlight')}</span>
+          </h2>
+          <p class="text-slate-600 dark:text-slate-400 max-w-xl">
+            विचार, ट्यूटोरियल, और समस्याओं के समाधान जिनका मैंने सामना किया है
+          </p>
+        </div>
+        <a href="/blog" class="mt-4 md:mt-0 text-primary-500 hover:text-primary-600 font-medium inline-flex items-center gap-2">
+          {t('blog.viewAll')}
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+      </div>
+
+      {latestPosts.length > 0 ? (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {latestPosts.map((post) => (
+            <a href={`/blog/${post.slug}`} class="card card-hover p-6 group">
+              <div class="flex flex-wrap gap-2 mb-4">
+                {post.data.tags?.slice(0, 2).map((tag: string) => (
+                  <span class="px-2 py-1 rounded-full bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 text-xs font-medium">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <h3 class="text-xl font-semibold mb-2 group-hover:text-primary-500 transition-colors">
+                {post.data.title}
+              </h3>
+              <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-2">
+                {post.data.description || "और पढ़ने के लिए क्लिक करें..."}
+              </p>
+              <time class="text-sm text-slate-500 dark:text-slate-500">
+                {new Date(post.data.date).toLocaleDateString('hi-IN', {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </time>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12 text-slate-600 dark:text-slate-400">
+          <p>ब्लॉग पोस्ट जल्द आ रहे हैं...</p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section bg-gradient-to-r from-primary-500 to-accent-500 text-white">
+    <div class="container-custom text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        {t('cta.title')}
+      </h2>
+      <p class="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
+        {t('cta.description')}
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a
+          href="mailto:contact@varij.dev"
+          class="btn bg-white text-primary-600 hover:bg-slate-100"
+        >
+          {t('cta.contact')}
+        </a>
+        <a
+          href="https://github.com/varijkapil13"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn bg-white/10 hover:bg-white/20 backdrop-blur"
+        >
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+          </svg>
+          {t('cta.github')}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
