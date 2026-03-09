@@ -1,13 +1,15 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://varij.dev',
   integrations: [
-    tailwind(),
     sitemap()
   ],
+  vite: {
+    plugins: [tailwindcss()]
+  },
   output: 'static',
   i18n: {
     defaultLocale: 'en',
