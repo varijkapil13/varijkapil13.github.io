@@ -182,14 +182,14 @@ const projects = [
           </div>
         </div>
         <div class="relative">
-          <div class="aspect-square rounded-2xl bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center">
+          <div class="aspect-square rounded-2xl bg-gradient-to-br from-primary-500/10 to-accent-500/10 flex items-center justify-center">
             <div class="w-48 h-48 rounded-full bg-gradient-to-r from-primary-500 to-accent-500 flex items-center justify-center text-white text-7xl font-bold shadow-2xl">
               VK
             </div>
           </div>
-          <!-- Floating elements -->
-          <div class="absolute -top-4 -right-4 w-24 h-24 bg-primary-500/10 rounded-2xl rotate-12 animate-float"></div>
-          <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-accent-500/10 rounded-2xl -rotate-12 animate-float" style="animation-delay: -2s;"></div>
+          <!-- Subtle decorative elements -->
+          <div class="absolute -top-4 -right-4 w-24 h-24 bg-primary-500/5 rounded-2xl rotate-12"></div>
+          <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-accent-500/5 rounded-2xl -rotate-12"></div>
         </div>
       </div>
 
@@ -400,32 +400,41 @@ const projects = [
           Work <span class="gradient-text">Experience</span>
         </h2>
 
-        <div class="space-y-6">
+        <div class="space-y-4">
           {experience.map((job, index) => (
-            <div class="card p-6 md:p-8 relative overflow-hidden">
-              <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary-500 to-accent-500"></div>
-              <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
-                <div>
-                  <h3 class="text-xl font-bold">{job.role}</h3>
-                  <p class="text-primary-500 font-medium">{job.company}</p>
-                </div>
-                <div class="text-slate-600 dark:text-slate-400 mt-2 md:mt-0 md:text-right">
-                  <p class="font-medium">{job.period}</p>
-                  <p class="text-sm">{job.location}</p>
-                </div>
-              </div>
-              <p class="text-slate-600 dark:text-slate-400 mb-4">{job.description}</p>
-              <ul class="space-y-2">
-                {job.highlights.map((highlight) => (
-                  <li class="flex items-start gap-2 text-slate-700 dark:text-slate-300">
-                    <svg class="w-5 h-5 text-primary-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            <details class="card overflow-hidden group" open={index === 0}>
+              <summary class="p-6 md:p-8 cursor-pointer list-none relative">
+                <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary-500 to-accent-500"></div>
+                <div class="flex flex-col md:flex-row md:items-start md:justify-between">
+                  <div class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-slate-400 mt-1 transition-transform group-open:rotate-90 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
-                    {highlight}
-                  </li>
-                ))}
-              </ul>
-            </div>
+                    <div>
+                      <h3 class="text-xl font-bold">{job.role}</h3>
+                      <p class="text-primary-500 font-medium">{job.company}</p>
+                    </div>
+                  </div>
+                  <div class="text-slate-600 dark:text-slate-400 mt-2 md:mt-0 md:text-right ml-8 md:ml-0">
+                    <p class="font-medium">{job.period}</p>
+                    <p class="text-sm">{job.location}</p>
+                  </div>
+                </div>
+              </summary>
+              <div class="px-6 md:px-8 pb-6 md:pb-8 ml-8">
+                <p class="text-slate-600 dark:text-slate-400 mb-4">{job.description}</p>
+                <ul class="space-y-2">
+                  {job.highlights.map((highlight) => (
+                    <li class="flex items-start gap-2 text-slate-700 dark:text-slate-300">
+                      <svg class="w-5 h-5 text-primary-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                      {highlight}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </details>
           ))}
         </div>
       </div>

@@ -2,6 +2,7 @@
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
+import { getLangFromUrl } from "../i18n/translations";
 
 interface Props {
   title: string;
@@ -22,6 +23,8 @@ const {
   modifiedDate,
   tags = []
 } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
 
 const currentPath = Astro.url.pathname;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -76,7 +79,7 @@ const articleSchema = article ? {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -121,10 +124,7 @@ const articleSchema = article ? {
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <!-- Fonts loaded via fontsource in global.css -->
 
     <!-- Theme Script (prevent flash) -->
     <script is:inline>
