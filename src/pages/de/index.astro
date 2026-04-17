@@ -39,6 +39,17 @@ const skills = {
   ],
 };
 
+const getLevelWidth = (level: string) => {
+  switch (level) {
+    case "expert":
+      return "w-full";
+    case "advanced":
+      return "w-3/4";
+    default:
+      return "w-1/2";
+  }
+};
+
 const getLevelColor = (level: string) => {
   switch (level) {
     case "expert":
@@ -152,9 +163,14 @@ const getLevelColor = (level: string) => {
           </div>
           <div class="space-y-3">
             {skills.languages.map((skill) => (
-              <div class="flex items-center justify-between">
-                <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
-                <span class={`w-2 h-2 rounded-full ${getLevelColor(skill.level)}`}></span>
+              <div class="space-y-1">
+                <div class="flex items-center justify-between text-sm">
+                  <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
+                  <span class="text-xs text-slate-500 capitalize">{skill.level}</span>
+                </div>
+                <div class="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <div class={`h-full rounded-full ${getLevelColor(skill.level)} ${getLevelWidth(skill.level)}`}></div>
+                </div>
               </div>
             ))}
           </div>
@@ -172,9 +188,14 @@ const getLevelColor = (level: string) => {
           </div>
           <div class="space-y-3">
             {skills.frameworks.map((skill) => (
-              <div class="flex items-center justify-between">
-                <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
-                <span class={`w-2 h-2 rounded-full ${getLevelColor(skill.level)}`}></span>
+              <div class="space-y-1">
+                <div class="flex items-center justify-between text-sm">
+                  <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
+                  <span class="text-xs text-slate-500 capitalize">{skill.level}</span>
+                </div>
+                <div class="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <div class={`h-full rounded-full ${getLevelColor(skill.level)} ${getLevelWidth(skill.level)}`}></div>
+                </div>
               </div>
             ))}
           </div>
@@ -192,9 +213,14 @@ const getLevelColor = (level: string) => {
           </div>
           <div class="space-y-3">
             {skills.platform.map((skill) => (
-              <div class="flex items-center justify-between">
-                <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
-                <span class={`w-2 h-2 rounded-full ${getLevelColor(skill.level)}`}></span>
+              <div class="space-y-1">
+                <div class="flex items-center justify-between text-sm">
+                  <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
+                  <span class="text-xs text-slate-500 capitalize">{skill.level}</span>
+                </div>
+                <div class="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <div class={`h-full rounded-full ${getLevelColor(skill.level)} ${getLevelWidth(skill.level)}`}></div>
+                </div>
               </div>
             ))}
           </div>
@@ -213,9 +239,14 @@ const getLevelColor = (level: string) => {
           </div>
           <div class="space-y-3">
             {skills.tools.map((skill) => (
-              <div class="flex items-center justify-between">
-                <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
-                <span class={`w-2 h-2 rounded-full ${getLevelColor(skill.level)}`}></span>
+              <div class="space-y-1">
+                <div class="flex items-center justify-between text-sm">
+                  <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
+                  <span class="text-xs text-slate-500 capitalize">{skill.level}</span>
+                </div>
+                <div class="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <div class={`h-full rounded-full ${getLevelColor(skill.level)} ${getLevelWidth(skill.level)}`}></div>
+                </div>
               </div>
             ))}
           </div>
@@ -223,17 +254,23 @@ const getLevelColor = (level: string) => {
       </div>
 
       <!-- Legend -->
-      <div class="flex justify-center gap-6 mt-8 text-sm text-slate-600 dark:text-slate-400">
+      <div class="flex flex-wrap justify-center gap-6 mt-8 text-sm text-slate-600 dark:text-slate-400">
         <div class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-primary-500"></span>
+          <div class="w-12 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+            <div class="h-full w-full rounded-full bg-primary-500"></div>
+          </div>
           <span>{t('skills.legend.expert')}</span>
         </div>
         <div class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-accent-500"></span>
+          <div class="w-12 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+            <div class="h-full w-3/4 rounded-full bg-accent-500"></div>
+          </div>
           <span>{t('skills.legend.advanced')}</span>
         </div>
         <div class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+          <div class="w-12 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+            <div class="h-full w-1/2 rounded-full bg-slate-400"></div>
+          </div>
           <span>{t('skills.legend.intermediate')}</span>
         </div>
       </div>
@@ -263,27 +300,40 @@ const getLevelColor = (level: string) => {
       {latestPosts.length > 0 ? (
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {latestPosts.map((post) => (
-            <a href={`/blog/${post.slug}`} class="card card-hover p-6 group">
-              <div class="flex flex-wrap gap-2 mb-4">
-                {post.data.tags?.slice(0, 2).map((tag: string) => (
-                  <span class="px-2 py-1 rounded-full bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 text-xs font-medium">
-                    {tag}
-                  </span>
-                ))}
+            <a href={`/blog/${post.slug}`} class="card card-hover overflow-hidden group">
+              <div class="aspect-video bg-gradient-to-br from-primary-500/20 to-accent-500/20 relative overflow-hidden">
+                {post.data.image ? (
+                  <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                ) : (
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <svg class="w-12 h-12 text-primary-500/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                    </svg>
+                  </div>
+                )}
               </div>
-              <h3 class="text-xl font-semibold mb-2 group-hover:text-primary-500 transition-colors">
-                {post.data.title}
-              </h3>
-              <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-2">
-                {post.data.description || "Klicken Sie, um mehr zu lesen..."}
-              </p>
-              <time class="text-sm text-slate-500 dark:text-slate-500">
-                {new Date(post.data.date).toLocaleDateString('de-DE', {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </time>
+              <div class="p-6">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  {post.data.tags?.slice(0, 2).map((tag: string) => (
+                    <span class="px-2 py-1 rounded-full bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 text-xs font-medium">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <h3 class="text-lg font-semibold mb-2 group-hover:text-primary-500 transition-colors line-clamp-2">
+                  {post.data.title}
+                </h3>
+                <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-2">
+                  {post.data.description || "Klicken Sie, um mehr zu lesen..."}
+                </p>
+                <time class="text-sm text-slate-500 dark:text-slate-500">
+                  {new Date(post.data.date).toLocaleDateString('de-DE', {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </time>
+              </div>
             </a>
           ))}
         </div>

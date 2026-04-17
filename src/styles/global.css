@@ -1,4 +1,11 @@
 @import "tailwindcss";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/inter/800.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
 
 @theme {
   /* Primary color palette (sky-based) */
@@ -112,7 +119,7 @@
 
 @layer utilities {
   .animate-float {
-    animation: float 6s ease-in-out infinite;
+    animation: float 12s ease-in-out infinite;
   }
 
   @keyframes float {
@@ -120,13 +127,13 @@
       transform: translateY(0);
     }
     50% {
-      transform: translateY(-20px);
+      transform: translateY(-8px);
     }
   }
 
   .animate-gradient {
     background-size: 200% 200%;
-    animation: gradient 8s ease infinite;
+    animation: gradient 15s ease infinite;
   }
 
   @keyframes gradient {
