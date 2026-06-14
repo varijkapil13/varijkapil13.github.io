@@ -2,7 +2,7 @@
 import { languages, getLangFromUrl, getLocalizedPath } from '../i18n/translations';
 
 const currentLang = getLangFromUrl(Astro.url);
-const currentPath = Astro.url.pathname.replace(/^\/(en|de)/, '') || '/';
+const currentPath = Astro.url.pathname.replace(/^\/(en|de|hi)/, '') || '/';
 ---
 
 <div class="lang-switcher relative">
