@@ -27,6 +27,7 @@ export const translations = {
     // Skills section
     'skills.title': 'Technical',
     'skills.titleHighlight': 'Skills',
+    'skills.description': 'Technologies and tools I work with to bring ideas to life',
     'skills.languages': 'Languages',
     'skills.frameworks': 'Frameworks',
     'skills.platform': 'Platform & Cloud',
@@ -38,7 +39,10 @@ export const translations = {
     // Blog section
     'blog.title': 'Latest from the',
     'blog.titleHighlight': 'Blog',
+    'blog.description': 'Thoughts, tutorials, and solutions to problems I have encountered',
     'blog.viewAll': 'View all posts',
+    'blog.comingSoon': 'Blog posts coming soon...',
+    'blog.readMore': 'Click to read more...',
 
     // CTA section
     'cta.title': "Let's Connect",
@@ -48,6 +52,8 @@ export const translations = {
 
     // Footer
     'footer.rights': 'All rights reserved.',
+    'footer.quickLinks': 'Quick Links',
+    'footer.connect': 'Connect',
 
     // About page
     'about.title': 'About',
@@ -63,7 +69,7 @@ export const translations = {
     'about.cloudNative': 'cloud-native architecture',
     'about.description3': ', multi-tenancy patterns,',
     'about.kubernetes': 'Kubernetes',
-    'about.description4': ', platform operations, and guiding teams through both the technical and organizational shifts that SaaSification demands.',
+    'about.description4': ', platform operations, and guiding teams through both the technical and organizational shifts that SaaS transformation demands.',
     'about.yearsExperience': 'Years Experience',
     'about.engineersLed': 'Engineers Led',
     'about.countriesWorked': 'Countries Worked',
@@ -129,6 +135,7 @@ export const translations = {
     // Skills section
     'skills.title': 'Technische',
     'skills.titleHighlight': 'Fähigkeiten',
+    'skills.description': 'Technologien und Tools, mit denen ich Ideen zum Leben erwecke',
     'skills.languages': 'Sprachen',
     'skills.frameworks': 'Frameworks',
     'skills.platform': 'Plattform & Cloud',
@@ -140,7 +147,10 @@ export const translations = {
     // Blog section
     'blog.title': 'Neueste',
     'blog.titleHighlight': 'Blogbeiträge',
+    'blog.description': 'Gedanken, Tutorials und Lösungen für Probleme, auf die ich gestoßen bin',
     'blog.viewAll': 'Alle Beiträge',
+    'blog.comingSoon': 'Blogbeiträge kommen bald...',
+    'blog.readMore': 'Klicken Sie, um mehr zu lesen...',
 
     // CTA section
     'cta.title': 'Kontakt aufnehmen',
@@ -150,6 +160,8 @@ export const translations = {
 
     // Footer
     'footer.rights': 'Alle Rechte vorbehalten.',
+    'footer.quickLinks': 'Schnelllinks',
+    'footer.connect': 'Verbinden',
 
     // About page
     'about.title': 'Über',
@@ -165,7 +177,7 @@ export const translations = {
     'about.cloudNative': 'Cloud-native Architektur',
     'about.description3': ', Multi-Tenancy-Muster,',
     'about.kubernetes': 'Kubernetes',
-    'about.description4': ', Plattform-Operations und die Begleitung von Teams durch technische und organisatorische Veränderungen, die eine SaaS-Transformation erfordert.',
+    'about.description4': ', Plattform-Operations und die Begleitung von Teams durch die technischen und organisatorischen Veränderungen einer SaaS-Transformation.',
     'about.yearsExperience': 'Jahre Erfahrung',
     'about.engineersLed': 'Ingenieure geleitet',
     'about.countriesWorked': 'Länder gearbeitet',
@@ -231,6 +243,7 @@ export const translations = {
     // Skills section
     'skills.title': 'तकनीकी',
     'skills.titleHighlight': 'कौशल',
+    'skills.description': 'विचारों को जीवंत करने के लिए मैं जिन तकनीकों और टूल्स के साथ काम करता हूँ',
     'skills.languages': 'भाषाएं',
     'skills.frameworks': 'फ्रेमवर्क',
     'skills.platform': 'प्लेटफॉर्म और क्लाउड',
@@ -242,7 +255,10 @@ export const translations = {
     // Blog section
     'blog.title': 'नवीनतम',
     'blog.titleHighlight': 'ब्लॉग पोस्ट',
+    'blog.description': 'मेरे विचार, ट्यूटोरियल, और समस्याओं के समाधान',
     'blog.viewAll': 'सभी पोस्ट देखें',
+    'blog.comingSoon': 'ब्लॉग पोस्ट जल्द आ रहे हैं...',
+    'blog.readMore': 'और पढ़ने के लिए क्लिक करें...',
 
     // CTA section
     'cta.title': 'संपर्क करें',
@@ -252,6 +268,8 @@ export const translations = {
 
     // Footer
     'footer.rights': 'सर्वाधिकार सुरक्षित।',
+    'footer.quickLinks': 'त्वरित लिंक',
+    'footer.connect': 'जुड़ें',
 
     // About page
     'about.title': 'मेरे',
@@ -267,7 +285,7 @@ export const translations = {
     'about.cloudNative': 'क्लाउड-नेटिव आर्किटेक्चर',
     'about.description3': ', मल्टी-टेनेंसी पैटर्न,',
     'about.kubernetes': 'Kubernetes',
-    'about.description4': ', प्लेटफॉर्म ऑपरेशंस, और टीमों को SaaSification के लिए आवश्यक तकनीकी और संगठनात्मक बदलावों के माध्यम से मार्गदर्शन।',
+    'about.description4': ', प्लेटफॉर्म ऑपरेशंस, और SaaS ट्रांसफॉर्मेशन के लिए आवश्यक तकनीकी और संगठनात्मक बदलावों में टीमों का मार्गदर्शन।',
     'about.yearsExperience': 'वर्षों का अनुभव',
     'about.engineersLed': 'इंजीनियरों का नेतृत्व',
     'about.countriesWorked': 'देशों में काम किया',

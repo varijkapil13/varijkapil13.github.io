@@ -1,0 +1,149 @@
+---
+import { skills, getLevelColor, getLevelWidth } from '../data/skills';
+import { useTranslations } from '../i18n/translations';
+
+interface Props {
+  lang: string;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang as 'en' | 'de' | 'hi');
+---
+
+<section class="section bg-white dark:bg-slate-900">
+  <div class="container-custom">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        {t('skills.title')} <span class="gradient-text">{t('skills.titleHighlight')}</span>
+      </h2>
+      <p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+        {t('skills.description')}
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Languages -->
+      <div class="card p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="p-2 rounded-lg bg-primary-50 dark:bg-primary-950">
+            <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-lg">{t('skills.languages')}</h3>
+        </div>
+        <div class="space-y-3">
+          {skills.languages.map((skill) => (
+            <div class="space-y-1">
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
+                <span class="text-xs text-slate-500 capitalize">{skill.level}</span>
+              </div>
+              <div class="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                <div class={`h-full rounded-full ${getLevelColor(skill.level)} ${getLevelWidth(skill.level)}`}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Frameworks -->
+      <div class="card p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="p-2 rounded-lg bg-accent-50 dark:bg-accent-950">
+            <svg class="w-6 h-6 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-lg">{t('skills.frameworks')}</h3>
+        </div>
+        <div class="space-y-3">
+          {skills.frameworks.map((skill) => (
+            <div class="space-y-1">
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
+                <span class="text-xs text-slate-500 capitalize">{skill.level}</span>
+              </div>
+              <div class="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                <div class={`h-full rounded-full ${getLevelColor(skill.level)} ${getLevelWidth(skill.level)}`}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Platform -->
+      <div class="card p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="p-2 rounded-lg bg-green-50 dark:bg-green-950">
+            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-lg">{t('skills.platform')}</h3>
+        </div>
+        <div class="space-y-3">
+          {skills.platform.map((skill) => (
+            <div class="space-y-1">
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
+                <span class="text-xs text-slate-500 capitalize">{skill.level}</span>
+              </div>
+              <div class="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                <div class={`h-full rounded-full ${getLevelColor(skill.level)} ${getLevelWidth(skill.level)}`}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Tools -->
+      <div class="card p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="p-2 rounded-lg bg-orange-50 dark:bg-orange-950">
+            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-lg">{t('skills.tools')}</h3>
+        </div>
+        <div class="space-y-3">
+          {skills.tools.map((skill) => (
+            <div class="space-y-1">
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-slate-700 dark:text-slate-300">{skill.name}</span>
+                <span class="text-xs text-slate-500 capitalize">{skill.level}</span>
+              </div>
+              <div class="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                <div class={`h-full rounded-full ${getLevelColor(skill.level)} ${getLevelWidth(skill.level)}`}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="flex flex-wrap justify-center gap-6 mt-8 text-sm text-slate-600 dark:text-slate-400">
+      <div class="flex items-center gap-2">
+        <div class="w-12 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+          <div class="h-full w-full rounded-full bg-primary-500"></div>
+        </div>
+        <span>{t('skills.legend.expert')}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-12 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+          <div class="h-full w-3/4 rounded-full bg-accent-500"></div>
+        </div>
+        <span>{t('skills.legend.advanced')}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-12 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+          <div class="h-full w-1/2 rounded-full bg-slate-400"></div>
+        </div>
+        <span>{t('skills.legend.intermediate')}</span>
+      </div>
+    </div>
+  </div>
+</section>
