@@ -1,0 +1,125 @@
+---
+import SkillsSection from "./SkillsSection.astro";
+import SocialLinks from "./SocialLinks.astro";
+import BlogPostCard from "./BlogPostCard.astro";
+import { getCollection } from "astro:content";
+import { useTranslations, getLocalizedPath } from "../i18n/translations";
+import { linkedinUrl } from "../data/social";
+import { readingTime } from "../utils/readingTime";
+
+interface Props {
+  lang: "en" | "de" | "hi";
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Latest 3 published posts
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const latestPosts = allPosts
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+---
+
+<!-- Hero Section -->
+<section class="relative min-h-[90vh] flex items-center overflow-hidden">
+  <!-- Background decoration -->
+  <div class="absolute inset-0 -z-10" aria-hidden="true">
+    <div class="absolute top-20 left-10 w-72 h-72 bg-primary-500/10 rounded-full blur-3xl animate-float"></div>
+    <div class="absolute bottom-20 right-10 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl animate-float" style="animation-delay: -3s;"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-primary-500/5 to-accent-500/5 rounded-full blur-3xl"></div>
+  </div>
+
+  <div class="container-custom">
+    <div class="max-w-4xl">
+      <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+        {t('hero.greeting')} <span class="gradient-text">{t('hero.name')}</span>
+      </h1>
+
+      <p class="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-8 leading-relaxed max-w-2xl">
+        <strong class="text-slate-900 dark:text-slate-100">{t('hero.title')}</strong>{t('hero.basedIn')}<strong class="text-slate-900 dark:text-slate-100">{t('hero.location')}</strong>{t('hero.basedInSuffix')}{" "}
+        {t('hero.description')}
+      </p>
+
+      <div class="flex flex-wrap gap-4">
+        <a href={getLocalizedPath("/about", lang)} class="btn btn-primary">
+          {t('hero.cta.about')}
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+        <a href="/blog" class="btn btn-secondary">
+          {t('hero.cta.blog')}
+        </a>
+      </div>
+
+      <!-- Social Links -->
+      <div class="flex items-center gap-4 mt-10">
+        <span class="text-sm text-slate-500 dark:text-slate-500">{t('hero.social')}</span>
+        <SocialLinks />
+      </div>
+    </div>
+  </div>
+</section>
+
+<SkillsSection lang={lang} />
+
+<!-- Latest Blog Posts -->
+<section class="section">
+  <div class="container-custom">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
+      <div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">
+          {t('blog.title')} <span class="gradient-text">{t('blog.titleHighlight')}</span>
+        </h2>
+        <p class="text-slate-600 dark:text-slate-400 max-w-xl">
+          {t('blog.description')}
+        </p>
+      </div>
+      <a href="/blog" class="mt-4 md:mt-0 text-primary-500 hover:text-primary-600 font-medium inline-flex items-center gap-2">
+        {t('blog.viewAll')}
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </a>
+    </div>
+
+    {latestPosts.length > 0 ? (
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {latestPosts.map((post) => (
+          <BlogPostCard
+            slug={post.id}
+            title={post.data.title}
+            description={post.data.description || t('blog.readMore')}
+            date={post.data.date}
+            tags={post.data.tags}
+            image={post.data.image}
+            minutes={readingTime(post.body)}
+            lang={lang}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-12 text-slate-600 dark:text-slate-400">
+        <p>{t('blog.comingSoon')}</p>
+      </div>
+    )}
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section bg-gradient-to-r from-primary-500 to-accent-500 text-white">
+  <div class="container-custom text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">
+      {t('cta.title')}
+    </h2>
+    <p class="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
+      {t('cta.description')}
+    </p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" class="btn bg-white text-primary-600 hover:bg-slate-100">
+        {t('cta.contact')}
+      </a>
+    </div>
+  </div>
+</section>

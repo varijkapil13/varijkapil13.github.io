@@ -1,22 +1,23 @@
 ---
 title: "Implementing OAuth 2.0 and OpenID Connect in Enterprise Java Applications"
-description: "A practical guide to securing enterprise applications with OAuth 2.0 and OIDC, based on real-world implementation experience."
+description: "How we secured an enterprise application with OAuth 2.0 and OIDC, and what I learned implementing it."
 date: 2024-07-22
+image: "/images/blog/oauth-oidc-enterprise-java.jpg"
 tags: ["java", "security", "oauth", "enterprise"]
 ---
 
-Authentication and authorization are critical components of any enterprise application. After implementing OAuth 2.0 and OpenID Connect (OIDC) for a large-scale automotive industry platform, I want to share some insights and lessons learned.
+I recently implemented OAuth 2.0 and OpenID Connect (OIDC) for a large-scale automotive industry platform. This post covers the decisions we made and what I'd do the same way again.
 
 ## Why OAuth 2.0 and OpenID Connect?
 
-Traditional session-based authentication doesn't scale well in modern distributed systems. OAuth 2.0 provides a robust framework for authorization, while OpenID Connect adds an identity layer on top, giving us:
+Traditional session-based authentication doesn't scale well in distributed systems. OAuth 2.0 is a standard framework for authorization, and OpenID Connect adds an identity layer on top. Together they gave us:
 
-- **Single Sign-On (SSO)** across multiple applications
-- **Standardized token-based authentication**
-- **Decoupled identity management**
-- **Better security** through short-lived tokens and refresh mechanisms
+- Single sign-on (SSO) across multiple applications
+- Standardized token-based authentication
+- Identity management decoupled from the applications
+- Better security through short-lived tokens and refresh tokens
 
-## Architecture Overview
+## Architecture overview
 
 In our implementation, we used a three-tier approach:
 
@@ -27,16 +28,16 @@ In our implementation, we used a three-tier approach:
 └─────────────────┘     └─────────────────┘     └─────────────────┘
 ```
 
-The Authorization Server handles:
+The authorization server handles:
 - User authentication
 - Token issuance (access tokens, refresh tokens, ID tokens)
 - Token validation and introspection
 
-## Key Implementation Decisions
+## Implementation decisions
 
-### 1. Token Storage Strategy
+### 1. Token storage
 
-For our React frontend, we opted for **in-memory token storage** combined with refresh tokens stored in HTTP-only cookies:
+For our React frontend, we kept access tokens in memory and stored refresh tokens in HTTP-only cookies:
 
 ```javascript
 // Token service - simplified example
@@ -64,7 +65,7 @@ class TokenService {
 }
 ```
 
-### 2. Backend Token Validation
+### 2. Backend token validation
 
 On the Jakarta EE backend, we implemented a JAX-RS filter for token validation:
 
@@ -98,20 +99,20 @@ public class OAuthFilter implements ContainerRequestFilter {
 }
 ```
 
-### 3. Scope-Based Authorization
+### 3. Scope-based authorization
 
 We defined granular scopes for different operations:
 
-- `read:reports` - View reports
-- `write:reports` - Create/modify reports
-- `admin:users` - User management
-- `manage:tasks` - Task management operations
+- `read:reports`: view reports
+- `write:reports`: create or modify reports
+- `admin:users`: user management
+- `manage:tasks`: task management operations
 
-## Lessons Learned
+## Lessons learned
 
-### Handle Token Expiration Gracefully
+### Handle token expiration before it happens
 
-One of the biggest challenges was handling token expiration in the frontend without disrupting user experience. We implemented a **proactive refresh strategy**:
+One of the hardest parts was handling token expiration in the frontend without interrupting the user. We refresh proactively, before each API call:
 
 ```javascript
 // Check token expiration before each API call
@@ -132,7 +133,7 @@ async function apiCall(endpoint, options) {
 }
 ```
 
-### Implement Proper Logout
+### Implement proper logout
 
 OIDC logout requires coordination between the frontend, your application, and the identity provider:
 
@@ -141,16 +142,16 @@ OIDC logout requires coordination between the frontend, your application, and th
 3. Redirect to identity provider's logout endpoint
 4. Handle the post-logout redirect
 
-### Test Thoroughly
+### Test the whole flow
 
-Security implementations need comprehensive testing:
+We tested at several levels:
 - Unit tests for token validation logic
 - Integration tests for the full authentication flow
 - Security penetration testing
 - Load testing for token validation endpoints
 
-## Conclusion
+## Final thoughts
 
-Implementing OAuth 2.0 and OIDC correctly requires careful planning and attention to security details. The investment pays off with a more secure, scalable, and user-friendly authentication system.
+Getting OAuth 2.0 and OIDC right takes planning, but we ended up with authentication that is more secure and scales better than sessions did, and users get SSO across applications.
 
-The key is to understand the OAuth flows deeply, choose the right flow for your use case (we used Authorization Code Flow with PKCE), and always follow security best practices.
+Most of the work is understanding the OAuth flows well enough to pick the right one for your use case. We used the Authorization Code Flow with PKCE.

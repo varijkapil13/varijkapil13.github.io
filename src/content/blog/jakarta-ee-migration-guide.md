@@ -1,15 +1,16 @@
 ---
-title: "Migrating from Java EE to Jakarta EE: What You Need to Know"
-description: "A practical guide to migrating enterprise applications from Java EE 8 to Jakarta EE 10, including namespace changes and common pitfalls."
+title: "Migrating from Java EE to Jakarta EE"
+description: "How we moved enterprise applications from Java EE 8 to Jakarta EE 10: the namespace changes, config files, app servers, and the pitfalls we hit."
 date: 2024-05-10
+image: "/images/blog/jakarta-ee-migration-guide.jpg"
 tags: ["java", "jakarta-ee", "enterprise", "migration"]
 ---
 
-When Oracle transferred Java EE to the Eclipse Foundation, it became Jakarta EE with significant namespace changes. Here's how we migrated our enterprise applications and what we learned.
+When Oracle transferred Java EE to the Eclipse Foundation, it became Jakarta EE, and the package namespace changed along with the name. This is how we migrated our enterprise applications and what we learned along the way.
 
-## Understanding the Changes
+## What changed
 
-The most significant change is the namespace migration from `javax.*` to `jakarta.*`:
+The biggest change is the namespace move from `javax.*` to `jakarta.*`:
 
 | Java EE 8 | Jakarta EE 9+ |
 |-----------|---------------|
@@ -21,11 +22,11 @@ The most significant change is the namespace migration from `javax.*` to `jakart
 | `javax.validation` | `jakarta.validation` |
 | `javax.json` | `jakarta.json` |
 
-## Migration Strategy
+## Migration strategy
 
-We used a phased approach:
+We migrated in phases.
 
-### Phase 1: Dependency Updates
+### Phase 1: Dependency updates
 
 Update your `pom.xml` from Java EE to Jakarta EE:
 
@@ -47,7 +48,7 @@ Update your `pom.xml` from Java EE to Jakarta EE:
 </dependency>
 ```
 
-Or individual dependencies:
+Or pull in individual dependencies:
 
 ```xml
 <!-- JAX-RS -->
@@ -83,7 +84,7 @@ Or individual dependencies:
 </dependency>
 ```
 
-### Phase 2: Namespace Migration
+### Phase 2: Namespace migration
 
 Replace all `javax` imports with `jakarta`:
 
@@ -111,9 +112,9 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 ```
 
-### Automated Migration
+### Automated migration
 
-Use the Eclipse Transformer for bulk migration:
+The Eclipse Transformer can do the bulk of the work:
 
 ```bash
 # Using Maven plugin
@@ -127,7 +128,7 @@ java -jar org.eclipse.transformer.cli.jar \
     -tr /path/to/jakarta-rules.properties
 ```
 
-For a simpler approach with sed (Linux/Mac):
+If you'd rather keep it simple, sed works too (Linux/Mac):
 
 ```bash
 # Replace in all Java files
@@ -140,7 +141,7 @@ find src -name "*.java" -exec sed -i 's/javax\.servlet/jakarta.servlet/g' {} \;
 find src -name "*.java" -exec sed -i 's/javax\.json/jakarta.json/g' {} \;
 ```
 
-### Phase 3: XML Configuration Files
+### Phase 3: XML configuration files
 
 Update `persistence.xml`:
 
@@ -198,7 +199,7 @@ Update `beans.xml`:
        version="4.0">
 ```
 
-## Application Server Migration
+## Application server migration
 
 ### Payara Server
 
@@ -228,11 +229,11 @@ WildFly 27+ supports Jakarta EE 10:
 </dependency>
 ```
 
-## Common Pitfalls
+## Common pitfalls
 
-### 1. Third-Party Libraries
+### 1. Third-party libraries
 
-Some libraries may still use `javax` namespace. Check compatibility:
+Some libraries still use the `javax` namespace, so check which version you're on:
 
 ```xml
 <!-- Old Hibernate Validator (javax) -->
@@ -266,7 +267,7 @@ import jakarta.ws.rs.client.Client;
 Client client = ClientBuilder.newClient();
 ```
 
-### 3. Security Annotations
+### 3. Security annotations
 
 ```java
 // Before
@@ -290,9 +291,9 @@ import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 ```
 
-## Testing After Migration
+## Testing after migration
 
-Create a test suite to verify everything works:
+We wrote a small test suite to check that injection, persistence, validation, and REST endpoints still work:
 
 ```java
 @ExtendWith(ArquillianExtension.class)
@@ -338,10 +339,10 @@ public class MigrationVerificationTest {
 }
 ```
 
-## Migration Checklist
+## Migration checklist
 
 - [ ] Update `pom.xml` dependencies to Jakarta EE
-- [ ] Run find/replace for `javax` → `jakarta` imports
+- [ ] Replace `javax` imports with `jakarta`
 - [ ] Update `persistence.xml` namespace
 - [ ] Update `web.xml` namespace
 - [ ] Update `beans.xml` namespace
@@ -351,19 +352,19 @@ public class MigrationVerificationTest {
 - [ ] Test deployment to staging
 - [ ] Monitor for runtime issues
 
-## Benefits of Jakarta EE 10
+## What Jakarta EE 10 adds
 
-After migration, you get access to:
+Once you've migrated, you can use:
 
-- **CDI 4.0** - Better event handling, improved interceptors
-- **JPA 3.1** - Java records support, UUID keys
-- **JAX-RS 3.1** - SE bootstrap, better async support
-- **JSON-B 3.0** - Polymorphic type handling
-- **Security 3.0** - OpenID Connect support
-- **Core Profile** - Lighter deployment option
+- CDI 4.0: better event handling and improved interceptors
+- JPA 3.1: Java records support and UUID keys
+- JAX-RS 3.1: SE bootstrap and better async support
+- JSON-B 3.0: polymorphic type handling
+- Security 3.0: OpenID Connect support
+- Core Profile: a lighter deployment option
 
-## Conclusion
+## How much work it is
 
-While the namespace migration requires effort, Jakarta EE 10 brings modern features and active development. The migration is mostly mechanical—update imports and namespaces—with the main challenge being third-party library compatibility.
+Most of the migration is mechanical: you update imports and XML namespaces. The hard part is third-party libraries that haven't moved to `jakarta` yet. In exchange you get a platform that is still actively developed.
 
-Plan for a few days of migration work for a medium-sized application, and always test thoroughly before deploying to production.
+For a medium-sized application, plan for a few days of work, and test thoroughly before anything goes to production.

@@ -19,7 +19,9 @@ export const translations = {
     'hero.name': 'Varij Kapil',
     'hero.title': 'Head of Backend Engineering & Operations',
     'hero.location': 'Bonn, Germany',
-    'hero.description': 'I transform legacy systems into scalable, multi-tenant SaaS platforms using Kubernetes and cloud-native architecture.',
+    'hero.basedIn': ' based in ',
+    'hero.basedInSuffix': '.',
+    'hero.description': 'I move legacy Java systems onto multi-tenant SaaS platforms that run on Kubernetes.',
     'hero.cta.about': 'Learn more about me',
     'hero.cta.blog': 'Read my blog',
     'hero.social': 'Find me on',
@@ -27,32 +29,30 @@ export const translations = {
     // Skills section
     'skills.title': 'Technical',
     'skills.titleHighlight': 'Skills',
-    'skills.description': 'Technologies and tools I work with to bring ideas to life',
+    'skills.description': 'The tools I work with, split by how often I use them',
     'skills.languages': 'Languages',
     'skills.frameworks': 'Frameworks',
     'skills.platform': 'Platform & Cloud',
     'skills.tools': 'Tools',
-    'skills.legend.expert': 'Expert / Daily use',
-    'skills.legend.advanced': 'Advanced',
-    'skills.legend.intermediate': 'Familiar',
+    'skills.daily': 'Use daily',
+    'skills.shipped': 'Have shipped with',
 
     // Blog section
     'blog.title': 'Latest from the',
     'blog.titleHighlight': 'Blog',
-    'blog.description': 'Thoughts, tutorials, and solutions to problems I have encountered',
+    'blog.description': 'Write-ups of problems I ran into at work and how we solved them',
     'blog.viewAll': 'View all posts',
     'blog.comingSoon': 'Blog posts coming soon...',
-    'blog.readMore': 'Click to read more...',
+    'blog.readMore': 'Read the post',
 
     // CTA section
-    'cta.title': "Let's Connect",
-    'cta.description': "Feel free to reach out if you'd like to discuss technology, share ideas, or just say hello.",
-    'cta.contact': 'Get in touch',
-    'cta.github': 'View GitHub',
+    'cta.title': "Let's talk",
+    'cta.description': "Message me on LinkedIn if you want to talk about Java, Kubernetes or platform migrations.",
+    'cta.contact': 'Message me on LinkedIn',
 
     // Footer
     'footer.rights': 'All rights reserved.',
-    'footer.quickLinks': 'Quick Links',
+    'footer.quickLinks': 'Pages',
     'footer.connect': 'Connect',
 
     // About page
@@ -63,13 +63,13 @@ export const translations = {
     'about.yearsExp': '10+ years',
     'about.expText': 'of experience in software development. Currently based in',
     'about.location': 'Bonn, Germany',
-    'about.description1': 'I lead backend engineering and operations teams through complex platform transformations—turning legacy, single-tenant systems into scalable, globally distributed',
+    'about.description1': 'I lead backend engineering and operations teams that move legacy, single-tenant systems onto globally distributed',
     'about.multiTenant': 'multi-tenant SaaS architectures',
     'about.description2': 'My focus areas include',
     'about.cloudNative': 'cloud-native architecture',
     'about.description3': ', multi-tenancy patterns,',
     'about.kubernetes': 'Kubernetes',
-    'about.description4': ', platform operations, and guiding teams through both the technical and organizational shifts that SaaS transformation demands.',
+    'about.description4': ', platform operations, and helping teams through the technical and organizational changes a move to SaaS brings.',
     'about.yearsExperience': 'Years Experience',
     'about.engineersLed': 'Engineers Led',
     'about.countriesWorked': 'Countries Worked',
@@ -82,8 +82,8 @@ export const translations = {
     'about.security': 'Security & Compliance',
     'about.securityDesc': 'HashiCorp Vault for secrets management, automated credential rotation. Driving compliance with GDPR, TISAX, and ISO 27001.',
     'about.gitops': 'GitOps & Observability',
-    'about.gitopsDesc': 'GitOps practices with Pulumi and Helm. Comprehensive observability with distributed tracing and metrics across all services.',
-    'about.engineering': 'Engineering Excellence',
+    'about.gitopsDesc': 'GitOps with Pulumi and Helm. Distributed tracing and metrics across all services.',
+    'about.engineering': 'Engineering practices',
     'about.engineeringDesc': 'AI-driven code reviews with Claude and Qodana. ADRs for architectural decisions. Platform documentation using arc42.',
     'about.teamDev': 'Team & Org Development',
     'about.teamDevDesc': 'Restructuring organizations using Team Topologies. Scaling teams through direct and offshore hiring. Leading team leads.',
@@ -104,16 +104,13 @@ export const translations = {
     'about.beyondCode': 'Beyond',
     'about.code': 'Code',
     'about.letsConnect': "Let's Connect",
-    'about.connectText': 'Feel free to connect with me on LinkedIn or check out my projects on GitHub. I enjoy discussing technology and sharing knowledge with the community.',
+    'about.connectText': 'The best way to reach me is a message on LinkedIn. I like talking shop.',
     'about.getInTouch': 'Get in Touch',
 
     // Projects page
     'projects.title': 'Personal',
     'projects.titleHighlight': 'Projects',
-    'projects.description': "A collection of side projects and experiments I've built over the years to solve problems or learn new technologies.",
-    'projects.wantMore': 'Want to see more?',
-    'projects.ctaText': 'Check out my GitHub profile for more projects, contributions, and code samples.',
-    'projects.viewGithub': 'View GitHub Profile',
+    'projects.description': "Side projects I built to scratch an itch or to learn something new.",
   },
   de: {
     // Navigation
@@ -127,6 +124,8 @@ export const translations = {
     'hero.name': 'Varij Kapil',
     'hero.title': 'Head of Backend Engineering & Operations',
     'hero.location': 'Bonn, Deutschland',
+    'hero.basedIn': ' in ',
+    'hero.basedInSuffix': '.',
     'hero.description': 'Ich transformiere Legacy-Systeme in skalierbare, mandantenfähige SaaS-Plattformen mit Kubernetes und Cloud-nativer Architektur.',
     'hero.cta.about': 'Mehr über mich',
     'hero.cta.blog': 'Zum Blog',
@@ -135,14 +134,13 @@ export const translations = {
     // Skills section
     'skills.title': 'Technische',
     'skills.titleHighlight': 'Fähigkeiten',
-    'skills.description': 'Technologien und Tools, mit denen ich Ideen zum Leben erwecke',
+    'skills.description': 'Die Tools, mit denen ich arbeite, danach sortiert, wie oft ich sie nutze',
     'skills.languages': 'Sprachen',
     'skills.frameworks': 'Frameworks',
     'skills.platform': 'Plattform & Cloud',
     'skills.tools': 'Tools',
-    'skills.legend.expert': 'Experte / Tägliche Nutzung',
-    'skills.legend.advanced': 'Fortgeschritten',
-    'skills.legend.intermediate': 'Vertraut',
+    'skills.daily': 'Täglich im Einsatz',
+    'skills.shipped': 'In Projekten eingesetzt',
 
     // Blog section
     'blog.title': 'Neueste',
@@ -155,8 +153,7 @@ export const translations = {
     // CTA section
     'cta.title': 'Kontakt aufnehmen',
     'cta.description': 'Schreib mir gerne, wenn du über Technologie diskutieren, Ideen austauschen oder einfach Hallo sagen möchtest.',
-    'cta.contact': 'Kontakt',
-    'cta.github': 'GitHub ansehen',
+    'cta.contact': 'Auf LinkedIn schreiben',
 
     // Footer
     'footer.rights': 'Alle Rechte vorbehalten.',
@@ -212,16 +209,13 @@ export const translations = {
     'about.beyondCode': 'Über den',
     'about.code': 'Code hinaus',
     'about.letsConnect': 'Kontakt aufnehmen',
-    'about.connectText': 'Verbinde dich gerne mit mir auf LinkedIn oder schau dir meine Projekte auf GitHub an. Ich freue mich über Diskussionen über Technologie und Wissensaustausch.',
+    'about.connectText': 'Am besten erreichst du mich per Nachricht auf LinkedIn.',
     'about.getInTouch': 'Kontakt',
 
     // Projects page
     'projects.title': 'Persönliche',
     'projects.titleHighlight': 'Projekte',
     'projects.description': 'Eine Sammlung von Nebenprojekten und Experimenten, die ich im Laufe der Jahre gebaut habe, um Probleme zu lösen oder neue Technologien zu lernen.',
-    'projects.wantMore': 'Mehr sehen?',
-    'projects.ctaText': 'Schau dir mein GitHub-Profil für weitere Projekte, Beiträge und Code-Beispiele an.',
-    'projects.viewGithub': 'GitHub-Profil ansehen',
   },
   hi: {
     // Navigation
@@ -235,6 +229,8 @@ export const translations = {
     'hero.name': 'वारिज कपिल',
     'hero.title': 'Head of Backend Engineering & Operations',
     'hero.location': 'बॉन, जर्मनी',
+    'hero.basedIn': ', ',
+    'hero.basedInSuffix': ' में स्थित।',
     'hero.description': 'मैं Kubernetes और क्लाउड-नेटिव आर्किटेक्चर का उपयोग करके लीगेसी सिस्टम को स्केलेबल, मल्टी-टेनेंट SaaS प्लेटफॉर्म में बदलता हूँ।',
     'hero.cta.about': 'मेरे बारे में जानें',
     'hero.cta.blog': 'ब्लॉग पढ़ें',
@@ -243,14 +239,13 @@ export const translations = {
     // Skills section
     'skills.title': 'तकनीकी',
     'skills.titleHighlight': 'कौशल',
-    'skills.description': 'विचारों को जीवंत करने के लिए मैं जिन तकनीकों और टूल्स के साथ काम करता हूँ',
+    'skills.description': 'जिन टूल्स के साथ मैं काम करता हूँ, इस आधार पर कि मैं उन्हें कितनी बार इस्तेमाल करता हूँ',
     'skills.languages': 'भाषाएं',
     'skills.frameworks': 'फ्रेमवर्क',
     'skills.platform': 'प्लेटफॉर्म और क्लाउड',
     'skills.tools': 'टूल्स',
-    'skills.legend.expert': 'विशेषज्ञ / दैनिक उपयोग',
-    'skills.legend.advanced': 'उन्नत',
-    'skills.legend.intermediate': 'परिचित',
+    'skills.daily': 'रोज़ इस्तेमाल',
+    'skills.shipped': 'प्रोजेक्ट्स में इस्तेमाल किया',
 
     // Blog section
     'blog.title': 'नवीनतम',
@@ -263,8 +258,7 @@ export const translations = {
     // CTA section
     'cta.title': 'संपर्क करें',
     'cta.description': 'अगर आप तकनीक पर चर्चा करना चाहते हैं, विचार साझा करना चाहते हैं, या बस नमस्ते कहना चाहते हैं, तो बेझिझक संपर्क करें।',
-    'cta.contact': 'संपर्क करें',
-    'cta.github': 'GitHub देखें',
+    'cta.contact': 'LinkedIn पर संदेश भेजें',
 
     // Footer
     'footer.rights': 'सर्वाधिकार सुरक्षित।',
@@ -320,16 +314,13 @@ export const translations = {
     'about.beyondCode': 'कोड से',
     'about.code': 'परे',
     'about.letsConnect': 'संपर्क करें',
-    'about.connectText': 'LinkedIn पर मुझसे जुड़ें या GitHub पर मेरे प्रोजेक्ट्स देखें। मुझे तकनीक पर चर्चा करना और समुदाय के साथ ज्ञान साझा करना पसंद है।',
+    'about.connectText': 'मुझसे संपर्क करने का सबसे अच्छा तरीका LinkedIn पर संदेश भेजना है।',
     'about.getInTouch': 'संपर्क करें',
 
     // Projects page
     'projects.title': 'व्यक्तिगत',
     'projects.titleHighlight': 'प्रोजेक्ट्स',
     'projects.description': 'वर्षों में समस्याओं को हल करने या नई तकनीकों को सीखने के लिए बनाए गए साइड प्रोजेक्ट्स और प्रयोगों का संग्रह।',
-    'projects.wantMore': 'और देखना चाहते हैं?',
-    'projects.ctaText': 'अधिक प्रोजेक्ट्स, योगदान, और कोड सैंपल्स के लिए मेरी GitHub प्रोफाइल देखें।',
-    'projects.viewGithub': 'GitHub प्रोफाइल देखें',
   },
 } as const;
 

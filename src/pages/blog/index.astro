@@ -1,17 +1,25 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import { readingTime } from "../../utils/readingTime";
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const sortedPosts = allPosts.sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
 
-// Get all unique tags
-const allTags = [...new Set(sortedPosts.flatMap((post) => post.data.tags || []))];
+// Filter buttons for tags shared by at least two posts, most used first
+const tagCounts = new Map<string, number>();
+for (const tag of sortedPosts.flatMap((post) => post.data.tags || [])) {
+  tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+}
+const allTags = [...tagCounts]
+  .filter(([, count]) => count >= 2)
+  .sort((a, b) => b[1] - a[1])
+  .map(([tag]) => tag);
 ---
 
-<BaseLayout title="Blog" description="Articles about software development, tutorials, and my thoughts on various topics.">
+<BaseLayout title="Blog" description="Notes from running Java backends in production: migrations, Kubernetes, PostgreSQL, CI/CD, and leading platform teams.">
   <section class="section">
     <div class="container-custom">
       <!-- Header -->
@@ -20,7 +28,7 @@ const allTags = [...new Set(sortedPosts.flatMap((post) => post.data.tags || []))
           My <span class="gradient-text">Blog</span>
         </h1>
         <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-          Articles about programming, problem-solving, and things I've learned along the way.
+          Notes from running Java backends in production: migrations, Kubernetes, databases, and the team side of platform work.
         </p>
       </div>
 
@@ -30,6 +38,7 @@ const allTags = [...new Set(sortedPosts.flatMap((post) => post.data.tags || []))
           <button
             class="tag-filter px-4 py-2 rounded-full text-sm font-medium transition-colors bg-primary-500 text-white"
             data-tag="all"
+            aria-pressed="true"
           >
             All Posts
           </button>
@@ -37,6 +46,7 @@ const allTags = [...new Set(sortedPosts.flatMap((post) => post.data.tags || []))
             <button
               class="tag-filter px-4 py-2 rounded-full text-sm font-medium transition-colors bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
               data-tag={tag}
+              aria-pressed="false"
             >
               {tag}
             </button>
@@ -56,7 +66,10 @@ const allTags = [...new Set(sortedPosts.flatMap((post) => post.data.tags || []))
                 <div class="aspect-video overflow-hidden">
                   <img
                     src={post.data.image}
-                    alt={post.data.title}
+                    alt=""
+                    width="1200"
+                    height="630"
+                    loading="lazy"
                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
@@ -70,7 +83,7 @@ const allTags = [...new Set(sortedPosts.flatMap((post) => post.data.tags || []))
                   ))}
                 </div>
                 <h2 class="text-xl font-semibold mb-2 group-hover:text-primary-500 transition-colors">
-                  <a href={`/blog/${post.slug}`} class="hover:underline">
+                  <a href={`/blog/${post.id}`} class="hover:underline">
                     {post.data.title}
                   </a>
                 </h2>
@@ -80,15 +93,18 @@ const allTags = [...new Set(sortedPosts.flatMap((post) => post.data.tags || []))
                   </p>
                 )}
                 <div class="flex items-center justify-between">
-                  <time class="text-sm text-slate-500">
-                    {new Date(post.data.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </time>
+                  <span class="text-sm text-slate-500">
+                    <time datetime={post.data.date.toISOString()}>
+                      {post.data.date.toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </time>{" "}
+                    &middot; {readingTime(post.body)} min
+                  </span>
                   <a
-                    href={`/blog/${post.slug}`}
+                    href={`/blog/${post.id}`}
                     class="text-primary-500 hover:text-primary-600 text-sm font-medium inline-flex items-center gap-1"
                   >
                     Read more
@@ -110,7 +126,7 @@ const allTags = [...new Set(sortedPosts.flatMap((post) => post.data.tags || []))
           </div>
           <h2 class="text-2xl font-semibold mb-2">No posts yet</h2>
           <p class="text-slate-600 dark:text-slate-400">
-            Blog posts are coming soon. Stay tuned!
+            No posts published yet.
           </p>
         </div>
       )}
@@ -129,6 +145,7 @@ const allTags = [...new Set(sortedPosts.flatMap((post) => post.data.tags || []))
 
       // Update active button
       tagButtons.forEach((btn) => {
+        btn.setAttribute("aria-pressed", String(btn === button));
         btn.classList.remove("bg-primary-500", "text-white");
         btn.classList.add("bg-slate-100", "dark:bg-slate-800", "text-slate-700", "dark:text-slate-300");
       });

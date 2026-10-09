@@ -11,6 +11,14 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 // Homepage, About, and Projects have German translations; Blog stays English only
+// A link is active on its own page and on any page below it (e.g. /blog/some-post)
+const isActive = (href: string) => {
+  const path = currentPath.replace(/\/$/, "") || "/";
+  const target = href.replace(/\/$/, "") || "/";
+  if (target === "/" || /^\/(de|hi)$/.test(target)) return path === target;
+  return path === target || path.startsWith(`${target}/`);
+};
+
 const navLinks = [
   { href: getLocalizedPath("/", lang), label: t('nav.home') },
   { href: getLocalizedPath("/about", lang), label: t('nav.about') },
@@ -34,10 +42,11 @@ const navLinks = [
             href={link.href}
             class:list={[
               "px-4 py-2 rounded-lg font-medium transition-colors",
-              currentPath === link.href
+              isActive(link.href)
                 ? "text-primary-500 bg-primary-50 dark:bg-primary-950"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800",
             ]}
+            aria-current={isActive(link.href) ? "page" : undefined}
           >
             {link.label}
           </a>
@@ -83,10 +92,11 @@ const navLinks = [
             href={link.href}
             class:list={[
               "px-4 py-2 rounded-lg font-medium transition-colors",
-              currentPath === link.href
+              isActive(link.href)
                 ? "text-primary-500 bg-primary-50 dark:bg-primary-950"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800",
             ]}
+            aria-current={isActive(link.href) ? "page" : undefined}
           >
             {link.label}
           </a>

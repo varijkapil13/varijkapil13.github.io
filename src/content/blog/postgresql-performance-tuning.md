@@ -1,15 +1,16 @@
 ---
 title: "PostgreSQL Performance Tuning: A Practical Guide"
-description: "Real-world PostgreSQL optimization techniques that made a significant difference in our enterprise applications."
+description: "The PostgreSQL tuning techniques that made the biggest difference in our enterprise applications."
 date: 2023-02-10
+image: "/images/blog/postgresql-performance-tuning.jpg"
 tags: ["postgresql", "database", "performance", "optimization"]
 ---
 
-After migrating our enterprise application from Oracle to PostgreSQL and optimizing it for production workloads, I've gathered practical tuning techniques that deliver real results.
+We migrated our enterprise application from Oracle to PostgreSQL and then spent a while getting it ready for production load. These are the tuning techniques that worked for us.
 
-## Understanding Query Performance
+## Understanding query performance
 
-Before optimizing, you need to measure. PostgreSQL's `EXPLAIN ANALYZE` is your best friend:
+Measure before you optimize. PostgreSQL's `EXPLAIN ANALYZE` is the tool I reach for first:
 
 ```sql
 EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
@@ -22,14 +23,14 @@ ORDER BY o.created_at DESC
 LIMIT 100;
 ```
 
-Key metrics to watch:
-- **Actual time**: Real execution time in milliseconds
-- **Rows**: Estimated vs actual rows (big differences indicate stale statistics)
-- **Buffers**: Shared hit (cache) vs read (disk)
+In the output, I look at:
+- Actual time: the real execution time in milliseconds
+- Rows: estimated vs actual rows (a big difference usually means stale statistics)
+- Buffers: shared hit (cache) vs read (disk)
 
-## Index Optimization
+## Index optimization
 
-### Composite Indexes
+### Composite indexes
 
 Order matters in composite indexes. Put the most selective column first:
 
@@ -45,9 +46,9 @@ AND created_at > '2024-01-01'
 ORDER BY created_at DESC;
 ```
 
-### Partial Indexes
+### Partial indexes
 
-When you frequently query a subset of data, partial indexes are gold:
+When you keep querying the same subset of data, a partial index is often the best fix:
 
 ```sql
 -- Index only active orders (much smaller than full table index)
@@ -61,9 +62,9 @@ ON orders (customer_id, created_at DESC)
 WHERE created_at > NOW() - INTERVAL '90 days';
 ```
 
-### Covering Indexes (INCLUDE)
+### Covering indexes (INCLUDE)
 
-Avoid table lookups by including all needed columns:
+If the index includes every column the query needs, PostgreSQL can skip the table lookup:
 
 ```sql
 -- Include frequently selected columns
@@ -79,11 +80,11 @@ ORDER BY created_at DESC
 LIMIT 10;
 ```
 
-## Configuration Tuning
+## Configuration tuning
 
 These settings had the biggest impact on our production servers:
 
-### Memory Settings
+### Memory settings
 
 ```ini
 # postgresql.conf
@@ -114,7 +115,7 @@ max_wal_size = 4GB
 min_wal_size = 1GB
 ```
 
-### Query Planner
+### Query planner
 
 ```ini
 # Cost estimates (adjust based on your storage)
@@ -126,11 +127,11 @@ max_parallel_workers_per_gather = 4
 max_parallel_workers = 8
 ```
 
-## Query Optimization Patterns
+## Query optimization patterns
 
 ### Avoid SELECT *
 
-Always specify columns you need:
+List the columns you need:
 
 ```sql
 -- Bad: fetches all columns including large TEXT fields
@@ -142,7 +143,7 @@ FROM orders
 WHERE customer_id = 123;
 ```
 
-### Use EXISTS Instead of IN for Subqueries
+### Use EXISTS instead of IN for subqueries
 
 ```sql
 -- Slower with large subquery results
@@ -159,7 +160,7 @@ WHERE EXISTS (
 );
 ```
 
-### Batch Operations
+### Batch operations
 
 For bulk inserts, use multi-value INSERT or COPY:
 
@@ -177,9 +178,9 @@ FROM '/path/to/data.csv'
 WITH (FORMAT csv, HEADER true);
 ```
 
-### Pagination Done Right
+### Keyset pagination
 
-Offset-based pagination gets slower as offset increases:
+Offset-based pagination gets slower as the offset grows:
 
 ```sql
 -- Slow for large offsets (scans and discards rows)
@@ -194,9 +195,9 @@ ORDER BY created_at DESC
 LIMIT 20;
 ```
 
-## Monitoring and Maintenance
+## Monitoring and maintenance
 
-### Find Slow Queries
+### Find slow queries
 
 Enable the `pg_stat_statements` extension:
 
@@ -212,7 +213,7 @@ ORDER BY total_exec_time DESC
 LIMIT 10;
 ```
 
-### Find Missing Indexes
+### Find missing indexes
 
 ```sql
 -- Tables with high sequential scans (potential missing indexes)
@@ -230,7 +231,7 @@ AND n_live_tup > 10000
 ORDER BY seq_tup_read DESC;
 ```
 
-### Find Unused Indexes
+### Find unused indexes
 
 ```sql
 -- Indexes that are never used (candidates for removal)
@@ -246,7 +247,7 @@ AND indexrelname NOT LIKE '%_pkey'
 ORDER BY pg_relation_size(indexrelid) DESC;
 ```
 
-### Automatic VACUUM Tuning
+### Autovacuum tuning
 
 ```sql
 -- Check if tables need more aggressive vacuuming
@@ -262,9 +263,9 @@ WHERE n_dead_tup > 1000
 ORDER BY n_dead_tup DESC;
 ```
 
-## Connection Pooling
+## Connection pooling
 
-Use PgBouncer for connection pooling:
+We put PgBouncer in front of the database:
 
 ```ini
 # pgbouncer.ini
@@ -281,9 +282,9 @@ max_client_conn = 1000
 default_pool_size = 50
 ```
 
-## Results We Achieved
+## Results
 
-After implementing these optimizations:
+Before and after these changes:
 
 | Metric | Before | After |
 |--------|--------|-------|
@@ -292,12 +293,8 @@ After implementing these optimizations:
 | Queries per second | 500 | 3000 |
 | Database CPU usage | 80% | 30% |
 
-## Key Takeaways
+## Where to start
 
-1. **Measure first** - Use `EXPLAIN ANALYZE` before optimizing
-2. **Index strategically** - Partial and covering indexes are powerful
-3. **Tune configuration** - Default settings are rarely optimal
-4. **Monitor continuously** - Use `pg_stat_statements` and system views
-5. **Pool connections** - Never let apps manage connections directly
+Run `EXPLAIN ANALYZE` before you change anything. Partial and covering indexes are worth knowing well, and the default configuration is rarely right for a production workload. Keep watching `pg_stat_statements` and the statistics views after the first round of fixes, and don't let applications manage database connections directly; put a pooler in between.
 
-PostgreSQL is incredibly powerful when properly tuned. Start with the biggest impact changes and measure the results.
+PostgreSQL performs very well once it's tuned. Start with the changes that have the biggest impact and measure after each one.

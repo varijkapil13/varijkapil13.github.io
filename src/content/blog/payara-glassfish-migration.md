@@ -2,23 +2,19 @@
 title: "Migrating from GlassFish to Payara Server"
 description: "Lessons learned from migrating enterprise Java applications from GlassFish to Payara Server in production."
 date: 2021-02-20
+image: "/images/blog/payara-glassfish-migration.jpg"
 tags: ["java", "payara", "glassfish", "enterprise"]
 ---
 
-When GlassFish development slowed and commercial support became uncertain, we migrated our enterprise applications to Payara Server. Here's how we did it and what we learned.
+When GlassFish development slowed and commercial support became uncertain, we migrated our enterprise applications to Payara Server. This post covers the steps we took and what we ran into along the way.
 
 ## Why Payara?
 
-Payara Server is a fork of GlassFish with:
+Payara Server is a fork of GlassFish. It gets regular releases with bug fixes and new features, and you can buy commercial support if you need it. It also adds production features GlassFish never had, such as request tracing, health checks, and cloud connectors. Payara 6 is certified for Jakarta EE 10.
 
-- **Active development** - Regular releases with bug fixes and features
-- **Commercial support** - Available when you need it
-- **Production enhancements** - Request tracing, health checks, cloud connectors
-- **Jakarta EE certified** - Payara 6 supports Jakarta EE 10
+## Migration assessment
 
-## Migration Assessment
-
-First, we inventoried our applications:
+We started by taking inventory of what we had:
 
 - 5 WAR applications
 - 15 EJB modules
@@ -27,7 +23,7 @@ First, we inventoried our applications:
 - JAAS security realms
 - Scheduled timers
 
-## Migration Steps
+## Migration steps
 
 ### 1. Install Payara Server
 
@@ -43,7 +39,7 @@ unzip payara-6.2024.1.zip
 ./payara6/bin/asadmin list-applications
 ```
 
-### 2. Export GlassFish Configuration
+### 2. Export the GlassFish configuration
 
 ```bash
 # Export domain configuration
@@ -53,9 +49,9 @@ asadmin export-sync-bundle --target=domain1 glassfish-config.zip
 cp glassfish5/glassfish/domains/domain1/config/domain.xml backup/
 ```
 
-### 3. Configure Connection Pools
+### 3. Configure connection pools
 
-JDBC pool configuration translates directly:
+JDBC pool configuration carries over almost one to one:
 
 ```bash
 # Create PostgreSQL connection pool
@@ -74,9 +70,9 @@ asadmin set resources.jdbc-connection-pool.AppPool.max-pool-size=50
 asadmin set resources.jdbc-connection-pool.AppPool.pool-resize-quantity=5
 ```
 
-### 4. JMS Configuration
+### 4. Configure JMS
 
-If using OpenMQ (embedded JMS):
+If you use OpenMQ (the embedded JMS broker):
 
 ```bash
 # Create connection factory
@@ -90,9 +86,9 @@ asadmin create-jms-resource --restype jakarta.jms.Queue \
     jms/OrderQueue
 ```
 
-### 5. Security Realm Migration
+### 5. Migrate security realms
 
-Custom JAAS realms require attention:
+Custom JAAS realms needed the most care. Here is the JDBC realm we set up:
 
 ```bash
 # Configure JDBC realm
@@ -108,7 +104,7 @@ digest-algorithm=SHA-256 \
     AppRealm
 ```
 
-### 6. Deploy Applications
+### 6. Deploy the applications
 
 ```bash
 # Deploy applications
@@ -119,11 +115,11 @@ asadmin deploy --name app2 --contextroot /app2 app2.war
 asadmin enable app1
 ```
 
-## Payara-Specific Enhancements
+## Payara-specific features
 
-Take advantage of Payara features we didn't have in GlassFish:
+Once the applications ran, we turned on several Payara features that GlassFish didn't have.
 
-### Request Tracing
+### Request tracing
 
 ```bash
 # Enable request tracing
@@ -134,7 +130,7 @@ asadmin set-requesttracing-configuration --enabled=true \
 asadmin list-requesttraces
 ```
 
-### Health Check Service
+### Health check service
 
 ```bash
 # Enable health checks
@@ -151,7 +147,7 @@ asadmin healthcheck-configure --enabled=true --name=HEAP_MEMORY_USAGE \
 
 ### MicroProfile Config
 
-Externalize configuration:
+MicroProfile Config lets you move settings out of the code:
 
 ```java
 @Inject
@@ -163,14 +159,14 @@ private boolean featureEnabled;
 private int apiTimeout;
 ```
 
-Set via environment or system properties:
+You can then set values through system properties or environment variables:
 ```bash
 asadmin create-system-properties app.feature.enabled=true
 # Or use environment variables
 export APP_FEATURE_ENABLED=true
 ```
 
-### Notification Service
+### Notification service
 
 ```bash
 # Configure Slack notifications
@@ -182,9 +178,9 @@ asadmin set-healthcheck-service-notification --enabled=true \
     --notifier=slack-notifier
 ```
 
-## Configuration Differences
+## Configuration differences
 
-### Thread Pools
+### Thread pools
 
 ```bash
 # GlassFish default was often too small
@@ -193,7 +189,7 @@ asadmin set configs.config.server-config.thread-pools.thread-pool.http-thread-po
 asadmin set configs.config.server-config.thread-pools.thread-pool.http-thread-pool.min-thread-pool-size=10
 ```
 
-### JVM Options
+### JVM options
 
 ```bash
 # Check current JVM options
@@ -212,9 +208,9 @@ asadmin create-jvm-options "--add-opens=java.base/java.lang=ALL-UNNAMED"
 
 ## Troubleshooting
 
-### Class Loading Issues
+### Class loading issues
 
-If you encounter class loading problems:
+If you run into class loading problems:
 
 ```bash
 # Enable verbose class loading
@@ -224,7 +220,7 @@ asadmin create-jvm-options "-verbose:class"
 asadmin create-jvm-options "--add-opens=java.base/java.util=ALL-UNNAMED"
 ```
 
-### Database Connection Issues
+### Database connection issues
 
 ```bash
 # Test connection pool
@@ -234,7 +230,7 @@ asadmin ping-connection-pool AppPool
 asadmin set configs.config.server-config.monitoring-service.module-monitoring-levels.jdbc-connection-pool=HIGH
 ```
 
-### Log Analysis
+### Log analysis
 
 ```bash
 # Server logs
@@ -244,7 +240,7 @@ tail -f payara6/glassfish/domains/domain1/logs/server.log
 asadmin set-log-levels com.mycompany=FINE
 ```
 
-## Docker Deployment
+## Docker deployment
 
 Payara provides official Docker images:
 
@@ -271,9 +267,9 @@ create-jdbc-resource --connectionpoolid=AppPool jdbc/AppDS
 set resources.jdbc-connection-pool.AppPool.max-pool-size=50
 ```
 
-## Performance Comparison
+## Performance comparison
 
-After migration and tuning:
+Our numbers after the migration and some tuning:
 
 | Metric | GlassFish 5 | Payara 6 |
 |--------|-------------|----------|
@@ -282,12 +278,8 @@ After migration and tuning:
 | Requests/sec | 2,500 | 3,200 |
 | P99 latency | 85ms | 62ms |
 
-## Key Takeaways
+## What I'd tell someone starting this migration
 
-1. **Migration is straightforward** - Most GlassFish configs work directly
-2. **Take advantage of new features** - Health checks, request tracing, MicroProfile
-3. **Test thoroughly** - Especially security realms and JMS
-4. **Plan for downtime** - Migration requires application restart
-5. **Update to Jakarta EE** - Payara 6 requires Jakarta namespace
+Most GlassFish configuration works on Payara without changes, so the migration itself is not hard. Test thoroughly, especially security realms and JMS. The move needs an application restart, so plan for downtime. Payara 6 also requires the Jakarta namespace, so the code has to move to Jakarta EE as part of the switch.
 
-The migration gave us a more stable, better-supported platform with modern features. The effort was worth it for the improved production experience.
+After that, use the features GlassFish didn't have: health checks, request tracing, and MicroProfile Config. For us the result was a more stable, better supported platform with modern features, and production got easier to run. It was worth the effort.

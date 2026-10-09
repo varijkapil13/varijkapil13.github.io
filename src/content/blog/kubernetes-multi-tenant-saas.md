@@ -2,18 +2,17 @@
 title: "What I Learned Building Multi-Tenant SaaS on Kubernetes"
 description: "Hard-won lessons from migrating a VM-per-customer architecture to shared Kubernetes clusters with namespace isolation."
 date: 2024-02-28
+image: "/images/blog/kubernetes-multi-tenant-saas.jpg"
 tags: ["kubernetes", "saas", "multi-tenancy", "architecture"]
 ---
 
-Last year, we started migrating our platform from a VM-per-customer setup to shared Kubernetes clusters. It wasn't straightforward, and I made plenty of mistakes along the way. Here's what actually worked.
+Last year, we started migrating our platform from a VM-per-customer setup to shared Kubernetes clusters. It wasn't straightforward, and I made plenty of mistakes along the way. This post covers what worked and what didn't.
 
-## The Problem We Had
+## The problem we had
 
-Our original architecture gave each customer their own VM. Simple, isolated, but expensive. When you have 50 customers, you have 50 VMs to maintain. Scaling meant provisioning more VMs, which took hours. Our ops team was drowning in maintenance work.
+Our original architecture gave each customer their own VM. That was simple and isolated, but expensive. When you have 50 customers, you have 50 VMs to maintain. Scaling meant provisioning more VMs, which took hours, and our ops team was drowning in maintenance work. We wanted to keep tenant isolation without that overhead.
 
-We needed tenant isolation without the overhead.
-
-## Why Namespace-Per-Tenant
+## Why namespace-per-tenant
 
 After researching various multi-tenancy patterns, we settled on namespace-per-tenant. The alternatives were:
 
@@ -23,7 +22,7 @@ After researching various multi-tenancy patterns, we settled on namespace-per-te
 
 Namespaces gave us good isolation without going overboard. Each tenant gets their own namespace with resource quotas, network policies, and RBAC rules.
 
-## Setting Up Tenant Isolation
+## Setting up tenant isolation
 
 The first thing we got wrong was trusting namespace isolation alone. Namespaces are a logical boundary, not a security boundary. We added:
 
@@ -68,7 +67,7 @@ spec:
     persistentvolumeclaims: "5"
 ```
 
-## The Onboarding Pipeline
+## The onboarding pipeline
 
 Creating a new tenant manually was error-prone. We built a pipeline that provisions everything:
 
@@ -82,13 +81,13 @@ Creating a new tenant manually was error-prone. We built a pipeline that provisi
 
 We use Pulumi for this because our team already knew TypeScript. Terraform would work just as well.
 
-## Secrets Management Was Harder Than Expected
+## Secrets management was harder than expected
 
 With VMs, secrets lived in environment files on each machine. Not great, but manageable. With shared infrastructure, we needed something better.
 
-HashiCorp Vault solved this. Each tenant gets a path in Vault, and their pods authenticate using Kubernetes service accounts. The key insight was using the Vault Agent Injector—it handles token renewal automatically, which we definitely would have gotten wrong ourselves.
+HashiCorp Vault solved this. Each tenant gets a path in Vault, and their pods authenticate using Kubernetes service accounts. The part that made it work was the Vault Agent Injector. It handles token renewal automatically, which we definitely would have gotten wrong ourselves.
 
-## What We Got Wrong
+## What we got wrong
 
 **Underestimating database isolation**: We initially tried a shared database with row-level security. Don't do this unless you really know what you're doing. A bug in one query could expose another tenant's data. We switched to database-per-tenant running in the same PostgreSQL cluster.
 
@@ -96,7 +95,7 @@ HashiCorp Vault solved this. Each tenant gets a path in Vault, and their pods au
 
 **Not testing resource limits**: We set conservative limits and never hit them during development. In production, legitimate workloads started getting OOM-killed. Test with realistic loads.
 
-## Monitoring Per Tenant
+## Monitoring per tenant
 
 We added tenant labels to all metrics:
 
@@ -108,8 +107,8 @@ Counter.builder("api_requests_total")
 
 This lets us track usage per tenant for billing and identify who's causing issues. Grafana dashboards with tenant dropdowns made debugging much easier.
 
-## Was It Worth It?
+## Was it worth it?
 
-Honestly, yes. Provisioning went from hours to minutes. Our infrastructure costs dropped by about 40%. The ops team spends less time on maintenance.
+Yes. Provisioning went from hours to minutes. Our infrastructure costs dropped by about 40%. The ops team spends less time on maintenance.
 
-But it took longer than we planned, and we underestimated the complexity. If you're considering this migration, double your timeline estimate. You'll need it.
+But it took longer than we planned, and we underestimated the complexity. If you're considering this migration, double your timeline estimate.

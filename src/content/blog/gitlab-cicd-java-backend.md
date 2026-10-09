@@ -1,15 +1,16 @@
 ---
-title: "Building a Robust CI/CD Pipeline with GitLab for Java Applications"
-description: "How we built continuous integration and deployment workflows for enterprise Java applications using GitLab CI/CD."
+title: "Building a CI/CD Pipeline with GitLab for Java Applications"
+description: "How we set up GitLab CI/CD to build, test, scan and deploy our enterprise Jakarta EE applications."
 date: 2022-07-14
+image: "/images/blog/gitlab-cicd-java-backend.jpg"
 tags: ["devops", "gitlab", "cicd", "java", "enterprise"]
 ---
 
-A well-designed CI/CD pipeline can dramatically improve your team's productivity and code quality. I'll share how we built our GitLab CI/CD pipeline for enterprise Java applications with Jakarta EE.
+This is the GitLab CI/CD pipeline we built for our enterprise Java applications, which run on Jakarta EE. I'll go through the full configuration first and then the parts that made the biggest difference for us.
 
-## Pipeline Overview
+## Pipeline overview
 
-Our pipeline consists of several stages:
+The pipeline has five stages:
 
 ```yaml
 stages:
@@ -20,11 +21,11 @@ stages:
   - deploy
 ```
 
-Each stage serves a specific purpose and provides fast feedback to developers.
+Each stage has one job to do, and the early ones are fast so developers hear about problems quickly.
 
-## The Complete Pipeline
+## The complete pipeline
 
-Here's our `.gitlab-ci.yml` configuration:
+This is our `.gitlab-ci.yml`:
 
 ```yaml
 variables:
@@ -181,9 +182,9 @@ deploy-production:
     - main
 ```
 
-## Key Pipeline Features
+## Notable parts of the pipeline
 
-### 1. Separate Unit and Integration Tests
+### 1. Separate unit and integration tests
 
 We split tests for faster feedback:
 
@@ -199,9 +200,9 @@ integration-tests:
     - mvn test -Dtest=*IntegrationTest
 ```
 
-Unit tests run quickly without external dependencies, while integration tests get their own database container.
+Unit tests run quickly without external dependencies. Integration tests get their own database container.
 
-### 2. Database Testing with Services
+### 2. Database testing with services
 
 We use GitLab services to spin up a PostgreSQL container for integration tests:
 
@@ -214,9 +215,9 @@ variables:
   DATABASE_URL: "jdbc:postgresql://postgres:5432/testdb"
 ```
 
-### 3. Caching for Speed
+### 3. Caching
 
-Maven dependency caching dramatically improves build times:
+Caching the Maven repository makes builds much faster:
 
 ```yaml
 cache:
@@ -226,9 +227,9 @@ cache:
 
 With caching, subsequent builds skip downloading dependencies entirely.
 
-### 4. OWASP Dependency Check
+### 4. OWASP dependency check
 
-Security scanning for vulnerable dependencies:
+This job scans our dependencies for known vulnerabilities:
 
 ```yaml
 dependency-check:
@@ -237,7 +238,7 @@ dependency-check:
   allow_failure: true  # Don't block pipeline, but report
 ```
 
-### 5. Environment-Specific Deployments
+### 5. Environment-specific deployments
 
 We use GitLab environments for deployment tracking:
 
@@ -247,14 +248,11 @@ environment:
   url: https://example.com
 ```
 
-This gives us:
-- Deployment history
-- Easy rollbacks
-- Environment-specific variables
+That gives us a deployment history per environment, easy rollbacks, and environment-specific variables.
 
-## Dockerfile for Java Applications
+## Dockerfile
 
-Our Dockerfile for Payara deployment:
+We deploy to Payara with this Dockerfile:
 
 ```dockerfile
 FROM payara/server-full:6.2024.1-jdk21
@@ -272,7 +270,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
 EXPOSE 8080 4848
 ```
 
-## Merge Request Pipelines
+## Merge request pipelines
 
 For merge requests, we run a lighter pipeline:
 
@@ -288,9 +286,9 @@ test-mr:
     - mvn test
 ```
 
-## Security Scanning
+## Security scanning
 
-GitLab provides built-in security scanning:
+GitLab ships templates for security scanning that you can include directly:
 
 ```yaml
 include:
@@ -305,9 +303,9 @@ dependency_scanning:
   stage: quality
 ```
 
-## Multi-Module Maven Projects
+## Multi-module Maven projects
 
-For complex multi-module projects:
+For larger multi-module projects we build in parallel and test each module separately:
 
 ```yaml
 build:
@@ -322,20 +320,22 @@ test:
     - mvn test -pl $MODULE -am
 ```
 
-## Monitoring Pipeline Performance
+## Monitoring pipeline performance
 
-We track pipeline metrics:
+The numbers we track:
 
-- **Average pipeline duration**: ~8 minutes
-- **Build success rate**: 94%
-- **Time to first feedback**: 2 minutes (compile + unit tests)
+| Metric | Value |
+|---|---|
+| Average pipeline duration | ~8 minutes |
+| Build success rate | 94% |
+| Time to first feedback | 2 minutes (compile + unit tests) |
 
-## Tips for Optimization
+## Optimization tips
 
-1. **Use `needs` keyword** for dependency-based execution instead of stage-based
-2. **Parallelize test suites** using Maven Surefire's parallel execution
-3. **Use shallow clones** for faster checkout: `GIT_DEPTH: 10`
-4. **Cache aggressively** but invalidate when needed
+1. Use the `needs` keyword so jobs run when their dependencies finish instead of waiting for the whole stage
+2. Parallelize test suites with Maven Surefire's parallel execution
+3. Use shallow clones for faster checkout: `GIT_DEPTH: 10`
+4. Cache aggressively, but invalidate the cache when dependencies change
 
 ```yaml
 build:
@@ -347,9 +347,9 @@ build:
       - .m2/repository/
 ```
 
-## Database Migration in CI/CD
+## Database migrations in CI/CD
 
-For Flyway migrations:
+We run Flyway migrations as a manual job on `main`:
 
 ```yaml
 migrate-database:
@@ -362,16 +362,8 @@ migrate-database:
   when: manual
 ```
 
-## Conclusion
+## Was it worth it?
 
-A well-designed CI/CD pipeline pays dividends in developer productivity and code quality. The initial investment in setting it up properly is worth it.
+Setting this up properly took real effort, and I think it paid for itself. If I had to pick what mattered most: split unit and integration tests so feedback is fast, test against a real database container, add security scanning early, cache dependencies, automate deployments too, and keep watching the pipeline metrics.
 
-Key takeaways:
-- Separate unit and integration tests for fast feedback
-- Use database containers for realistic testing
-- Implement security scanning early
-- Cache dependencies aggressively
-- Automate everything, including deployments
-- Monitor and continuously improve
-
-The pipeline we built has reduced our deployment frequency from weekly to multiple times per day, while maintaining high quality standards.
+With this pipeline we went from deploying weekly to deploying several times a day, without lowering our quality bar.
