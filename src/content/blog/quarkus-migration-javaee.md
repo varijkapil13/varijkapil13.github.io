@@ -4,6 +4,7 @@ description: "How we migrated a monolithic Java EE application to Quarkus micros
 date: 2023-08-22
 image: "/images/blog/quarkus-migration-javaee.jpg"
 series: "monolith-to-saas"
+seriesLabel: "Java EE → Quarkus"
 tags: ["quarkus", "java", "microservices", "migration"]
 ---
 

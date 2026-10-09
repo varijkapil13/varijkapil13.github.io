@@ -3,62 +3,64 @@ import type { MarkdownHeading } from "astro";
 
 interface Props {
   headings: MarkdownHeading[];
+  // "inline": collapsible box above the post (small screens); "sidebar": sticky column (wide screens)
+  variant: "inline" | "sidebar";
 }
 
-const { headings } = Astro.props;
+const { headings, variant } = Astro.props;
 const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
-{items.length >= 3 && (
-  <>
-    <!-- Small screens: collapsible box above the article -->
-    <details class="min-[1400px]:hidden card p-5 mb-10">
-      <summary class="font-semibold cursor-pointer">On this page</summary>
-      <ol class="mt-3 space-y-1.5 text-sm">
+{items.length >= 3 && variant === "inline" && (
+  <details class="lg:hidden card px-5 py-4 mb-10">
+    <summary class="cursor-pointer eyebrow">On this page</summary>
+    <ol class="mt-3 space-y-1.5 text-sm">
+      {items.map((h) => (
+        <li class={h.depth === 3 ? "pl-4" : ""}>
+          <a href={`#${h.slug}`} class="text-muted hover:text-fg">{h.text}</a>
+        </li>
+      ))}
+    </ol>
+  </details>
+)}
+
+{items.length >= 3 && variant === "sidebar" && (
+  <nav aria-label="Table of contents" class="hidden lg:block">
+    <div class="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
+      <p class="eyebrow mb-3">On this page</p>
+      <ol class="space-y-2 text-[13px] border-l border-line">
         {items.map((h) => (
-          <li class={h.depth === 3 ? "pl-4" : ""}>
-            <a href={`#${h.slug}`} class="text-slate-600 dark:text-slate-400 hover:text-primary-500">{h.text}</a>
+          <li>
+            <a
+              href={`#${h.slug}`}
+              data-toc-link={h.slug}
+              class:list={[
+                "block -ml-px border-l border-transparent text-muted hover:text-fg transition-colors leading-snug",
+                h.depth === 3 ? "pl-6" : "pl-3",
+              ]}
+            >
+              {h.text}
+            </a>
           </li>
         ))}
       </ol>
-    </details>
-
-    <!-- Wide screens: sticky sidebar -->
-    <nav aria-label="Table of contents" class="hidden min-[1400px]:block absolute top-0 -right-64 w-56 h-full">
-      <div class="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
-        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-3">On this page</p>
-        <ol class="space-y-2 text-sm border-l border-slate-200 dark:border-slate-800">
-          {items.map((h) => (
-            <li>
-              <a
-                href={`#${h.slug}`}
-                data-toc-link={h.slug}
-                class:list={[
-                  "block -ml-px border-l-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors",
-                  h.depth === 3 ? "pl-6" : "pl-3",
-                ]}
-              >
-                {h.text}
-              </a>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </nav>
-  </>
+    </div>
+  </nav>
 )}
 
 <script>
   // Highlight the section currently in view
   const links = document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]");
   if (links.length) {
-    const active = ["text-primary-500", "!border-primary-500"];
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
-          links.forEach((l) => l.classList.toggle(active[0], l.dataset.tocLink === entry.target.id));
-          links.forEach((l) => l.classList.toggle(active[1], l.dataset.tocLink === entry.target.id));
+          links.forEach((l) => {
+            const active = l.dataset.tocLink === entry.target.id;
+            l.classList.toggle("!text-fg", active);
+            l.classList.toggle("!border-accent", active);
+          });
         }
       },
       { rootMargin: "-80px 0px -70% 0px" }

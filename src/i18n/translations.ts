@@ -15,21 +15,27 @@ export const translations = {
     'nav.projects': 'Projects',
 
     // Hero section
-    'hero.greeting': "Hi, I'm",
     'hero.name': 'Varij Kapil',
     'hero.title': 'Head of Backend Engineering & Operations',
     'hero.location': 'Bonn, Germany',
-    'hero.basedIn': ' based in ',
-    'hero.basedInSuffix': '.',
     'hero.description': 'I move legacy Java systems onto multi-tenant SaaS platforms that run on Kubernetes.',
-    'hero.cta.about': 'Learn more about me',
-    'hero.cta.blog': 'Read my blog',
-    'hero.social': 'Find me on',
+    'home.headline': 'Legacy Java platforms, rebuilt as',
+    'home.headlineMuted': 'multi-tenant SaaS on Kubernetes.',
+    'home.lead': 'I lead backend and operations teams through platform migrations, and write down what worked and what broke.',
+    'home.ctaWriting': 'Read the writing',
+    'home.fact.based': 'Based in',
+    'home.fact.experience': 'Experience',
+    'home.fact.experienceValue': '10+ years',
+    'home.fact.team': 'Team',
+    'home.fact.teamValue': '~15 engineers',
+    'home.fact.stack': 'Stack',
+    'home.fact.focus': 'Focus',
+    'home.fact.focusValue': 'Multi-tenancy, GitOps, team design',
+    'home.seriesCount': '{n}-part series',
+    'home.latest': 'Latest writing',
+    'home.allPosts': 'All posts',
 
     // Skills section
-    'skills.title': 'Technical',
-    'skills.titleHighlight': 'Skills',
-    'skills.description': 'The tools I work with, split by how often I use them',
     'skills.languages': 'Languages',
     'skills.frameworks': 'Frameworks',
     'skills.platform': 'Platform & Cloud',
@@ -38,18 +44,11 @@ export const translations = {
     'skills.shipped': 'Have shipped with',
 
     // Blog section
-    'blog.title': 'Latest from the',
-    'blog.titleHighlight': 'Blog',
     'blog.description': 'Write-ups of problems I ran into at work and how we solved them',
     'blog.englishOnly': '',
     'blog.viewAll': 'View all posts',
-    'blog.comingSoon': 'Blog posts coming soon...',
-    'blog.readMore': 'Read the post',
 
     // CTA section
-    'cta.title': "Let's talk",
-    'cta.description': "Message me on LinkedIn if you want to talk about Java, Kubernetes or platform migrations.",
-    'cta.contact': 'Message me on LinkedIn',
 
     // Footer
     'footer.rights': 'All rights reserved.',
@@ -97,7 +96,7 @@ export const translations = {
     'about.experience2': 'Experience',
     'about.education': 'Education',
     'about.certifications': 'Certifications',
-    'about.uniProjects': 'University',
+    'about.uniProjects': 'University ',
     'about.projects': 'Projects',
     'about.beyondCode': 'Beyond',
     'about.code': 'Code',
@@ -117,21 +116,27 @@ export const translations = {
     'nav.projects': 'Projekte',
 
     // Hero section
-    'hero.greeting': 'Hallo, ich bin',
     'hero.name': 'Varij Kapil',
     'hero.title': 'Head of Backend Engineering & Operations',
     'hero.location': 'Bonn, Deutschland',
-    'hero.basedIn': ' in ',
-    'hero.basedInSuffix': '.',
     'hero.description': 'Ich transformiere Legacy-Systeme in skalierbare, mandantenfähige SaaS-Plattformen mit Kubernetes und Cloud-nativer Architektur.',
-    'hero.cta.about': 'Mehr über mich',
-    'hero.cta.blog': 'Zum Blog',
-    'hero.social': 'Finde mich auf',
+    'home.headline': 'Legacy-Java-Plattformen, neu gebaut als',
+    'home.headlineMuted': 'mandantenfähiges SaaS auf Kubernetes.',
+    'home.lead': 'Ich führe Backend- und Operations-Teams durch Plattformmigrationen und schreibe auf, was funktioniert hat und was nicht.',
+    'home.ctaWriting': 'Zu den Beiträgen',
+    'home.fact.based': 'Standort',
+    'home.fact.experience': 'Erfahrung',
+    'home.fact.experienceValue': '10+ Jahre',
+    'home.fact.team': 'Team',
+    'home.fact.teamValue': '~15 Engineers',
+    'home.fact.stack': 'Stack',
+    'home.fact.focus': 'Schwerpunkt',
+    'home.fact.focusValue': 'Mandantenfähigkeit, GitOps, Teamdesign',
+    'home.seriesCount': 'Serie in {n} Teilen',
+    'home.latest': 'Neueste Beiträge',
+    'home.allPosts': 'Alle Beiträge',
 
     // Skills section
-    'skills.title': 'Technische',
-    'skills.titleHighlight': 'Fähigkeiten',
-    'skills.description': 'Die Tools, mit denen ich arbeite, danach sortiert, wie oft ich sie nutze',
     'skills.languages': 'Sprachen',
     'skills.frameworks': 'Frameworks',
     'skills.platform': 'Plattform & Cloud',
@@ -140,18 +145,11 @@ export const translations = {
     'skills.shipped': 'In Projekten eingesetzt',
 
     // Blog section
-    'blog.title': 'Neueste',
-    'blog.titleHighlight': 'Blogbeiträge',
     'blog.description': 'Gedanken, Tutorials und Lösungen für Probleme, auf die ich gestoßen bin',
     'blog.englishOnly': 'Die Blogbeiträge sind auf Englisch.',
     'blog.viewAll': 'Alle Beiträge',
-    'blog.comingSoon': 'Blogbeiträge kommen bald...',
-    'blog.readMore': 'Klicken Sie, um mehr zu lesen...',
 
     // CTA section
-    'cta.title': 'Kontakt aufnehmen',
-    'cta.description': 'Schreib mir gerne, wenn du über Technologie diskutieren, Ideen austauschen oder einfach Hallo sagen möchtest.',
-    'cta.contact': 'Auf LinkedIn schreiben',
 
     // Footer
     'footer.rights': 'Alle Rechte vorbehalten.',
@@ -219,21 +217,27 @@ export const translations = {
     'nav.projects': 'प्रोजेक्ट्स',
 
     // Hero section
-    'hero.greeting': 'नमस्ते, मैं हूँ',
     'hero.name': 'वारिज कपिल',
     'hero.title': 'Head of Backend Engineering & Operations',
     'hero.location': 'बॉन, जर्मनी',
-    'hero.basedIn': ', ',
-    'hero.basedInSuffix': ' में स्थित।',
     'hero.description': 'मैं Kubernetes और क्लाउड-नेटिव आर्किटेक्चर का उपयोग करके लीगेसी सिस्टम को स्केलेबल, मल्टी-टेनेंट SaaS प्लेटफॉर्म में बदलता हूँ।',
-    'hero.cta.about': 'मेरे बारे में जानें',
-    'hero.cta.blog': 'ब्लॉग पढ़ें',
-    'hero.social': 'मुझे यहाँ खोजें',
+    'home.headline': 'लीगेसी Java प्लेटफॉर्म,',
+    'home.headlineMuted': 'Kubernetes पर मल्टी-टेनेंट SaaS के रूप में नए सिरे से बने।',
+    'home.lead': 'मैं प्लेटफॉर्म माइग्रेशन में बैकएंड और ऑपरेशंस टीमों का नेतृत्व करता हूँ, और लिखता हूँ कि क्या काम आया और क्या टूटा।',
+    'home.ctaWriting': 'लेख पढ़ें',
+    'home.fact.based': 'स्थान',
+    'home.fact.experience': 'अनुभव',
+    'home.fact.experienceValue': '10+ वर्ष',
+    'home.fact.team': 'टीम',
+    'home.fact.teamValue': '~15 इंजीनियर',
+    'home.fact.stack': 'स्टैक',
+    'home.fact.focus': 'फोकस',
+    'home.fact.focusValue': 'मल्टी-टेनेंसी, GitOps, टीम डिज़ाइन',
+    'home.seriesCount': '{n} भागों की सीरीज़',
+    'home.latest': 'नवीनतम लेख',
+    'home.allPosts': 'सभी पोस्ट',
 
     // Skills section
-    'skills.title': 'तकनीकी',
-    'skills.titleHighlight': 'कौशल',
-    'skills.description': 'जिन टूल्स के साथ मैं काम करता हूँ, इस आधार पर कि मैं उन्हें कितनी बार इस्तेमाल करता हूँ',
     'skills.languages': 'भाषाएं',
     'skills.frameworks': 'फ्रेमवर्क',
     'skills.platform': 'प्लेटफॉर्म और क्लाउड',
@@ -242,18 +246,11 @@ export const translations = {
     'skills.shipped': 'प्रोजेक्ट्स में इस्तेमाल किया',
 
     // Blog section
-    'blog.title': 'नवीनतम',
-    'blog.titleHighlight': 'ब्लॉग पोस्ट',
     'blog.description': 'मेरे विचार, ट्यूटोरियल, और समस्याओं के समाधान',
     'blog.englishOnly': 'ब्लॉग पोस्ट अंग्रेज़ी में हैं।',
     'blog.viewAll': 'सभी पोस्ट देखें',
-    'blog.comingSoon': 'ब्लॉग पोस्ट जल्द आ रहे हैं...',
-    'blog.readMore': 'और पढ़ने के लिए क्लिक करें...',
 
     // CTA section
-    'cta.title': 'संपर्क करें',
-    'cta.description': 'अगर आप तकनीक पर चर्चा करना चाहते हैं, विचार साझा करना चाहते हैं, या बस नमस्ते कहना चाहते हैं, तो बेझिझक संपर्क करें।',
-    'cta.contact': 'LinkedIn पर संदेश भेजें',
 
     // Footer
     'footer.rights': 'सर्वाधिकार सुरक्षित।',
@@ -301,7 +298,7 @@ export const translations = {
     'about.experience2': 'अनुभव',
     'about.education': 'शिक्षा',
     'about.certifications': 'प्रमाणपत्र',
-    'about.uniProjects': 'विश्वविद्यालय',
+    'about.uniProjects': 'विश्वविद्यालय ',
     'about.projects': 'प्रोजेक्ट्स',
     'about.beyondCode': 'कोड से',
     'about.code': 'परे',

@@ -5,6 +5,7 @@ date: 2023-11-15
 tags: ["gitops", "pulumi", "helm", "kubernetes", "devops"]
 image: "/images/blog/gitops-pulumi-helm.jpg"
 series: "monolith-to-saas"
+seriesLabel: "GitOps with Pulumi & Helm"
 ---
 
 We used to deploy by SSHing into servers and running scripts. Then we moved to Kubernetes and deployment became clicking buttons in Jenkins. Neither was great. GitOps changed how we think about deployments.

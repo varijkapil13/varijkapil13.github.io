@@ -13,6 +13,8 @@ const blog = defineCollection({
     image: z.string().optional(),
     draft: z.boolean().optional().default(false),
     series: z.enum(Object.keys(series) as [keyof typeof series]).optional(),
+    // Short name for this part in the series timeline
+    seriesLabel: z.string().optional(),
   }),
 });
 

@@ -5,9 +5,7 @@ import { readingTime } from "../../utils/readingTime";
 import { series, type SeriesId } from "../../data/series";
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
-const sortedPosts = allPosts.sort(
-  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-);
+const sortedPosts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 // Series that have at least one published post
 const seriesList = (Object.keys(series) as SeriesId[])
@@ -16,7 +14,7 @@ const seriesList = (Object.keys(series) as SeriesId[])
 
 // Filter buttons for tags shared by at least two posts, most used first
 const tagCounts = new Map<string, number>();
-for (const tag of sortedPosts.flatMap((post) => post.data.tags || [])) {
+for (const tag of sortedPosts.flatMap((post) => post.data.tags)) {
   tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
 }
 const allTags = [...tagCounts]
@@ -26,158 +24,87 @@ const allTags = [...tagCounts]
 ---
 
 <BaseLayout title="Blog" description="Notes from running Java backends in production: migrations, Kubernetes, PostgreSQL, CI/CD, and leading platform teams.">
-  <section class="section">
-    <div class="container-custom">
-      <!-- Header -->
-      <div class="text-center mb-16">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">
-          My <span class="gradient-text">Blog</span>
-        </h1>
-        <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-          Notes from running Java backends in production: migrations, Kubernetes, databases, and the team side of platform work.
-        </p>
+  <section class="border-b border-line">
+    <div class="container-custom py-14 md:py-20">
+      <p class="eyebrow mb-4">Blog · {sortedPosts.length} posts</p>
+      <h1 class="text-4xl md:text-5xl font-semibold tracking-[-0.035em] mb-4">Writing</h1>
+      <p class="text-lg text-muted max-w-2xl">
+        Notes from running Java backends in production: migrations, Kubernetes, databases, and the team side of platform work.
+      </p>
+    </div>
+  </section>
+
+  <section class="container-custom py-12">
+    {seriesList.map((s) => (
+      <a href={`/blog/series/${s.id}`} class="card card-hover p-6 md:p-7 mb-10 flex flex-col md:flex-row md:items-center gap-5 md:gap-10 group">
+        <div class="flex-1">
+          <p class="eyebrow mb-2"><span class="dot mr-2 align-middle"></span>Series · {s.count} parts</p>
+          <h2 class="text-xl font-semibold tracking-tight mb-1.5 group-hover:text-accent transition-colors">{s.title}</h2>
+          <p class="text-muted text-sm">{s.description}</p>
+        </div>
+        <span class="btn btn-secondary shrink-0">Read the series →</span>
+      </a>
+    ))}
+
+    {allTags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-8" role="group" aria-label="Filter posts by tag">
+        <button type="button" class="tag-filter" data-tag="all" aria-pressed="true">all</button>
+        {allTags.map((tag) => (
+          <button type="button" class="tag-filter" data-tag={tag} aria-pressed="false">{tag}</button>
+        ))}
       </div>
+    )}
 
-      <!-- Series -->
-      {seriesList.map((s) => (
-        <a href={`/blog/series/${s.id}`} class="card card-hover p-6 md:p-8 mb-12 flex flex-col md:flex-row md:items-center gap-4 md:gap-8 group bg-gradient-to-r from-primary-500/10 to-accent-500/10">
-          <div class="flex-1">
-            <p class="text-sm font-semibold uppercase tracking-wide text-primary-500 mb-1">Series · {s.count} parts</p>
-            <h2 class="text-2xl font-bold mb-2 group-hover:text-primary-500 transition-colors">{s.title}</h2>
-            <p class="text-slate-600 dark:text-slate-400">{s.description}</p>
-          </div>
-          <span class="btn btn-primary shrink-0">Read the series</span>
-        </a>
-      ))}
-
-      <!-- Tags Filter -->
-      {allTags.length > 0 && (
-        <div class="flex flex-wrap justify-center gap-2 mb-12">
-          <button
-            class="tag-filter px-4 py-2 rounded-full text-sm font-medium transition-colors bg-primary-500 text-white"
-            data-tag="all"
-            aria-pressed="true"
-          >
-            All Posts
-          </button>
-          {allTags.map((tag) => (
-            <button
-              class="tag-filter px-4 py-2 rounded-full text-sm font-medium transition-colors bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
-              data-tag={tag}
-              aria-pressed="false"
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
-      )}
-
-      <!-- Blog Posts Grid -->
-      {sortedPosts.length > 0 ? (
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sortedPosts.map((post) => (
-            <article
-              class="blog-post card card-hover overflow-hidden group"
-              data-tags={JSON.stringify(post.data.tags || [])}
-            >
-              {post.data.image && (
-                <div class="aspect-video overflow-hidden">
-                  <img
-                    src={post.data.image}
-                    alt=""
-                    width="1200"
-                    height="630"
-                    loading="lazy"
-                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-              )}
-              <div class="p-6">
-                <div class="flex flex-wrap gap-2 mb-3">
-                  {post.data.tags?.slice(0, 2).map((tag: string) => (
-                    <span class="px-2 py-1 rounded-full bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 text-xs font-medium">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <h2 class="text-xl font-semibold mb-2 group-hover:text-primary-500 transition-colors">
-                  <a href={`/blog/${post.id}`} class="hover:underline">
-                    {post.data.title}
-                  </a>
-                </h2>
-                {post.data.description && (
-                  <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-2">
-                    {post.data.description}
-                  </p>
-                )}
-                <div class="flex items-center justify-between">
-                  <span class="text-sm text-slate-500">
-                    <time datetime={post.data.date.toISOString()}>
-                      {post.data.date.toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </time>{" "}
-                    &middot; {readingTime(post.body)} min
-                  </span>
-                  <a
-                    href={`/blog/${post.id}`}
-                    class="text-primary-500 hover:text-primary-600 text-sm font-medium inline-flex items-center gap-1"
-                  >
-                    Read more
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </a>
-                </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {sortedPosts.map((post) => (
+        <article class="blog-post card card-hover overflow-hidden group flex flex-col" data-tags={JSON.stringify(post.data.tags)}>
+          <a href={`/blog/${post.id}`} class="flex flex-col h-full">
+            {post.data.image && (
+              <div class="aspect-[1200/630] overflow-hidden border-b border-line">
+                <img src={post.data.image} alt="" width="1200" height="630" loading="lazy" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300" />
               </div>
-            </article>
-          ))}
-        </div>
-      ) : (
-        <div class="text-center py-20">
-          <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-            <svg class="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-            </svg>
-          </div>
-          <h2 class="text-2xl font-semibold mb-2">No posts yet</h2>
-          <p class="text-slate-600 dark:text-slate-400">
-            No posts published yet.
-          </p>
-        </div>
-      )}
+            )}
+            <div class="p-5 flex flex-col flex-1">
+              <p class="eyebrow mb-2">
+                <time datetime={post.data.date.toISOString()}>{post.data.date.toISOString().slice(0, 10)}</time>{" "}
+                · {readingTime(post.body)} min
+              </p>
+              <h2 class="font-semibold leading-snug mb-2 group-hover:text-accent transition-colors">{post.data.title}</h2>
+              {post.data.description && <p class="text-sm text-muted line-clamp-2 mb-4">{post.data.description}</p>}
+              <p class="eyebrow mt-auto">{post.data.tags.slice(0, 3).join(" · ")}</p>
+            </div>
+          </a>
+        </article>
+      ))}
     </div>
   </section>
 </BaseLayout>
 
+<style>
+  @reference "../../styles/global.css";
+
+  .tag-filter {
+    @apply font-mono text-xs px-3 py-1.5 rounded-full border border-line text-muted transition-colors;
+  }
+  .tag-filter:hover {
+    @apply text-fg border-line-strong;
+  }
+  .tag-filter[aria-pressed="true"] {
+    @apply bg-fg text-bg border-fg;
+  }
+</style>
+
 <script>
-  // Tag filtering functionality
-  const tagButtons = document.querySelectorAll(".tag-filter");
-  const posts = document.querySelectorAll(".blog-post");
+  const tagButtons = document.querySelectorAll<HTMLButtonElement>(".tag-filter");
+  const posts = document.querySelectorAll<HTMLElement>(".blog-post");
 
   tagButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      const tag = button.getAttribute("data-tag");
-
-      // Update active button
-      tagButtons.forEach((btn) => {
-        btn.setAttribute("aria-pressed", String(btn === button));
-        btn.classList.remove("bg-primary-500", "text-white");
-        btn.classList.add("bg-slate-100", "dark:bg-slate-800", "text-slate-700", "dark:text-slate-300");
-      });
-      button.classList.add("bg-primary-500", "text-white");
-      button.classList.remove("bg-slate-100", "dark:bg-slate-800", "text-slate-700", "dark:text-slate-300");
-
-      // Filter posts
+      const tag = button.dataset.tag;
+      tagButtons.forEach((btn) => btn.setAttribute("aria-pressed", String(btn === button)));
       posts.forEach((post) => {
-        const postTags = JSON.parse(post.getAttribute("data-tags") || "[]");
-        if (tag === "all" || postTags.includes(tag)) {
-          (post as HTMLElement).style.display = "";
-        } else {
-          (post as HTMLElement).style.display = "none";
-        }
+        const postTags: string[] = JSON.parse(post.dataset.tags || "[]");
+        post.style.display = tag === "all" || postTags.includes(tag!) ? "" : "none";
       });
     });
   });
