@@ -2,11 +2,17 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 import { readingTime } from "../../utils/readingTime";
+import { series, type SeriesId } from "../../data/series";
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const sortedPosts = allPosts.sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
+
+// Series that have at least one published post
+const seriesList = (Object.keys(series) as SeriesId[])
+  .map((id) => ({ id, ...series[id], count: sortedPosts.filter((p) => p.data.series === id).length }))
+  .filter((s) => s.count > 0);
 
 // Filter buttons for tags shared by at least two posts, most used first
 const tagCounts = new Map<string, number>();
@@ -31,6 +37,18 @@ const allTags = [...tagCounts]
           Notes from running Java backends in production: migrations, Kubernetes, databases, and the team side of platform work.
         </p>
       </div>
+
+      <!-- Series -->
+      {seriesList.map((s) => (
+        <a href={`/blog/series/${s.id}`} class="card card-hover p-6 md:p-8 mb-12 flex flex-col md:flex-row md:items-center gap-4 md:gap-8 group bg-gradient-to-r from-primary-500/10 to-accent-500/10">
+          <div class="flex-1">
+            <p class="text-sm font-semibold uppercase tracking-wide text-primary-500 mb-1">Series · {s.count} parts</p>
+            <h2 class="text-2xl font-bold mb-2 group-hover:text-primary-500 transition-colors">{s.title}</h2>
+            <p class="text-slate-600 dark:text-slate-400">{s.description}</p>
+          </div>
+          <span class="btn btn-primary shrink-0">Read the series</span>
+        </a>
+      ))}
 
       <!-- Tags Filter -->
       {allTags.length > 0 && (

@@ -1,0 +1,53 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { series, type SeriesId } from "../../../data/series";
+import { getSeriesPosts } from "../../../utils/series";
+import { readingTime } from "../../../utils/readingTime";
+
+export function getStaticPaths() {
+  return Object.keys(series).map((id) => ({ params: { id } }));
+}
+
+const id = Astro.params.id as SeriesId;
+const { title, description } = series[id];
+const posts = await getSeriesPosts(id);
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="section">
+    <div class="container-custom max-w-3xl">
+      <a href="/blog" class="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-primary-500 mb-8">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+        </svg>
+        Back to Blog
+      </a>
+
+      <p class="text-sm font-semibold uppercase tracking-wide text-primary-500 mb-3">Series · {posts.length} parts</p>
+      <h1 class="text-4xl md:text-5xl font-bold mb-6 text-balance">{title}</h1>
+      <p class="text-xl text-slate-600 dark:text-slate-400 mb-12">{description}</p>
+
+      <ol class="space-y-4">
+        {posts.map((post, i) => (
+          <li>
+            <a href={`/blog/${post.id}`} class="card card-hover p-6 flex gap-5 group">
+              <span class="text-3xl font-bold gradient-text tabular-nums w-10 shrink-0">{i + 1}</span>
+              <span>
+                <span class="block text-lg font-semibold group-hover:text-primary-500 transition-colors">{post.data.title}</span>
+                {post.data.description && (
+                  <span class="block text-sm text-slate-600 dark:text-slate-400 mt-1">{post.data.description}</span>
+                )}
+                <span class="block text-sm text-slate-500 mt-2">
+                  <time datetime={post.data.date.toISOString()}>
+                    {post.data.date.toLocaleDateString("en-US", { year: "numeric", month: "long" })}
+                  </time>{" "}
+                  &middot; {readingTime(post.body)} min
+                </span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+</BaseLayout>

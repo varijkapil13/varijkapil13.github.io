@@ -109,9 +109,10 @@ for (const name of readdirSync(BLOG_DIR).filter((f) => f.endsWith(".md"))) {
   await tab.screenshot({ path: out, type: "jpeg", quality: 82 });
 
   // Point the post at its cover
-  const raw = readFileSync(file, "utf8");
-  if (!/^image:/m.test(raw)) {
-    writeFileSync(file, raw.replace(/^(date:.*)$/m, `$1\nimage: "/images/blog/${id}.jpg"`));
+  // Only touch the front matter: a post body can contain `image:` too (e.g. Helm values)
+  if (!post.hasImage) {
+    const raw = readFileSync(file, "utf8");
+    writeFileSync(file, raw.replace(/^(---\n[\s\S]*?^date:.*)$/m, `$1\nimage: "/images/blog/${id}.jpg"`));
   }
   console.log(`cover: ${out}`);
 }

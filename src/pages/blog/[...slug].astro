@@ -3,6 +3,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import { readingTime } from "../../utils/readingTime";
 import TableOfContents from "../../components/TableOfContents.astro";
+import SeriesNav from "../../components/SeriesNav.astro";
+import { getSeriesPosts } from "../../utils/series";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -20,6 +22,7 @@ const { post } = Astro.props;
 const { Content, headings } = await render(post);
 
 const minutes = readingTime(post.body);
+const seriesPosts = post.data.series ? await getSeriesPosts(post.data.series) : [];
 
 // Related posts: most shared tags first, then newest
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
@@ -93,6 +96,10 @@ const relatedPosts = allPosts
       </header>
 
 
+      {post.data.series && (
+        <SeriesNav id={post.data.series} posts={seriesPosts} current={post.id} position="top" />
+      )}
+
       <!-- Article Content -->
       <div class="relative">
         <TableOfContents headings={headings} />
@@ -100,6 +107,10 @@ const relatedPosts = allPosts
           <Content />
         </div>
       </div>
+
+      {post.data.series && (
+        <SeriesNav id={post.data.series} posts={seriesPosts} current={post.id} position="bottom" />
+      )}
 
       <!-- Share & Author -->
       <div class="mt-16 pt-8 border-t border-slate-200 dark:border-slate-800">
@@ -167,3 +178,37 @@ const relatedPosts = allPosts
     </section>
   )}
 </BaseLayout>
+
+<script>
+  // Copy button on every code block
+  document.querySelectorAll<HTMLPreElement>(".prose pre").forEach((pre) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "copy-code";
+    button.textContent = "Copy";
+    button.setAttribute("aria-label", "Copy code to clipboard");
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(pre.querySelector("code")?.innerText ?? pre.innerText);
+        button.textContent = "Copied";
+      } catch {
+        button.textContent = "Failed";
+      }
+      setTimeout(() => (button.textContent = "Copy"), 1500);
+    });
+    const wrapper = document.createElement("div");
+    wrapper.className = "code-block";
+    pre.replaceWith(wrapper);
+    wrapper.append(pre, button);
+  });
+
+  // Link icon on section headings, for sharing a specific section
+  document.querySelectorAll<HTMLHeadingElement>(".prose h2[id], .prose h3[id]").forEach((heading) => {
+    const link = document.createElement("a");
+    link.href = `#${heading.id}`;
+    link.className = "heading-anchor";
+    link.setAttribute("aria-label", `Link to section: ${heading.textContent}`);
+    link.textContent = "#";
+    heading.append(link);
+  });
+</script>

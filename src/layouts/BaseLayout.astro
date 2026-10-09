@@ -41,7 +41,10 @@ const ogLocale = ogLocaleMap[lang] || 'en_US';
 
 // Generate hreflang URLs - strip current locale prefix and rebuild for each language
 const pathWithoutLocale = currentPath.replace(/^\/(en|de|hi)/, '') || '/';
-const hreflangUrls = [
+// Only these pages exist in every language; the blog is English only
+const translatedPaths = ['/', '/about', '/projects'];
+const isTranslated = translatedPaths.includes(pathWithoutLocale.replace(/\/$/, '') || '/');
+const hreflangUrls = !isTranslated ? [] : [
   { lang: 'en', url: new URL(pathWithoutLocale, Astro.site) },
   { lang: 'de', url: new URL(`/de${pathWithoutLocale}`, Astro.site) },
   { lang: 'hi', url: new URL(`/hi${pathWithoutLocale}`, Astro.site) },
