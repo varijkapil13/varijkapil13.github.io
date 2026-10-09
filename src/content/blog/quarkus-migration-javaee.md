@@ -3,6 +3,7 @@ title: "Why We Moved from Java EE to Quarkus (And What Broke)"
 description: "How we migrated a monolithic Java EE application to Quarkus microservices, including the parts that didn't go smoothly."
 date: 2023-08-22
 image: "/images/blog/quarkus-migration-javaee.jpg"
+series: "monolith-to-saas"
 tags: ["quarkus", "java", "microservices", "migration"]
 ---
 

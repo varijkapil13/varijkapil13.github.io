@@ -1,0 +1,57 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { series, type SeriesId } from "../data/series";
+
+interface Props {
+  id: SeriesId;
+  posts: CollectionEntry<"blog">[];
+  current: string;
+  position: "top" | "bottom";
+}
+
+const { id, posts, current, position } = Astro.props;
+const index = posts.findIndex((p) => p.id === current);
+const prev = posts[index - 1];
+const next = posts[index + 1];
+const href = `/blog/series/${id}`;
+---
+
+{position === "top" ? (
+  <details data-series-nav class="card p-5 mb-10 border-l-4 !border-l-primary-500">
+    <summary class="cursor-pointer">
+      <span class="text-sm text-slate-500">Part {index + 1} of {posts.length} in the series</span>{" "}
+      <a href={href} class="font-semibold text-primary-600 dark:text-primary-400 hover:underline">{series[id].title}</a>
+    </summary>
+    <ol class="mt-4 space-y-1.5 text-sm list-decimal pl-6">
+      {posts.map((p) => (
+        <li>
+          {p.id === current ? (
+            <span class="font-semibold" aria-current="page">{p.data.title}</span>
+          ) : (
+            <a href={`/blog/${p.id}`} class="text-slate-600 dark:text-slate-400 hover:text-primary-500">{p.data.title}</a>
+          )}
+        </li>
+      ))}
+    </ol>
+  </details>
+) : (
+  <nav aria-label="Series navigation" class="mt-12 grid sm:grid-cols-2 gap-4">
+    {prev ? (
+      <a href={`/blog/${prev.id}`} class="card card-hover p-5 group">
+        <span class="text-xs uppercase tracking-wide text-slate-500">Previous in series</span>
+        <span class="block mt-1 font-semibold group-hover:text-primary-500">{prev.data.title}</span>
+      </a>
+    ) : <div class="hidden sm:block"></div>}
+    {next ? (
+      <a href={`/blog/${next.id}`} class="card card-hover p-5 group sm:text-right">
+        <span class="text-xs uppercase tracking-wide text-slate-500">Next in series</span>
+        <span class="block mt-1 font-semibold group-hover:text-primary-500">{next.data.title}</span>
+      </a>
+    ) : (
+      <a href={href} class="card card-hover p-5 group sm:text-right">
+        <span class="text-xs uppercase tracking-wide text-slate-500">End of series</span>
+        <span class="block mt-1 font-semibold group-hover:text-primary-500">See all {posts.length} parts</span>
+      </a>
+    )}
+  </nav>
+)}

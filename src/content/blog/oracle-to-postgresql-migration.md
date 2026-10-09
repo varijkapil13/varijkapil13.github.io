@@ -3,6 +3,7 @@ title: "Migrating from Oracle to PostgreSQL: A Practical Guide"
 description: "What I learned coordinating a large database migration from Oracle to PostgreSQL for an enterprise application."
 date: 2023-04-18
 image: "/images/blog/oracle-to-postgresql-migration.jpg"
+series: "monolith-to-saas"
 tags: ["postgresql", "oracle", "database", "migration"]
 ---
 

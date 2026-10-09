@@ -3,6 +3,7 @@ title: "Migrating from Java EE to Jakarta EE"
 description: "How we moved enterprise applications from Java EE 8 to Jakarta EE 10: the namespace changes, config files, app servers, and the pitfalls we hit."
 date: 2024-05-10
 image: "/images/blog/jakarta-ee-migration-guide.jpg"
+series: "monolith-to-saas"
 tags: ["java", "jakarta-ee", "enterprise", "migration"]
 ---
 
