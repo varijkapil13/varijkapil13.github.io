@@ -1,15 +1,15 @@
 ---
 title: "Docker for Java Developers: From Development to Production"
-description: "Practical guide to containerizing Java applications with optimized Dockerfiles and production-ready configurations."
+description: "How I containerize Java applications: multi-stage Dockerfiles, JVM memory settings, health checks and the production configuration I use."
 date: 2022-03-25
 tags: ["docker", "java", "devops", "containers"]
 ---
 
-Containerizing Java applications requires understanding both Docker best practices and Java-specific considerations. Here's what I've learned running Java applications in containers in production.
+Running Java in containers means getting the usual Docker practices right and also dealing with how the JVM behaves inside a container. These are the setups I've ended up with after running Java services in containers in production.
 
 ## Optimized Dockerfile
 
-A multi-stage build that produces lean, secure images:
+A multi-stage build keeps the build tools out of the final image and runs the app as a non-root user:
 
 ```dockerfile
 # Build stage
@@ -55,9 +55,9 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=60s \
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
 ```
 
-## JVM Memory Configuration
+## JVM memory configuration
 
-The key to running Java in containers is proper memory settings:
+Most of the trouble I've had with Java in containers came down to memory settings:
 
 ```bash
 # Let JVM automatically size heap based on container limits
@@ -69,16 +69,16 @@ The key to running Java in containers is proper memory settings:
 -Xmx512m -Xms512m                 # Fixed heap size
 ```
 
-### Memory Calculation Example
+### Memory calculation example
 
 For a container with 1GB memory limit:
-- **MaxRAMPercentage=75%** → 768MB max heap
-- Remaining 256MB for metaspace, threads, native memory
+- MaxRAMPercentage=75% gives a 768MB max heap
+- The remaining 256MB covers metaspace, threads and native memory
 - Always leave headroom to avoid OOM kills
 
-## Docker Compose for Development
+## Docker Compose for development
 
-A complete development environment:
+This gives me the app and a PostgreSQL database locally, with the debug port open:
 
 ```yaml
 version: '3.8'
@@ -132,7 +132,7 @@ networks:
     driver: bridge
 ```
 
-## Development Dockerfile with Hot Reload
+## Development Dockerfile with hot reload
 
 ```dockerfile
 # Dockerfile.dev
@@ -160,9 +160,9 @@ CMD ["./mvnw", "spring-boot:run", \
      "-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"]
 ```
 
-## Production Configuration
+## Production configuration
 
-### Graceful Shutdown
+### Graceful shutdown
 
 ```java
 @Configuration
@@ -192,9 +192,9 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 ENTRYPOINT exec java $JAVA_OPTS -jar app.jar
 ```
 
-### Health Checks
+### Health checks
 
-Implement proper health endpoints:
+I expose separate endpoints for general health, readiness and liveness:
 
 ```java
 @RestController
@@ -236,9 +236,9 @@ public class HealthController {
 }
 ```
 
-## Image Optimization
+## Image optimization
 
-### Layer Caching
+### Layer caching
 
 Order Dockerfile instructions from least to most frequently changed:
 
@@ -253,9 +253,9 @@ COPY --from=builder /app/target/lib/* /app/lib/
 COPY --from=builder /app/target/app.jar /app/
 ```
 
-### Image Size Reduction
+### Image size reduction
 
-Compare image sizes:
+Approximate sizes for different base images:
 
 ```bash
 # Full JDK image: ~400MB
@@ -271,9 +271,9 @@ FROM eclipse-temurin:21-jre-alpine
 FROM gcr.io/distroless/java21-debian12
 ```
 
-### Using jlink for Custom Runtime
+### Using jlink for a custom runtime
 
-Create a minimal JRE with only needed modules:
+jlink builds a minimal JRE that contains only the modules your application needs:
 
 ```dockerfile
 FROM eclipse-temurin:21-jdk-alpine AS jre-builder
@@ -300,7 +300,7 @@ ENV PATH="/opt/java/bin:$PATH"
 # Result: ~50-80MB image!
 ```
 
-## Security Best Practices
+## Security practices
 
 ```dockerfile
 # 1. Use specific image tags, not 'latest'
@@ -321,9 +321,9 @@ USER 1001
 # docker scout cves myimage:tag
 ```
 
-## Logging Configuration
+## Logging configuration
 
-Configure for container environments:
+In containers I log to stdout and let the runtime collect it:
 
 ```xml
 <!-- logback.xml -->
@@ -345,13 +345,6 @@ Configure for container environments:
 </configuration>
 ```
 
-## Key Takeaways
+## Summary
 
-1. **Use multi-stage builds** - Separate build and runtime environments
-2. **Configure JVM for containers** - UseContainerSupport and RAM percentages
-3. **Run as non-root** - Security requirement for production
-4. **Implement health checks** - Liveness and readiness probes
-5. **Optimize image size** - Alpine base, jlink for minimal JRE
-6. **Log to stdout** - Let container runtime handle log aggregation
-
-These practices have helped us run Java applications reliably in containers across development, staging, and production environments.
+The short version: use multi-stage builds, size the JVM heap from the container's limits with UseContainerSupport and the RAM percentage flags, run as a non-root user (a security requirement for production), add liveness and readiness checks, shrink the image with an Alpine base or jlink, and log to stdout. That setup has worked for us in development, staging and production.

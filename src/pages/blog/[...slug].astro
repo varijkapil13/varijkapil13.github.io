@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
+import { readingTime } from "../../utils/readingTime";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -17,14 +18,15 @@ type Props = {
 const { post } = Astro.props;
 const { Content } = await post.render();
 
-// Get related posts (same tags)
+const minutes = readingTime(post.body);
+
+// Related posts: most shared tags first, then newest
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const sharedTags = (p: CollectionEntry<"blog">) =>
+  (p.data.tags ?? []).filter((tag) => post.data.tags?.includes(tag)).length;
 const relatedPosts = allPosts
-  .filter(
-    (p) =>
-      p.slug !== post.slug &&
-      p.data.tags?.some((tag: string) => post.data.tags?.includes(tag))
-  )
+  .filter((p) => p.slug !== post.slug && sharedTags(p) > 0)
+  .sort((a, b) => sharedTags(b) - sharedTags(a) || b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 3);
 ---
 
@@ -77,13 +79,15 @@ const relatedPosts = allPosts
             <span>Varij Kapil</span>
           </div>
           <span>&middot;</span>
-          <time>
+          <time datetime={post.data.date.toISOString()}>
             {new Date(post.data.date).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
               day: "numeric",
             })}
           </time>
+          <span>&middot;</span>
+          <span>{minutes} min read</span>
         </div>
       </header>
 
@@ -166,7 +170,7 @@ const relatedPosts = allPosts
               <h3 class="text-lg font-semibold group-hover:text-primary-500 transition-colors">
                 {relatedPost.data.title}
               </h3>
-              <time class="text-sm text-slate-500 mt-2 block">
+              <time datetime={relatedPost.data.date.toISOString()} class="text-sm text-slate-500 mt-2 block">
                 {new Date(relatedPost.data.date).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "short",

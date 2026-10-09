@@ -5,11 +5,11 @@ date: 2020-09-12
 tags: ["java", "debugging", "production", "monitoring"]
 ---
 
-Nobody wants that 2 AM PagerDuty alert. But when it comes, you need to diagnose and fix fast. Over the years, I've built a toolkit for production debugging that has saved me countless times.
+Nobody wants the 2 AM PagerDuty alert, but when it comes you need to find the problem and fix it fast. Over the years I've settled on a small set of tools for production debugging, and they've got me out of trouble more times than I can count.
 
-## First: Don't Panic
+## First, don't panic
 
-I've seen developers SSH into production and start changing things immediately. Resist this urge. Take 60 seconds to understand what's actually happening.
+I've seen developers SSH into production and start changing things immediately. Don't. Take 60 seconds to understand what's actually happening.
 
 Check the basics first:
 - Is the service up?
@@ -19,9 +19,9 @@ Check the basics first:
 
 Most incidents fall into a few categories: memory issues, thread problems, slow dependencies, or bad deployments. Knowing which you're dealing with guides your investigation.
 
-## The Tools I Actually Use
+## The tools I actually use
 
-### Thread Dumps
+### Thread dumps
 
 When an application seems stuck or slow, thread dumps are my first stop:
 
@@ -40,9 +40,9 @@ I take three dumps, 10 seconds apart. Then I look for:
 grep -A 2 "BLOCKED" thread_dump.txt
 ```
 
-### Heap Dumps
+### Heap dumps
 
-For memory issues, nothing beats a heap dump:
+For memory issues I go straight to a heap dump:
 
 ```bash
 jcmd <pid> GC.heap_dump /tmp/heap.hprof
@@ -52,7 +52,7 @@ I analyze these with Eclipse MAT (Memory Analyzer Tool). The "Leak Suspects" rep
 
 One gotcha: heap dumps pause the JVM. On a busy production server, this can cause timeout errors. I usually dump on a replica I've pulled from the load balancer.
 
-### GC Logs
+### GC logs
 
 If you're not already logging GC, start now:
 
@@ -60,14 +60,14 @@ If you're not already logging GC, start now:
 -Xlog:gc*:file=/var/log/gc.log:time,uptime:filecount=5,filesize=10M
 ```
 
-When memory issues hit, these logs show you:
+When memory issues hit, these logs tell you:
 - How often GC runs
 - How much time is spent in GC
 - Whether memory is actually being reclaimed
 
-Long GC pauses correlate directly with latency spikes. I've caught memory leaks by noticing GC frequency increasing over time.
+Long GC pauses line up directly with latency spikes. I've caught memory leaks just by noticing GC running more and more often over time.
 
-### Async Profiler
+### Async profiler
 
 For CPU issues, async-profiler generates flame graphs without significant overhead:
 
@@ -75,41 +75,38 @@ For CPU issues, async-profiler generates flame graphs without significant overhe
 ./profiler.sh -d 30 -f profile.html <pid>
 ```
 
-The flame graph shows exactly where CPU time goes. Wide boxes at the top are where to focus optimization efforts.
+The flame graph shows exactly where CPU time goes. The wide boxes at the top are where I start optimizing.
 
-## A Real Debugging Session
+## A real debugging session
 
-Last month, our API started timing out randomly. Here's how I diagnosed it.
+Last month our API started timing out at random. This is how I tracked it down.
 
-**Step 1: Check metrics**. Latency percentiles showed p99 spiking while p50 was normal. This suggested a subset of requests were slow, not all of them.
+1. Metrics first. The p99 latency was spiking while p50 stayed normal, so only a subset of requests were slow.
+2. A thread dump showed 40 threads stuck in `SocketInputStream.read()`, all talking to our cache server.
+3. Redis itself was healthy, but the network metrics showed packet loss to that subnet.
+4. The root cause was a flapping network switch, which the infra team fixed.
 
-**Step 2: Thread dump**. Found 40 threads stuck in `SocketInputStream.read()`, all connecting to our cache server.
+The whole thing took 15 minutes. Without the thread dump, I would have spent hours looking at application code.
 
-**Step 3: Check the cache**. Redis was healthy, but network metrics showed packet loss to that subnet.
+## What I always have ready
 
-**Step 4: Root cause**. A network switch was flapping. Infra team fixed it.
-
-Total time: 15 minutes. Without the thread dump, I would have spent hours looking at application code.
-
-## Things I Always Have Ready
-
-- **JDK tools available**: `jcmd`, `jstack`, `jmap` should be in the container
-- **Heap dump location with space**: Know where dumps will go and ensure there's room
-- **Profiler ready to attach**: Have async-profiler installed, know how to use it
-- **Log aggregation working**: You can't debug without logs
+- The JDK tools (`jcmd`, `jstack`, `jmap`) installed in the container
+- A known location for heap dumps, with enough disk space to hold one
+- async-profiler installed, and the know-how to attach it
+- Working log aggregation, because you can't debug without logs
 
 ## Prevention
 
-The best debugging session is one that never happens. I've learned to:
+I'd rather not need any of this, so I've learned to:
 
 - Add circuit breakers around external calls
 - Set sensible timeouts everywhere (never use infinite timeouts)
 - Monitor queue depths and thread pool saturation
 - Alert on error rate increases, not just errors
 
-Our monitoring now catches most issues before users notice. When something does slip through, the tools above help me fix it quickly.
+Our monitoring now catches most issues before users notice. When something does slip through, I fall back on the tools above.
 
-## One More Thing
+## Write it down
 
 Document your incidents. After fixing something, write down:
 - What broke
@@ -117,4 +114,4 @@ Document your incidents. After fixing something, write down:
 - What you did to fix it
 - How to prevent it
 
-Future you (or your teammates) will thank you.
+The next time something similar breaks, you (or a teammate) will have a head start.

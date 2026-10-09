@@ -1,26 +1,21 @@
 ---
 title: "Migrating from Oracle to PostgreSQL: A Practical Guide"
-description: "Lessons learned from coordinating a large-scale database migration from Oracle to PostgreSQL in an enterprise environment."
+description: "What I learned coordinating a large database migration from Oracle to PostgreSQL for an enterprise application."
 date: 2023-04-18
 tags: ["postgresql", "oracle", "database", "migration"]
 ---
 
-Database migrations are often considered one of the riskiest undertakings in software development. After coordinating a migration from Oracle to PostgreSQL for a complex enterprise application, I want to share what worked, what didn't, and what I wish I knew before starting.
+Database migrations have a reputation for being risky, and for good reason. I coordinated a migration from Oracle to PostgreSQL for a complex enterprise application, and this post covers how we did it and what I wish I'd known before starting.
 
 ## Why We Migrated
 
-Our decision to move from Oracle to PostgreSQL was driven by several factors:
+Oracle licensing was a significant expense, and that was the main driver. PostgreSQL also gave us better options for cloud deployment, open source tooling with an active community behind it, and it performs very well for our workload.
 
-- **Licensing costs** - Oracle licensing was a significant expense
-- **Cloud flexibility** - PostgreSQL offers better options for cloud deployment
-- **Open source ecosystem** - Rich tooling and community support
-- **Performance** - PostgreSQL performs excellently for our workload
-
-## The Migration Strategy
+## The migration strategy
 
 We followed a phased approach rather than a "big bang" migration:
 
-### Phase 1: Assessment and Planning
+### Phase 1: Assessment and planning
 
 First, we cataloged everything:
 
@@ -32,7 +27,7 @@ GROUP BY object_type
 ORDER BY COUNT(*) DESC;
 ```
 
-Key items to inventory:
+What we inventoried:
 - Tables and their relationships
 - Stored procedures and functions
 - Triggers
@@ -41,11 +36,11 @@ Key items to inventory:
 - Custom data types
 - Database links
 
-### Phase 2: Schema Conversion
+### Phase 2: Schema conversion
 
-Oracle and PostgreSQL have syntax differences that need attention:
+Oracle and PostgreSQL differ in syntax and types in a few places:
 
-#### Data Types Mapping
+#### Data type mapping
 
 | Oracle | PostgreSQL |
 |--------|------------|
@@ -70,9 +65,9 @@ CREATE SEQUENCE my_seq START WITH 1 INCREMENT BY 1;
 -- Usage: nextval('my_seq')
 ```
 
-### Phase 3: Code Migration
+### Phase 3: Code migration
 
-This was the most time-consuming phase. Key areas of change:
+This was the most time-consuming phase. The main changes were in procedures and string handling.
 
 #### PL/SQL to PL/pgSQL
 
@@ -107,7 +102,7 @@ END;
 $$ LANGUAGE plpgsql;
 ```
 
-#### String Concatenation
+#### String concatenation
 
 Oracle uses `||` for string concatenation (PostgreSQL does too, thankfully), but watch out for NULL handling:
 
@@ -120,11 +115,11 @@ SELECT COALESCE(first_name, '') || ' ' || COALESCE(last_name, '')
 FROM users;
 ```
 
-### Phase 4: Application Layer Changes
+### Phase 4: Application layer changes
 
 Our Jakarta EE application required updates:
 
-#### JPA/Hibernate Configuration
+#### JPA/Hibernate configuration
 
 ```xml
 <!-- Before (Oracle) -->
@@ -134,7 +129,7 @@ Our Jakarta EE application required updates:
 <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
 ```
 
-#### Native Queries
+#### Native queries
 
 We had to review and update all native SQL queries:
 
@@ -146,13 +141,13 @@ We had to review and update all native SQL queries:
 @Query(value = "SELECT * FROM orders LIMIT :limit", nativeQuery = true)
 ```
 
-## Data Migration
+## Data migration
 
-For the actual data migration, we used a combination of tools:
+For the data itself, we combined a few tools:
 
-1. **ora2pg** - Excellent open-source tool for schema and data migration
-2. **Custom scripts** - For complex transformations
-3. **Parallel loading** - Using PostgreSQL's COPY command for large tables
+1. ora2pg, an excellent open source tool for schema and data migration
+2. Custom scripts for complex transformations
+3. Parallel loading with PostgreSQL's COPY command for large tables
 
 ```bash
 # Example ora2pg configuration
@@ -166,11 +161,11 @@ PG_USER     postgres
 TYPE        TABLE,SEQUENCE,VIEW,FUNCTION,PROCEDURE
 ```
 
-## Testing Strategy
+## Testing
 
-We implemented multiple levels of testing:
+We tested at several levels:
 
-### Row Count Verification
+### Row count verification
 ```sql
 -- Compare counts between Oracle and PostgreSQL
 -- Oracle
@@ -181,7 +176,7 @@ SELECT 'customers', COUNT(*) FROM customers;
 -- Run same query on PostgreSQL and compare
 ```
 
-### Data Integrity Checks
+### Data integrity checks
 ```sql
 -- Checksum comparison for critical columns
 SELECT MD5(STRING_AGG(
@@ -193,20 +188,20 @@ SELECT MD5(STRING_AGG(
 FROM orders;
 ```
 
-### Application Testing
+### Application testing
 - Full regression test suite
 - Performance benchmarks
 - User acceptance testing
 
-## Lessons Learned
+## Lessons learned
 
-1. **Start with a thorough assessment** - Know exactly what you're migrating
-2. **Automate everything** - Schema conversion, data migration, testing
-3. **Plan for rollback** - Have a way to go back if things go wrong
-4. **Test with production-like data** - Volume matters for performance testing
-5. **Involve the whole team** - Developers, DBAs, and QA all need to be aligned
+1. Start with a thorough assessment so you know exactly what you're migrating.
+2. Automate schema conversion, data migration, and testing.
+3. Plan for rollback, so you have a way back if things go wrong.
+4. Test with production-like data. Volume matters for performance testing.
+5. Involve developers, DBAs, and QA early so everyone is aligned.
 
-## Performance Tuning Post-Migration
+## Performance tuning after the migration
 
 After migration, we needed to tune PostgreSQL:
 
@@ -220,8 +215,8 @@ FROM pg_stat_user_indexes
 WHERE idx_scan = 0;
 ```
 
-## Conclusion
+## Was it worth it?
 
-Migrating from Oracle to PostgreSQL is a significant undertaking, but it's absolutely achievable with proper planning and execution. The cost savings and flexibility we gained made it worthwhile.
+Migrating from Oracle to PostgreSQL is a lot of work, but it's doable with good planning. The cost savings and flexibility we gained made it worthwhile for us.
 
-The key is to treat it as a project, not just a technical task. Get buy-in from stakeholders, plan thoroughly, and don't rush the testing phase.
+Treat it as a project with stakeholders and a plan, get their buy-in early, and don't rush the testing phase.

@@ -5,13 +5,13 @@ date: 2020-05-18
 tags: ["database", "postgresql", "java", "performance"]
 ---
 
-Connection pooling seems simple until it isn't. I've crashed production systems, debugged mysterious timeouts, and spent weekends fixing pool exhaustion issues. Here's what I wish I'd known earlier.
+Connection pooling seems simple until it isn't. I've crashed production systems with a badly sized pool and spent weekends chasing timeouts that turned out to be pool exhaustion. These are the mistakes I wish someone had warned me about.
 
-## Mistake 1: Pool Too Large
+## Mistake 1: pool too large
 
 My first instinct when things got slow was to increase the pool size. More connections means more throughput, right?
 
-Wrong. PostgreSQL doesn't scale linearly with connections. After about 100 concurrent connections, performance degrades. Each connection consumes memory and CPU for context switching.
+It doesn't. PostgreSQL doesn't scale linearly with connections, and past about 100 concurrent connections performance degrades. Each connection uses memory, and the CPU spends time context switching between them.
 
 The formula I use now:
 
@@ -19,11 +19,11 @@ The formula I use now:
 connections = (cores * 2) + effective_spindle_count
 ```
 
-For a 4-core server with SSDs, that's about 10 connections. Much smaller than the 200 I used to configure.
+For a 4-core server with SSDs, that's about 10 connections, a lot fewer than the 200 I used to configure.
 
-## Mistake 2: Pool Too Small
+## Mistake 2: pool too small
 
-The opposite problem. I once set a pool size of 5 for an application that had 20 concurrent request handlers. Under load, threads waited forever for connections.
+I've also made the opposite mistake. I once set a pool size of 5 for an application that had 20 concurrent request handlers. Under load, threads waited forever for connections.
 
 ```java
 // HikariCP timeout defaults to 30 seconds
@@ -35,9 +35,9 @@ try (Connection conn = dataSource.getConnection()) {
 
 Match your pool size to your actual concurrency. If you have 20 threads that need database access, you need at least 20 connections (or accept that some threads will wait).
 
-## Mistake 3: Not Setting Timeouts
+## Mistake 3: not setting timeouts
 
-Default timeout settings are dangerous. Without explicit configuration:
+The default timeout settings are dangerous, so I always set these explicitly:
 
 ```yaml
 # HikariCP settings I always configure
@@ -47,13 +47,11 @@ idleTimeout: 600000         # 10 minutes before closing idle
 maxLifetime: 1800000        # 30 minutes max connection age
 ```
 
-The `connectionTimeout` is critical. Without it, a pool exhaustion issue blocks threads indefinitely, cascading into a full outage.
+`connectionTimeout` matters most. Without it, pool exhaustion blocks threads indefinitely, and the blocked threads pile up into a full outage.
 
-## Mistake 4: Connection Leaks
+## Mistake 4: connection leaks
 
-This one bit me hard. Our pool would slowly exhaust over hours, then suddenly everything failed.
-
-The cause: code that didn't close connections properly.
+This one bit me hard. Our pool would drain slowly over several hours, and then everything failed at once. The cause was code that didn't close its connections properly.
 
 ```java
 // BAD: Connection never closed if exception thrown
@@ -76,11 +74,11 @@ HikariCP has leak detection that logs warnings when connections aren't returned:
 leakDetectionThreshold: 60000  # Log if connection held > 60 seconds
 ```
 
-Enable this in development. It will find your leaks.
+Turn this on in development and it will find your leaks.
 
-## Mistake 5: Ignoring Connection Validation
+## Mistake 5: ignoring connection validation
 
-Connections go stale. Network issues, database restarts, and firewall timeouts all can leave you with dead connections in the pool.
+Connections go stale. A network problem, a database restart or a firewall timeout can leave dead connections sitting in the pool.
 
 I learned this the hard way after a database failover. The pool had connections to the old primary that silently failed.
 
@@ -90,13 +88,13 @@ connectionTestQuery: SELECT 1
 validationTimeout: 5000
 ```
 
-HikariCP is smart about this—it validates connections efficiently. But you need to enable it.
+HikariCP validates connections efficiently, but only if you enable it.
 
-## Mistake 6: One Pool for Everything
+## Mistake 6: one pool for everything
 
 We had one pool shared between transaction processing and reporting queries. Report queries were slow and held connections for seconds. Transaction queries were fast but starved for connections.
 
-Solution: separate pools.
+We fixed it by giving each workload its own pool:
 
 ```java
 @Bean("transactionDataSource")
@@ -116,11 +114,11 @@ public DataSource reportingDataSource() {
 }
 ```
 
-Different workloads need different configurations.
+The transaction pool fails fast when it can't get a connection, while reports are allowed to wait.
 
-## Monitoring Your Pool
+## Monitoring your pool
 
-You can't fix what you can't see. I export these metrics:
+I export these pool metrics:
 
 ```java
 HikariDataSource ds = (HikariDataSource) dataSource;
@@ -134,9 +132,9 @@ int threadsAwaitingConnection = poolMXBean.getThreadsAwaitingConnection();
 
 Alert when `threadsAwaitingConnection` is consistently above zero. That means your pool is too small or something is holding connections too long.
 
-## The Right Configuration
+## My default configuration
 
-After years of tuning, here's my default HikariCP config:
+After years of tuning, this is the HikariCP config I start from:
 
 ```yaml
 spring:
@@ -151,10 +149,10 @@ spring:
       connection-test-query: SELECT 1
 ```
 
-Then I adjust based on actual metrics. Start conservative, monitor, and tune.
+I keep it conservative at first and adjust once I have real metrics.
 
-## One Last Thing
+## Don't share pools across applications
 
 Don't share pools across unrelated applications. Each application should have its own pool with its own limits. Otherwise, one misbehaving app can exhaust connections for everyone.
 
-This might seem obvious, but I've seen shared database users with no per-application limits cause outages more than once.
+It sounds obvious, but I've seen shared database users with no per-application limits cause outages more than once.

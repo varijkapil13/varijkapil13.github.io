@@ -1,15 +1,15 @@
 ---
 title: "Java Logging Best Practices for Production Systems"
-description: "Effective logging strategies that help you debug issues faster and monitor application health in production."
+description: "The logging habits that help me debug production issues faster and keep an eye on application health."
 date: 2021-06-15
 tags: ["java", "logging", "monitoring", "best-practices"]
 ---
 
-Good logging is the difference between hours of debugging and minutes. After years of troubleshooting production issues, here are the logging practices that have saved me countless times.
+With good logs, a production issue takes minutes to debug instead of hours. I've spent years troubleshooting production systems, and these are the logging practices that have saved me again and again.
 
-## Choosing the Right Log Level
+## Choosing the right log level
 
-Use levels consistently across your application:
+Use levels the same way across the whole application:
 
 ```java
 // ERROR: Something failed and needs attention
@@ -41,9 +41,9 @@ log.debug("Calculating discount for items: {}", items);
 log.trace("Processing item {} of {}", index, total);
 ```
 
-## Structured Logging
+## Structured logging
 
-Make logs machine-parseable for better querying:
+Make logs machine-parseable so you can query them:
 
 ```java
 // Using SLF4J with Logback and logstash-encoder
@@ -71,9 +71,9 @@ Output:
 }
 ```
 
-## MDC for Request Context
+## MDC for request context
 
-Add context that's automatically included in all log entries:
+MDC lets you add context that is included in every log entry automatically:
 
 ```java
 @Provider
@@ -118,9 +118,9 @@ Logback configuration:
 <pattern>%d{ISO8601} [%X{correlationId}] [%X{userId:-anonymous}] %-5level %logger{36} - %msg%n</pattern>
 ```
 
-## What to Log
+## What to log
 
-### Always Log
+### Always log
 
 ```java
 // Application startup and configuration
@@ -142,7 +142,7 @@ log.info("Payment service responded in {}ms with status {}", duration, status);
 log.error("Failed to send email to {}: {}", email, exception.getMessage(), exception);
 ```
 
-### Never Log
+### Never log
 
 ```java
 // NEVER log sensitive data
@@ -155,9 +155,9 @@ log.info("Auth token: {}", authToken);            // NEVER
 log.info("Processing card ending in {}", maskCardNumber(cardNumber));
 ```
 
-## Exception Logging
+## Exception logging
 
-Log exceptions properly:
+The two usual mistakes are losing the stack trace and logging the exception twice:
 
 ```java
 // Bad: loses stack trace
@@ -181,9 +181,9 @@ try {
 }
 ```
 
-## Performance Considerations
+## Performance considerations
 
-### Avoid Expensive Operations in Log Statements
+### Avoid expensive operations in log statements
 
 ```java
 // Bad: toString() called even if DEBUG is disabled
@@ -199,7 +199,7 @@ if (log.isDebugEnabled()) {
 }
 ```
 
-### Async Logging for High-Throughput Systems
+### Async logging for high-throughput systems
 
 ```xml
 <!-- logback.xml -->
@@ -215,9 +215,9 @@ if (log.isDebugEnabled()) {
 </root>
 ```
 
-## Log Aggregation Configuration
+## Log aggregation configuration
 
-Configure for centralized logging (ELK, Splunk, etc.):
+For centralized logging (ELK, Splunk, etc.), write JSON in production and readable text in development:
 
 ```xml
 <!-- logback-spring.xml -->
@@ -250,7 +250,7 @@ Configure for centralized logging (ELK, Splunk, etc.):
 </configuration>
 ```
 
-## Log Levels Per Environment
+## Log levels per environment
 
 ```yaml
 # application-dev.yml
@@ -268,9 +268,9 @@ logging:
     org.hibernate: WARN
 ```
 
-## Useful Logging Patterns
+## Useful logging patterns
 
-### Method Entry/Exit for Debugging
+### Method entry/exit for debugging
 
 ```java
 public Order processOrder(OrderRequest request) {
@@ -287,7 +287,7 @@ public Order processOrder(OrderRequest request) {
 }
 ```
 
-### Timed Operations
+### Timed operations
 
 ```java
 public void syncData() {
@@ -305,15 +305,3 @@ public void syncData() {
     }
 }
 ```
-
-## Key Takeaways
-
-1. **Use appropriate log levels** - ERROR for failures, INFO for business events
-2. **Structure your logs** - JSON format for easier querying
-3. **Add context with MDC** - Correlation IDs, user IDs, request paths
-4. **Never log secrets** - Passwords, tokens, personal data
-5. **Log exceptions properly** - Include stack trace for unexpected errors
-6. **Consider performance** - Use parameterized logging, async appenders
-7. **Configure per environment** - Verbose in dev, focused in production
-
-Good logging is an investment that pays off during every production incident.

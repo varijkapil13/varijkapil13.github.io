@@ -1,15 +1,15 @@
 ---
 title: "Building Production-Ready REST APIs with JAX-RS"
-description: "Best practices and patterns for building robust, maintainable REST APIs using JAX-RS in enterprise Java applications."
+description: "Patterns I use for building maintainable REST APIs with JAX-RS in enterprise Java applications."
 date: 2021-11-08
 tags: ["java", "jax-rs", "rest-api", "enterprise"]
 ---
 
-After building REST APIs with JAX-RS for several years in enterprise environments, I've collected a set of patterns and practices that have consistently proven valuable. Here's what works in production.
+I've built REST APIs with JAX-RS for several years in enterprise environments, and a handful of patterns keep showing up in every project that holds up in production. These are the ones I reach for.
 
-## Project Structure
+## Project structure
 
-A well-organized project structure makes maintenance easier:
+A clear package layout makes maintenance easier:
 
 ```
 src/main/java/
@@ -39,9 +39,9 @@ src/main/java/
 │       └── ApplicationConfig.java
 ```
 
-## Resource Class Design
+## Resource class design
 
-Keep resource classes thin - they should only handle HTTP concerns:
+Keep resource classes thin. They should only handle HTTP concerns:
 
 ```java
 @Path("/orders")
@@ -111,7 +111,7 @@ public class OrderResource {
 }
 ```
 
-## Exception Handling
+## Exception handling
 
 Use a global exception mapper for consistent error responses:
 
@@ -169,7 +169,7 @@ public class GlobalExceptionMapper implements ExceptionMapper<Throwable> {
 }
 ```
 
-## Request Validation
+## Request validation
 
 Use Bean Validation for input validation:
 
@@ -201,9 +201,9 @@ public class OrderItemRequest {
 }
 ```
 
-## Logging and Monitoring
+## Logging and monitoring
 
-Implement a logging filter for request/response tracking:
+A logging filter tracks each request and response:
 
 ```java
 @Provider
@@ -244,9 +244,9 @@ public class LoggingFilter implements ContainerRequestFilter, ContainerResponseF
 }
 ```
 
-## Pagination Pattern
+## Pagination
 
-Implement consistent pagination across all list endpoints:
+Use the same pagination model on every list endpoint:
 
 ```java
 public class PageRequest {
@@ -276,9 +276,9 @@ public class Page<T> {
 }
 ```
 
-## API Versioning
+## API versioning
 
-Use URI versioning for clarity:
+I prefer URI versioning because it's obvious from the URL which version a client is calling:
 
 ```java
 @ApplicationPath("/api/v1")
@@ -293,9 +293,9 @@ public class OrderResource {
 }
 ```
 
-## Rate Limiting
+## Rate limiting
 
-Implement rate limiting to protect your API:
+A rate limiting filter keeps one client from overwhelming the API:
 
 ```java
 @Provider
@@ -377,14 +377,8 @@ public class OrderResourceTest {
 }
 ```
 
-## Key Takeaways
+## Wrapping up
 
-1. **Keep resources thin** - Move business logic to services
-2. **Use DTOs** - Don't expose your entities directly
-3. **Validate everything** - Use Bean Validation consistently
-4. **Handle errors gracefully** - Global exception mapper for consistency
-5. **Log and monitor** - Track all requests for debugging
-6. **Version your API** - Plan for future changes
-7. **Test thoroughly** - Integration tests catch real issues
+The short version: keep business logic in services, expose DTOs instead of entities, validate input with Bean Validation, send every error through one exception mapper, log every request, version the API from day one, and write integration tests, because they catch the issues unit tests miss.
 
-These patterns have served me well across multiple enterprise projects. Start simple and add complexity only when needed.
+These patterns have served me well across multiple enterprise projects. Start simple and add complexity only when you need it.

@@ -1,17 +1,17 @@
 ---
 title: "Java 21 Features We're Actually Using in Production"
-description: "A look at the Java 21 features that have made a real difference in our enterprise applications."
+description: "Which Java 21 features we use in our enterprise applications after several months in production, and what they changed."
 date: 2024-11-20
 tags: ["java", "enterprise", "backend"]
 ---
 
-Java 21 is the latest LTS release, and after running it in production for several months, I want to share which new features have genuinely improved our codebase.
+Java 21 is the latest LTS release. We've been running it in production for several months, and these are the new features that have improved our codebase.
 
-## Virtual Threads (Project Loom)
+## Virtual threads (Project Loom)
 
-This is the headline feature, and it lives up to the hype. Virtual threads have transformed how we handle concurrent operations.
+This is the headline feature, and it lives up to the hype. Virtual threads changed how we write concurrent code.
 
-### Before: Thread Pool Management
+### Before: thread pool management
 
 ```java
 // Managing thread pools was always a balancing act
@@ -26,7 +26,7 @@ for (Request request : requests) {
 }
 ```
 
-### After: Virtual Threads
+### After: virtual threads
 
 ```java
 // Just create as many virtual threads as you need
@@ -42,11 +42,11 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 }
 ```
 
-In our API gateway, virtual threads allowed us to handle **10x more concurrent connections** with the same hardware.
+In our API gateway, virtual threads let us handle 10x more concurrent connections on the same hardware.
 
-### Structured Concurrency (Preview)
+### Structured concurrency (preview)
 
-Even better, structured concurrency makes concurrent code easier to reason about:
+Structured concurrency goes further and makes concurrent code easier to reason about:
 
 ```java
 Response handleRequest(Request request) throws Exception {
@@ -63,11 +63,11 @@ Response handleRequest(Request request) throws Exception {
 }
 ```
 
-All tasks are scoped together - if one fails, others are cancelled automatically.
+All tasks share one scope, so if one fails, the others are cancelled automatically.
 
-## Record Patterns
+## Record patterns
 
-Pattern matching for records makes data extraction cleaner:
+Pattern matching for records makes pulling data out of them cleaner:
 
 ```java
 // Before
@@ -97,9 +97,9 @@ if (shape instanceof Rectangle(Point(int x1, int y1), Point(int x2, int y2))) {
 }
 ```
 
-## Pattern Matching for Switch
+## Pattern matching for switch
 
-Combined with sealed classes, this is incredibly powerful:
+This gets really useful with sealed classes, because the compiler checks that the switch covers every case:
 
 ```java
 sealed interface PaymentMethod permits CreditCard, BankTransfer, DigitalWallet {}
@@ -126,9 +126,9 @@ String processPayment(PaymentMethod method, Amount amount) {
 }
 ```
 
-## Sequenced Collections
+## Sequenced collections
 
-Finally, a proper way to access first/last elements:
+We finally have a proper way to get the first and last elements:
 
 ```java
 // Before - inconsistent APIs
@@ -157,9 +157,9 @@ var firstAndLast = List.of(
 );
 ```
 
-## String Templates (Preview)
+## String templates (preview)
 
-String templates make string composition safer and cleaner:
+String templates make building strings safer and easier to read:
 
 ```java
 // Before - error prone
@@ -180,9 +180,9 @@ String formatted = FMT."Balance: %.2f\{balance}";
 PreparedStatement stmt = SQL."SELECT * FROM users WHERE name = \{name} AND age > \{age}";
 ```
 
-## Practical Tips for Migration
+## Practical tips for migration
 
-### 1. Start with Virtual Threads
+### 1. Start with virtual threads
 
 If you're using thread pools for I/O-bound operations, switching to virtual threads is usually straightforward:
 
@@ -195,18 +195,18 @@ ExecutorService executor = Executors.newCachedThreadPool();
 ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 ```
 
-### 2. Update Your Records
+### 2. Use record patterns on your existing records
 
-If you're already using records, you can immediately benefit from record patterns in switch statements.
+If you already use records, you can start using record patterns in switch statements right away.
 
-### 3. Gradual Adoption
+### 3. Adopt gradually
 
 You don't need to use everything at once. We started with:
 1. Virtual threads (biggest impact)
 2. Sequenced collections (quality of life)
 3. Record patterns (where applicable)
 
-## Performance Results
+## Performance results
 
 After migrating our main API service to Java 21 with virtual threads:
 
@@ -217,8 +217,8 @@ After migrating our main API service to Java 21 with virtual threads:
 | Memory usage | 8GB | 6GB |
 | Thread count | 500 | 50 platform + thousands virtual |
 
-## Conclusion
+## Is it worth upgrading?
 
-Java 21 is a significant release. Virtual threads alone justify the upgrade for any I/O-heavy application. Combined with pattern matching improvements and other features, it makes Java code more expressive and efficient.
+For any I/O-heavy application, virtual threads alone justify the upgrade. The pattern matching improvements and the other features make the code more expressive on top of that.
 
-If you're still on Java 11 or 17, Java 21 is worth the migration effort. The new features aren't just syntactic sugar - they enable fundamentally better approaches to common problems.
+If you're still on Java 11 or 17, I think Java 21 is worth the migration effort. Virtual threads and sealed types with exhaustive switches change how you solve common problems, which is more than you get from syntactic sugar.

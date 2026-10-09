@@ -4,7 +4,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 const projects = [
   {
     title: "Working Hours Tracker",
-    description: "An application to log working hours, leaves, and holidays in an organization. Calculates overtimes for all employees automatically.",
+    description: "An application to log working hours, leaves, and holidays in an organization. It calculates overtime for every employee automatically.",
     tags: ["Web App", "Time Tracking", "HR"],
     icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
     color: "primary",
@@ -18,14 +18,14 @@ const projects = [
   },
   {
     title: "Privacy-First Expense Calculator",
-    description: "An iOS application for expense calculation that protects your data and keeps it completely private. No cloud sync, no tracking.",
+    description: "An iOS expense calculator that keeps your data on the device. It has no cloud sync and no tracking.",
     tags: ["iOS", "Swift", "Privacy"],
     icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
     color: "green",
   },
   {
-    title: "Personal Website (This Site!)",
-    description: "Several iterations of my personal website. I love testing new technologies, so this site has transitioned through various tools and frameworks - currently built with Astro.",
+    title: "This website",
+    description: "I use this site to try out new tools, so it has been rebuilt several times. The current version runs on Astro.",
     tags: ["Astro", "Tailwind CSS", "Web"],
     icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg>`,
     color: "orange",
@@ -59,7 +59,7 @@ const getColorClasses = (color: string) => {
 };
 ---
 
-<BaseLayout title="Projects" description="Explore personal software projects by Varij Kapil, including time tracking apps, database tools, and iOS development. Built with Java, Python, Swift, and Astro.">
+<BaseLayout title="Projects" description="Side projects by Varij Kapil: a working hours tracker, a database schema tool, an iOS expense calculator, and this site.">
   <section class="section">
     <div class="container-custom">
       <!-- Header -->
@@ -68,7 +68,7 @@ const getColorClasses = (color: string) => {
           Personal <span class="gradient-text">Projects</span>
         </h1>
         <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-          A collection of side projects and experiments I've built over the years to solve problems or learn new technologies.
+          Side projects I built to scratch an itch or to learn something new.
         </p>
       </div>
 
@@ -106,7 +106,7 @@ const getColorClasses = (color: string) => {
             Want to see more?
           </h2>
           <p class="text-slate-600 dark:text-slate-400 mb-6 max-w-xl mx-auto">
-            Check out my GitHub profile for more projects, contributions, and code samples.
+            The rest of my code is on GitHub.
           </p>
           <a
             href="https://github.com/varijkapil13"

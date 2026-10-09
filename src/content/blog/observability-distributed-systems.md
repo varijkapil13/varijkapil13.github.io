@@ -1,23 +1,23 @@
 ---
 title: "Building Observability into Distributed Systems"
-description: "Practical approaches to logging, metrics, and tracing that helped us understand our microservices."
+description: "The logging, metrics, and tracing setup that helped us understand what our microservices were doing."
 date: 2022-11-20
 tags: ["observability", "monitoring", "microservices", "distributed-systems"]
 ---
 
 When we had a monolith, debugging was straightforward. Attach a debugger, set breakpoints, step through code. Then we split into microservices, and suddenly a single request touched six different services. The old approach didn't work anymore.
 
-## The Three Pillars
+## Logs, metrics, and traces
 
-Observability rests on three pillars: logs, metrics, and traces. You need all three.
+Observability is usually split into logs, metrics, and traces, and you need all three because each answers a different question.
 
-**Logs** tell you what happened. They're great for debugging specific issues once you know where to look.
+Logs tell you what happened. They're great for debugging specific issues once you know where to look.
 
-**Metrics** tell you how the system is behaving overall. Is latency increasing? Are errors spiking? Metrics answer aggregate questions.
+Metrics tell you how the system is behaving overall. Is latency increasing? Are errors spiking? Metrics answer aggregate questions like these.
 
-**Traces** connect the dots. When a request fails, a trace shows you which service failed and why, even across service boundaries.
+Traces follow a single request. When a request fails, a trace shows you which service failed and why, even across service boundaries.
 
-## Our Logging Setup
+## Our logging setup
 
 Structured logging was the first change. No more:
 
@@ -43,7 +43,7 @@ Instead:
 
 Structured logs are searchable. "Show me all errors for customer CUST-789 in the last hour" becomes a simple query.
 
-We use SLF4J with Logback, outputting JSON to stdout. Fluentd collects and ships to Elasticsearch. Kibana provides the UI.
+We use SLF4J with Logback, writing JSON to stdout. Fluentd collects the logs and ships them to Elasticsearch, and we search them in Kibana.
 
 ```java
 // MDC (Mapped Diagnostic Context) adds context to all logs
@@ -62,9 +62,9 @@ try {
 }
 ```
 
-## Metrics That Matter
+## Metrics that matter
 
-We started by collecting everything. Big mistake. Too many metrics means nobody looks at any of them.
+We started by collecting everything, which was a mistake. With too many metrics, nobody looks at any of them.
 
 Now we focus on the RED method for services:
 
@@ -98,9 +98,9 @@ try {
 
 We export to Prometheus and visualize in Grafana. Alerts fire when error rates exceed thresholds or latency degrades.
 
-## Distributed Tracing
+## Distributed tracing
 
-Tracing is what ties everything together. A single request gets a trace ID that propagates across all services.
+With tracing, a single request gets a trace ID that propagates across all services, so you can follow it end to end.
 
 We use OpenTelemetry. It's vendor-neutral and has good Java support.
 
@@ -127,9 +127,9 @@ try (Scope scope = span.makeCurrent()) {
 
 Traces flow to Jaeger (or Tempo, or whatever your backend is). When something fails, you can see exactly which service, which method, and how long each step took.
 
-## Correlation Is Key
+## Correlating logs, metrics, and traces
 
-The magic happens when you connect everything. A trace ID should appear in:
+The real payoff comes from linking the three together. A trace ID should appear in:
 
 - Log entries
 - Metric labels (where cardinality allows)
@@ -146,17 +146,17 @@ When an alert fires for high error rate, I:
 
 This workflow takes minutes instead of hours.
 
-## What We Got Wrong
+## What we got wrong
 
 **Too much log volume**. We logged every request body initially. Storage costs exploded. Now we log bodies only for errors, and even then we redact sensitive fields.
 
 **Missing context**. Early traces had spans but no useful attributes. "HTTP request" isn't helpful. "GET /api/orders/123 for customer ABC" is helpful.
 
-**Sampling too aggressively**. To reduce costs, we sampled 1% of traces. Then we couldn't debug rare issues. We switched to tail-based sampling—keep all traces for errors and slow requests, sample normal ones.
+**Sampling too aggressively**. To reduce costs, we sampled 1% of traces. Then we couldn't debug rare issues. We switched to tail-based sampling, which keeps all traces for errors and slow requests and samples the normal ones.
 
 **Ignoring the baseline**. We added observability but didn't establish what "normal" looked like. When alerts fired, we didn't know if 50ms latency was good or bad. Spend time understanding baseline behavior before setting alert thresholds.
 
-## Start Small
+## Start small
 
 If you're just starting, don't try to do everything at once:
 
@@ -165,4 +165,4 @@ If you're just starting, don't try to do everything at once:
 3. Then: distributed tracing for cross-service requests
 4. Finally: refine dashboards and alerts based on real incidents
 
-Observability is a journey. Each incident teaches you what you need to see. Build incrementally based on actual debugging needs.
+Each incident teaches you something about what you need to see, so build incrementally based on what you actually needed while debugging.

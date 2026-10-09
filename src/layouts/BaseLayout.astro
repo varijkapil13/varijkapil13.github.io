@@ -140,6 +140,8 @@ const articleSchema = article ? {
     <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
     {article && articleSchema && <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />}
 
+    <link rel="alternate" type="application/rss+xml" title="Varij Kapil" href="/rss.xml" />
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
