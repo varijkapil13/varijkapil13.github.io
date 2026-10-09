@@ -2,6 +2,7 @@
 title: "Building Production-Ready REST APIs with JAX-RS"
 description: "Patterns I use for building maintainable REST APIs with JAX-RS in enterprise Java applications."
 date: 2021-11-08
+image: "/images/blog/jax-rs-rest-api-best-practices.jpg"
 tags: ["java", "jax-rs", "rest-api", "enterprise"]
 ---
 

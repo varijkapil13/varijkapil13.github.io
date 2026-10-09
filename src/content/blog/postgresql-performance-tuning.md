@@ -2,6 +2,7 @@
 title: "PostgreSQL Performance Tuning: A Practical Guide"
 description: "The PostgreSQL tuning techniques that made the biggest difference in our enterprise applications."
 date: 2023-02-10
+image: "/images/blog/postgresql-performance-tuning.jpg"
 tags: ["postgresql", "database", "performance", "optimization"]
 ---
 

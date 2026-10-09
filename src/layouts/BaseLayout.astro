@@ -65,8 +65,7 @@ const personSchema = {
     "addressCountry": "Germany"
   },
   "sameAs": [
-    "https://linkedin.com/in/varijkapil13",
-    "https://github.com/varijkapil13"
+    "https://www.linkedin.com/in/varijkapil13"
   ]
 };
 
@@ -127,14 +126,12 @@ const articleSchema = article ? {
     {article && modifiedDate && <meta property="article:modified_time" content={modifiedDate} />}
     {article && tags.map(tag => <meta property="article:tag" content={tag} />)}
 
-    <!-- Twitter -->
+    <!-- Large-image link previews -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content={canonicalURL.toString()} />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(image, Astro.site)} />
-    <meta name="twitter:creator" content="@varijkapil13" />
-    <meta name="twitter:site" content="@varijkapil13" />
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />

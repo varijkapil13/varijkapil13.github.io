@@ -4,7 +4,7 @@ import SocialLinks from "./SocialLinks.astro";
 import BlogPostCard from "./BlogPostCard.astro";
 import { getCollection } from "astro:content";
 import { useTranslations, getLocalizedPath } from "../i18n/translations";
-import { email } from "../data/social";
+import { linkedinUrl } from "../data/social";
 import { readingTime } from "../utils/readingTime";
 
 interface Props {
@@ -37,7 +37,7 @@ const latestPosts = allPosts
       </h1>
 
       <p class="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-8 leading-relaxed max-w-2xl">
-        <strong class="text-slate-900 dark:text-slate-100">{t('hero.title')}</strong>{t('hero.basedIn')}<strong class="text-slate-900 dark:text-slate-100">{t('hero.location')}</strong>{t('hero.basedInSuffix')}
+        <strong class="text-slate-900 dark:text-slate-100">{t('hero.title')}</strong>{t('hero.basedIn')}<strong class="text-slate-900 dark:text-slate-100">{t('hero.location')}</strong>{t('hero.basedInSuffix')}{" "}
         {t('hero.description')}
       </p>
 
@@ -88,7 +88,7 @@ const latestPosts = allPosts
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {latestPosts.map((post) => (
           <BlogPostCard
-            slug={post.slug}
+            slug={post.id}
             title={post.data.title}
             description={post.data.description || t('blog.readMore')}
             date={post.data.date}
@@ -117,16 +117,8 @@ const latestPosts = allPosts
       {t('cta.description')}
     </p>
     <div class="flex flex-wrap justify-center gap-4">
-      <a href={`mailto:${email}`} class="btn bg-white text-primary-600 hover:bg-slate-100">
+      <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" class="btn bg-white text-primary-600 hover:bg-slate-100">
         {t('cta.contact')}
-      </a>
-      <a
-        href="https://github.com/varijkapil13"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="btn bg-white/10 hover:bg-white/20 backdrop-blur"
-      >
-        {t('cta.github')}
       </a>
     </div>
   </div>

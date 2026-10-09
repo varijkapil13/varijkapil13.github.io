@@ -2,6 +2,7 @@
 title: "How I Debug Production Issues in Java Applications"
 description: "The tools and techniques I actually use when something breaks at 2 AM."
 date: 2020-09-12
+image: "/images/blog/debugging-production-java.jpg"
 tags: ["java", "debugging", "production", "monitoring"]
 ---
 

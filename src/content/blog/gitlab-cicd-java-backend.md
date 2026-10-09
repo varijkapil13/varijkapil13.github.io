@@ -2,6 +2,7 @@
 title: "Building a CI/CD Pipeline with GitLab for Java Applications"
 description: "How we set up GitLab CI/CD to build, test, scan and deploy our enterprise Jakarta EE applications."
 date: 2022-07-14
+image: "/images/blog/gitlab-cicd-java-backend.jpg"
 tags: ["devops", "gitlab", "cicd", "java", "enterprise"]
 ---
 

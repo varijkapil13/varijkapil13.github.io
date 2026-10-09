@@ -172,6 +172,10 @@ code {
   @apply font-bold text-slate-900 dark:text-slate-100;
 }
 
+.prose h2, .prose h3 {
+  @apply scroll-mt-24;
+}
+
 .prose h1 {
   @apply text-4xl mt-8 mb-4;
 }

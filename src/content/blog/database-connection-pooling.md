@@ -2,6 +2,7 @@
 title: "Database Connection Pooling Mistakes I've Made"
 description: "Common connection pooling pitfalls and how to configure pools properly for production workloads."
 date: 2020-05-18
+image: "/images/blog/database-connection-pooling.jpg"
 tags: ["database", "postgresql", "java", "performance"]
 ---
 

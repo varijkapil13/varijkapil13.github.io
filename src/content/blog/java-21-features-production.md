@@ -2,6 +2,7 @@
 title: "Java 21 Features We're Actually Using in Production"
 description: "Which Java 21 features we use in our enterprise applications after several months in production, and what they changed."
 date: 2024-11-20
+image: "/images/blog/java-21-features-production.jpg"
 tags: ["java", "enterprise", "backend"]
 ---
 

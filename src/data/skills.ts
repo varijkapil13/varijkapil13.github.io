@@ -27,24 +27,8 @@ export const skills = {
 
 export type SkillLevel = "expert" | "advanced" | "intermediate";
 
-export const getLevelWidth = (level: string): string => {
-  switch (level) {
-    case "expert":
-      return "w-full";
-    case "advanced":
-      return "w-3/4";
-    default:
-      return "w-1/2";
-  }
-};
-
-export const getLevelColor = (level: string): string => {
-  switch (level) {
-    case "expert":
-      return "bg-primary-500";
-    case "advanced":
-      return "bg-accent-500";
-    default:
-      return "bg-slate-400";
-  }
-};
+// "expert" means daily use; everything else is something I've shipped with.
+export const splitByUse = (list: { name: string; level: string }[]) => ({
+  daily: list.filter((s) => s.level === "expert"),
+  shipped: list.filter((s) => s.level !== "expert"),
+});

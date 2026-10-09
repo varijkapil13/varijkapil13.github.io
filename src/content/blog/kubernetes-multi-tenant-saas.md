@@ -2,6 +2,7 @@
 title: "What I Learned Building Multi-Tenant SaaS on Kubernetes"
 description: "Hard-won lessons from migrating a VM-per-customer architecture to shared Kubernetes clusters with namespace isolation."
 date: 2024-02-28
+image: "/images/blog/kubernetes-multi-tenant-saas.jpg"
 tags: ["kubernetes", "saas", "multi-tenancy", "architecture"]
 ---
 

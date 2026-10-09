@@ -2,6 +2,7 @@
 title: "Java Logging Best Practices for Production Systems"
 description: "The logging habits that help me debug production issues faster and keep an eye on application health."
 date: 2021-06-15
+image: "/images/blog/java-application-logging.jpg"
 tags: ["java", "logging", "monitoring", "best-practices"]
 ---
 

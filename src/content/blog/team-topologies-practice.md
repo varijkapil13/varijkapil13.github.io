@@ -2,6 +2,7 @@
 title: "Applying Team Topologies: What Actually Changed for Us"
 description: "How we restructured our engineering organization using Team Topologies principles and what we learned."
 date: 2024-09-15
+image: "/images/blog/team-topologies-practice.jpg"
 tags: ["team-topologies", "engineering", "organization", "leadership"]
 ---
 

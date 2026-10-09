@@ -2,6 +2,7 @@
 title: "Building Observability into Distributed Systems"
 description: "The logging, metrics, and tracing setup that helped us understand what our microservices were doing."
 date: 2022-11-20
+image: "/images/blog/observability-distributed-systems.jpg"
 tags: ["observability", "monitoring", "microservices", "distributed-systems"]
 ---
 

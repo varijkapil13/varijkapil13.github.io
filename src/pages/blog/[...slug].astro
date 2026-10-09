@@ -1,12 +1,13 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 import { readingTime } from "../../utils/readingTime";
+import TableOfContents from "../../components/TableOfContents.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: { post },
   }));
 }
@@ -16,7 +17,7 @@ type Props = {
 };
 
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content, headings } = await render(post);
 
 const minutes = readingTime(post.body);
 
@@ -25,7 +26,7 @@ const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const sharedTags = (p: CollectionEntry<"blog">) =>
   (p.data.tags ?? []).filter((tag) => post.data.tags?.includes(tag)).length;
 const relatedPosts = allPosts
-  .filter((p) => p.slug !== post.slug && sharedTags(p) > 0)
+  .filter((p) => p.id !== post.id && sharedTags(p) > 0)
   .sort((a, b) => sharedTags(b) - sharedTags(a) || b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 3);
 ---
@@ -91,20 +92,13 @@ const relatedPosts = allPosts
         </div>
       </header>
 
-      <!-- Featured Image -->
-      {post.data.image && (
-        <div class="aspect-video mb-12 rounded-2xl overflow-hidden">
-          <img
-            src={post.data.image}
-            alt={post.data.title}
-            class="w-full h-full object-cover"
-          />
-        </div>
-      )}
 
       <!-- Article Content -->
-      <div class="prose dark:prose-invert max-w-none">
-        <Content />
+      <div class="relative">
+        <TableOfContents headings={headings} />
+        <div class="prose dark:prose-invert max-w-none">
+          <Content />
+        </div>
       </div>
 
       <!-- Share & Author -->
@@ -124,17 +118,6 @@ const relatedPosts = allPosts
           <!-- Share buttons -->
           <div class="flex items-center gap-3">
             <span class="text-sm text-slate-600 dark:text-slate-400">Share:</span>
-            <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(Astro.url.href)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-              aria-label="Share on Twitter"
-            >
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-              </svg>
-            </a>
             <a
               href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(Astro.url.href)}&title=${encodeURIComponent(post.data.title)}`}
               target="_blank"
@@ -159,7 +142,7 @@ const relatedPosts = allPosts
         <h2 class="text-2xl font-bold mb-8">Related Articles</h2>
         <div class="grid md:grid-cols-3 gap-6">
           {relatedPosts.map((relatedPost) => (
-            <a href={`/blog/${relatedPost.slug}`} class="card card-hover p-6 group">
+            <a href={`/blog/${relatedPost.id}`} class="card card-hover p-6 group">
               <div class="flex flex-wrap gap-2 mb-3">
                 {relatedPost.data.tags?.slice(0, 2).map((tag: string) => (
                   <span class="px-2 py-1 rounded-full bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 text-xs font-medium">

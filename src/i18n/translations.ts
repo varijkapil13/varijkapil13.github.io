@@ -29,14 +29,13 @@ export const translations = {
     // Skills section
     'skills.title': 'Technical',
     'skills.titleHighlight': 'Skills',
-    'skills.description': 'What I work with day to day, and how well I know it',
+    'skills.description': 'The tools I work with, split by how often I use them',
     'skills.languages': 'Languages',
     'skills.frameworks': 'Frameworks',
     'skills.platform': 'Platform & Cloud',
     'skills.tools': 'Tools',
-    'skills.legend.expert': 'Expert / Daily use',
-    'skills.legend.advanced': 'Advanced',
-    'skills.legend.intermediate': 'Familiar',
+    'skills.daily': 'Use daily',
+    'skills.shipped': 'Have shipped with',
 
     // Blog section
     'blog.title': 'Latest from the',
@@ -48,9 +47,8 @@ export const translations = {
 
     // CTA section
     'cta.title': "Let's talk",
-    'cta.description': "Email me if you want to talk about Java, Kubernetes or platform migrations, or just to say hello.",
-    'cta.contact': 'Get in touch',
-    'cta.github': 'View GitHub',
+    'cta.description': "Message me on LinkedIn if you want to talk about Java, Kubernetes or platform migrations.",
+    'cta.contact': 'Message me on LinkedIn',
 
     // Footer
     'footer.rights': 'All rights reserved.',
@@ -106,16 +104,13 @@ export const translations = {
     'about.beyondCode': 'Beyond',
     'about.code': 'Code',
     'about.letsConnect': "Let's Connect",
-    'about.connectText': 'You can find me on LinkedIn, and my side projects are on GitHub. I like talking shop, so get in touch.',
+    'about.connectText': 'The best way to reach me is a message on LinkedIn. I like talking shop.',
     'about.getInTouch': 'Get in Touch',
 
     // Projects page
     'projects.title': 'Personal',
     'projects.titleHighlight': 'Projects',
     'projects.description': "Side projects I built to scratch an itch or to learn something new.",
-    'projects.wantMore': 'Want to see more?',
-    'projects.ctaText': 'The rest of my code is on GitHub.',
-    'projects.viewGithub': 'View GitHub Profile',
   },
   de: {
     // Navigation
@@ -139,14 +134,13 @@ export const translations = {
     // Skills section
     'skills.title': 'Technische',
     'skills.titleHighlight': 'Fähigkeiten',
-    'skills.description': 'Technologien und Tools, mit denen ich Ideen zum Leben erwecke',
+    'skills.description': 'Die Tools, mit denen ich arbeite, danach sortiert, wie oft ich sie nutze',
     'skills.languages': 'Sprachen',
     'skills.frameworks': 'Frameworks',
     'skills.platform': 'Plattform & Cloud',
     'skills.tools': 'Tools',
-    'skills.legend.expert': 'Experte / Tägliche Nutzung',
-    'skills.legend.advanced': 'Fortgeschritten',
-    'skills.legend.intermediate': 'Vertraut',
+    'skills.daily': 'Täglich im Einsatz',
+    'skills.shipped': 'In Projekten eingesetzt',
 
     // Blog section
     'blog.title': 'Neueste',
@@ -159,8 +153,7 @@ export const translations = {
     // CTA section
     'cta.title': 'Kontakt aufnehmen',
     'cta.description': 'Schreib mir gerne, wenn du über Technologie diskutieren, Ideen austauschen oder einfach Hallo sagen möchtest.',
-    'cta.contact': 'Kontakt',
-    'cta.github': 'GitHub ansehen',
+    'cta.contact': 'Auf LinkedIn schreiben',
 
     // Footer
     'footer.rights': 'Alle Rechte vorbehalten.',
@@ -216,16 +209,13 @@ export const translations = {
     'about.beyondCode': 'Über den',
     'about.code': 'Code hinaus',
     'about.letsConnect': 'Kontakt aufnehmen',
-    'about.connectText': 'Verbinde dich gerne mit mir auf LinkedIn oder schau dir meine Projekte auf GitHub an. Ich freue mich über Diskussionen über Technologie und Wissensaustausch.',
+    'about.connectText': 'Am besten erreichst du mich per Nachricht auf LinkedIn.',
     'about.getInTouch': 'Kontakt',
 
     // Projects page
     'projects.title': 'Persönliche',
     'projects.titleHighlight': 'Projekte',
     'projects.description': 'Eine Sammlung von Nebenprojekten und Experimenten, die ich im Laufe der Jahre gebaut habe, um Probleme zu lösen oder neue Technologien zu lernen.',
-    'projects.wantMore': 'Mehr sehen?',
-    'projects.ctaText': 'Schau dir mein GitHub-Profil für weitere Projekte, Beiträge und Code-Beispiele an.',
-    'projects.viewGithub': 'GitHub-Profil ansehen',
   },
   hi: {
     // Navigation
@@ -249,14 +239,13 @@ export const translations = {
     // Skills section
     'skills.title': 'तकनीकी',
     'skills.titleHighlight': 'कौशल',
-    'skills.description': 'विचारों को जीवंत करने के लिए मैं जिन तकनीकों और टूल्स के साथ काम करता हूँ',
+    'skills.description': 'जिन टूल्स के साथ मैं काम करता हूँ, इस आधार पर कि मैं उन्हें कितनी बार इस्तेमाल करता हूँ',
     'skills.languages': 'भाषाएं',
     'skills.frameworks': 'फ्रेमवर्क',
     'skills.platform': 'प्लेटफॉर्म और क्लाउड',
     'skills.tools': 'टूल्स',
-    'skills.legend.expert': 'विशेषज्ञ / दैनिक उपयोग',
-    'skills.legend.advanced': 'उन्नत',
-    'skills.legend.intermediate': 'परिचित',
+    'skills.daily': 'रोज़ इस्तेमाल',
+    'skills.shipped': 'प्रोजेक्ट्स में इस्तेमाल किया',
 
     // Blog section
     'blog.title': 'नवीनतम',
@@ -269,8 +258,7 @@ export const translations = {
     // CTA section
     'cta.title': 'संपर्क करें',
     'cta.description': 'अगर आप तकनीक पर चर्चा करना चाहते हैं, विचार साझा करना चाहते हैं, या बस नमस्ते कहना चाहते हैं, तो बेझिझक संपर्क करें।',
-    'cta.contact': 'संपर्क करें',
-    'cta.github': 'GitHub देखें',
+    'cta.contact': 'LinkedIn पर संदेश भेजें',
 
     // Footer
     'footer.rights': 'सर्वाधिकार सुरक्षित।',
@@ -326,16 +314,13 @@ export const translations = {
     'about.beyondCode': 'कोड से',
     'about.code': 'परे',
     'about.letsConnect': 'संपर्क करें',
-    'about.connectText': 'LinkedIn पर मुझसे जुड़ें या GitHub पर मेरे प्रोजेक्ट्स देखें। मुझे तकनीक पर चर्चा करना और समुदाय के साथ ज्ञान साझा करना पसंद है।',
+    'about.connectText': 'मुझसे संपर्क करने का सबसे अच्छा तरीका LinkedIn पर संदेश भेजना है।',
     'about.getInTouch': 'संपर्क करें',
 
     // Projects page
     'projects.title': 'व्यक्तिगत',
     'projects.titleHighlight': 'प्रोजेक्ट्स',
     'projects.description': 'वर्षों में समस्याओं को हल करने या नई तकनीकों को सीखने के लिए बनाए गए साइड प्रोजेक्ट्स और प्रयोगों का संग्रह।',
-    'projects.wantMore': 'और देखना चाहते हैं?',
-    'projects.ctaText': 'अधिक प्रोजेक्ट्स, योगदान, और कोड सैंपल्स के लिए मेरी GitHub प्रोफाइल देखें।',
-    'projects.viewGithub': 'GitHub प्रोफाइल देखें',
   },
 } as const;
 

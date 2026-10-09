@@ -2,6 +2,7 @@
 title: "Docker for Java Developers: From Development to Production"
 description: "How I containerize Java applications: multi-stage Dockerfiles, JVM memory settings, health checks and the production configuration I use."
 date: 2022-03-25
+image: "/images/blog/docker-java-applications.jpg"
 tags: ["docker", "java", "devops", "containers"]
 ---
 
