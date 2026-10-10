@@ -1,16 +1,18 @@
 ---
 title: "PostgreSQL Performance Tuning: A Practical Guide"
-description: "The PostgreSQL tuning techniques that made the biggest difference in our enterprise applications."
+description: "After moving our enterprise application from Oracle to PostgreSQL, we had to get it ready for production load. This is how we found the slow parts and what we changed."
 date: 2023-02-10
 image: "/images/blog/postgresql-performance-tuning.jpg"
 tags: ["postgresql", "database", "performance", "optimization"]
 ---
 
-We migrated our enterprise application from Oracle to PostgreSQL and then spent a while getting it ready for production load. These are the tuning techniques that worked for us.
+When we migrated our enterprise application from Oracle to PostgreSQL, getting the data across was only the first milestone. A freshly migrated database runs the same queries as before, but the engine underneath makes different decisions about how to run them, and it starts out with a configuration designed to work on almost any machine rather than to perform well on yours. So after the migration we spent a while getting PostgreSQL ready for production load. This post walks through how we went about it, in roughly the order I would do it again, and the techniques that made the most difference for us.
 
-## Understanding query performance
+## Measuring before changing anything
 
-Measure before you optimize. PostgreSQL's `EXPLAIN ANALYZE` is the tool I reach for first:
+The temptation with a slow database is to start changing settings and adding indexes straight away. I have learned to resist that, because without a measurement you cannot tell whether a change helped, did nothing, or made things worse somewhere else. So the first step is always to look at what PostgreSQL is actually doing.
+
+Every SQL query is run according to a plan. PostgreSQL's query planner looks at the query, the available indexes and the statistics it keeps about each table, and then picks what it thinks is the cheapest way to get the answer: which index to use, in what order to join tables, whether to sort in memory or on disk. `EXPLAIN` shows you that plan. `EXPLAIN ANALYZE` goes further and actually runs the query, so you see the real timings next to the planner's estimates. It is the tool I reach for first:
 
 ```sql
 EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
@@ -23,16 +25,17 @@ ORDER BY o.created_at DESC
 LIMIT 100;
 ```
 
-In the output, I look at:
-- Actual time: the real execution time in milliseconds
-- Rows: estimated vs actual rows (a big difference usually means stale statistics)
-- Buffers: shared hit (cache) vs read (disk)
+The output can be long, but three things tell me most of what I need. The actual time is the real execution time of each step in milliseconds, which shows where the time is going. The row counts come in two versions, estimated and actual, and a big difference between them usually means the table statistics are stale: the planner made its choices based on a picture of the data that is no longer true, and it probably picked the wrong plan as a result. Finally, the `BUFFERS` option shows how many data pages were a shared hit, meaning they were already in PostgreSQL's memory cache, and how many had to be read from disk. A query that keeps reading from disk is a very different problem from one that is slow while working entirely in memory.
 
-## Index optimization
+Once you can see the plans, the first place to look is usually the indexes.
+
+## Getting the indexes right
+
+An index is a separate data structure, sorted by one or more columns, that lets PostgreSQL jump to matching rows instead of reading the whole table. Indexes are not free, since every insert and update has to maintain them as well, so the goal is to have the right ones rather than many.
 
 ### Composite indexes
 
-Order matters in composite indexes. Put the most selective column first:
+A composite index covers more than one column, and the order of the columns matters, because the index is sorted by the first column, then by the second within each value of the first, and so on. The rule of thumb you will often hear is to put the most selective column first. In our case the deciding factor was how each column is used in the query. Look at this example:
 
 ```sql
 -- Good: status has few distinct values, created_at is the range filter
@@ -46,9 +49,11 @@ AND created_at > '2024-01-01'
 ORDER BY created_at DESC;
 ```
 
+As the comment says, `status` has only a few distinct values, so on its own it is not very selective. It still goes first, because the query compares it with an exact value, while `created_at` is a range filter and the sort key. With this order, all the `PENDING` rows sit together in the index, already sorted by `created_at` from newest to oldest. PostgreSQL can jump to the start of that block, read forward until the date falls outside the range, and return the rows in the requested order without sorting them. If the columns were the other way round, the pending rows would be scattered across the whole date range.
+
 ### Partial indexes
 
-When you keep querying the same subset of data, a partial index is often the best fix:
+Some queries keep asking about the same small subset of a table. In an order system, most of the interesting work happens on orders that are still active, while the large majority of rows are old, finished orders that are rarely queried by status. A normal index on such a table indexes every row, including all the ones nobody asks about. A partial index has a `WHERE` clause and only contains the rows that match it, which makes it much smaller and faster to search. When you keep querying the same subset of data, a partial index is often the best fix:
 
 ```sql
 -- Index only active orders (much smaller than full table index)
@@ -62,9 +67,11 @@ ON orders (customer_id, created_at DESC)
 WHERE created_at > NOW() - INTERVAL '90 days';
 ```
 
-### Covering indexes (INCLUDE)
+The planner can only use a partial index when it can prove that the query's own `WHERE` clause falls inside the index condition, so the queries have to filter on the same thing. The second example needs a caveat. PostgreSQL only accepts immutable expressions in an index predicate, and `NOW()` changes over time, so the condition has to be written with a fixed date instead, and the index rebuilt from time to time if you want it to keep covering only the most recent data.
 
-If the index includes every column the query needs, PostgreSQL can skip the table lookup:
+### Covering indexes
+
+Even with a good index, PostgreSQL normally has to do two things for each matching row: find the entry in the index, then go to the table itself to fetch the columns the query asked for. That second step is often the expensive one, because the rows are spread across the table. If the index includes every column the query needs, PostgreSQL can skip the table lookup and answer from the index alone, which is called an index-only scan. The `INCLUDE` clause adds extra columns to an index for exactly this purpose, without making them part of the sort order:
 
 ```sql
 -- Include frequently selected columns
@@ -80,11 +87,15 @@ ORDER BY created_at DESC
 LIMIT 10;
 ```
 
-## Configuration tuning
+Here the index is searched and sorted by customer and date, and it also carries the status and amount, so a query that shows a customer's latest orders never needs to touch the table. One detail is worth knowing: PostgreSQL still has to check whether each row is visible to the current transaction, and it can only skip that check for pages that vacuum has marked as all-visible. On a table that is kept well vacuumed, this works very well.
 
-These settings had the biggest impact on our production servers:
+## Tuning the configuration
 
-### Memory settings
+Indexes fix individual queries. The server configuration affects all of them. PostgreSQL's defaults are deliberately conservative so that it starts on any machine, which means that on a dedicated database server with plenty of memory it uses only a small part of what is available. These are the settings that had the biggest impact on our production servers.
+
+### Memory
+
+Memory is where the defaults are furthest from what a dedicated server needs. `shared_buffers` is PostgreSQL's own cache of data pages, and the usual starting point for a dedicated database server is about a quarter of RAM. The rest is left to the operating system, which caches files as well. `effective_cache_size` does not allocate anything; it tells the planner how much memory is likely available for caching in total, between PostgreSQL and the operating system, so that it can estimate how often data will come from memory rather than disk. Around 75% of RAM is a common value.
 
 ```ini
 # postgresql.conf
@@ -103,7 +114,11 @@ maintenance_work_mem = 2GB
 effective_cache_size = 24GB
 ```
 
-### Write-Ahead Log (WAL)
+The exclamation mark next to `work_mem` is there for a reason. It is the amount of memory a single sort or hash operation may use before it spills to disk, and it applies per operation, not per connection. One complex query can run several such operations at once, and many connections can run queries at the same time, so a generous value multiplies quickly. Raising it helps large sorts and joins stay in memory, but it has to be weighed against how many queries run in parallel. `maintenance_work_mem` is the equivalent for maintenance work like `VACUUM` and building indexes, which runs much less often and can safely get more.
+
+### Write-ahead log
+
+Every change in PostgreSQL is first written to the write-ahead log (WAL) before it is applied to the data files, which is what lets the database recover after a crash. Periodically, PostgreSQL runs a checkpoint, where it writes all changed pages to the data files so that older WAL can be recycled. If checkpoints happen too often, or all their writes land at once, you see bursts of disk activity and latency spikes.
 
 ```ini
 # Larger WAL buffers for write-heavy workloads
@@ -115,7 +130,11 @@ max_wal_size = 4GB
 min_wal_size = 1GB
 ```
 
-### Query planner
+A larger `max_wal_size` lets more WAL build up between checkpoints, so they happen less often. `checkpoint_completion_target = 0.9` tells PostgreSQL to spread a checkpoint's writes over 90% of the time until the next one, instead of writing everything as fast as possible. The larger `wal_buffers` gives write-heavy workloads more room in memory before WAL has to be flushed.
+
+### The query planner
+
+The planner chooses between plans by estimating their cost, and those estimates depend on assumptions about the hardware. The default `random_page_cost` of 4.0 assumes that reading a random page is four times as expensive as reading pages in sequence, which made sense for spinning disks. On SSDs, random reads are almost as cheap as sequential ones, and with the old value the planner tends to avoid index scans that would actually be fast.
 
 ```ini
 # Cost estimates (adjust based on your storage)
@@ -127,11 +146,13 @@ max_parallel_workers_per_gather = 4
 max_parallel_workers = 8
 ```
 
-## Query optimization patterns
+`effective_io_concurrency` tells PostgreSQL how many read requests the storage can handle at once, which SSDs handle much better than spinning disks. The last two settings allow PostgreSQL to split a large query across several worker processes, up to four for a single query and eight in total across the server.
 
-### Avoid SELECT *
+## Writing better queries
 
-List the columns you need:
+The configuration and the indexes give PostgreSQL the means to be fast, but the queries the application sends still decide a lot. A few patterns came up again and again.
+
+The first is `SELECT *`. It is convenient, but it fetches every column, including large `TEXT` fields that the code then ignores. Those have to be read, possibly from separate storage, and sent over the network. It also rules out the index-only scans described above, because no index will contain every column. Listing the columns you need avoids all of that:
 
 ```sql
 -- Bad: fetches all columns including large TEXT fields
@@ -143,7 +164,7 @@ FROM orders
 WHERE customer_id = 123;
 ```
 
-### Use EXISTS instead of IN for subqueries
+The second is how subqueries are written. A query that filters with `IN (SELECT ...)` and one that uses `EXISTS` ask the same question, but the reasoning behind preferring `EXISTS` is that it only needs to find one matching row and can stop there, instead of working with the full result of the subquery:
 
 ```sql
 -- Slower with large subquery results
@@ -160,9 +181,9 @@ WHERE EXISTS (
 );
 ```
 
-### Batch operations
+Modern PostgreSQL versions can often turn both forms into the same kind of join internally, so this is a case where `EXPLAIN ANALYZE` should have the final word on your own queries.
 
-For bulk inserts, use multi-value INSERT or COPY:
+The third pattern is about writing lots of data. Every individual `INSERT` is a separate round trip to the database, and if each one runs in its own transaction, each also waits for its own commit. Sending many rows in one statement cuts most of that overhead, and for really large datasets, `COPY` is faster still, because it streams rows into the table in bulk:
 
 ```sql
 -- Single multi-value INSERT (faster than individual inserts)
@@ -178,9 +199,9 @@ FROM '/path/to/data.csv'
 WITH (FORMAT csv, HEADER true);
 ```
 
-### Keyset pagination
+Keep in mind that `COPY ... FROM` with a file path reads the file on the database server, not on your machine, and needs the corresponding privileges. From a client, psql's `\copy` does the same thing with a local file.
 
-Offset-based pagination gets slower as the offset grows:
+The last pattern is pagination. The usual way to page through results is `LIMIT` with `OFFSET`, and it gets slower as the offset grows. To return page 501, PostgreSQL still has to work through the first 10,000 rows in order, then throw them away. Keyset pagination avoids that by remembering where the previous page ended, in this case the `created_at` of its last row, and asking for the rows after that point. With an index on `created_at`, the database jumps straight there:
 
 ```sql
 -- Slow for large offsets (scans and discards rows)
@@ -195,11 +216,13 @@ ORDER BY created_at DESC
 LIMIT 20;
 ```
 
-## Monitoring and maintenance
+The trade-off is that you can no longer jump to an arbitrary page number, only to the next one, which suits infinite scrolling and API cursors better than numbered pages.
 
-### Find slow queries
+## Watching it over time
 
-Enable the `pg_stat_statements` extension:
+The first round of fixes is not the end. Data grows, usage changes and new features add new queries, so we kept a set of monitoring queries that show where PostgreSQL is spending its effort.
+
+To find slow queries, we use the `pg_stat_statements` extension. It records statistics for every distinct query the server runs: how many times it was called, the total time spent on it, and the average. Sorting by total time is more useful than sorting by the slowest single execution, because a fast query that runs constantly can cost far more in total than a slow report that runs once a day.
 
 ```sql
 -- Top 10 slowest queries by total time
@@ -213,7 +236,7 @@ ORDER BY total_exec_time DESC
 LIMIT 10;
 ```
 
-### Find missing indexes
+To find missing indexes, we look at the opposite side of the statistics: tables that are read with sequential scans, meaning PostgreSQL reads every row from start to finish. On a small table that is fine and often the fastest option. On a table with many thousands of rows that is scanned this way again and again, it usually means a query has no index to use.
 
 ```sql
 -- Tables with high sequential scans (potential missing indexes)
@@ -231,7 +254,7 @@ AND n_live_tup > 10000
 ORDER BY seq_tup_read DESC;
 ```
 
-### Find unused indexes
+Unused indexes are the mirror image. An index that is never scanned still costs disk space and slows down every write to its table. This query lists the indexes with no scans, largest first, leaving out primary keys, which are needed for uniqueness even when they are not used for reading:
 
 ```sql
 -- Indexes that are never used (candidates for removal)
@@ -247,7 +270,7 @@ AND indexrelname NOT LIKE '%_pkey'
 ORDER BY pg_relation_size(indexrelid) DESC;
 ```
 
-### Autovacuum tuning
+The last thing we watched was vacuuming, which needs a little background. When PostgreSQL updates or deletes a row, it does not remove the old version immediately, because other transactions might still need to see it. The old versions, called dead tuples, stay in the table until `VACUUM` cleans them up. Autovacuum does this automatically in the background, but on busy tables its default thresholds can fall behind, and the table fills up with dead rows that make scans slower and the table larger. This query shows which tables have the most dead tuples, the ratio of dead to total, and when they were last vacuumed:
 
 ```sql
 -- Check if tables need more aggressive vacuuming
@@ -263,9 +286,11 @@ WHERE n_dead_tup > 1000
 ORDER BY n_dead_tup DESC;
 ```
 
-## Connection pooling
+A table that keeps showing up near the top is a candidate for more aggressive autovacuum settings.
 
-We put PgBouncer in front of the database:
+## Putting a pooler in front
+
+The final change was about connections rather than queries. Every PostgreSQL connection is a separate server process with its own memory, so a large number of connections costs real resources even when most of them are idle, and opening a new one is relatively slow. Applications that each hold many connections can overload the database simply by connecting. We put PgBouncer in front of the database to deal with this. Applications connect to PgBouncer, which keeps a much smaller pool of real connections to PostgreSQL and shares them out:
 
 ```ini
 # pgbouncer.ini
@@ -282,9 +307,11 @@ max_client_conn = 1000
 default_pool_size = 50
 ```
 
+With this configuration, up to 1000 clients can connect to PgBouncer, but they share 50 actual connections to the database. `pool_mode = transaction` means a client only holds a real connection for the length of one transaction, then gives it back. That is what makes the sharing efficient, but it also means session-level state, such as session variables or server-side prepared statements, cannot be relied on between transactions, so the application has to be compatible with it.
+
 ## Results
 
-Before and after these changes:
+This is how the numbers looked before and after these changes:
 
 | Metric | Before | After |
 |--------|--------|-------|
@@ -293,8 +320,10 @@ Before and after these changes:
 | Queries per second | 500 | 3000 |
 | Database CPU usage | 80% | 30% |
 
-## Where to start
+P99 latency is the time within which 99% of queries finish. I find it the more telling row of the two latency numbers, because an average hides the slow outliers, and those outliers are what users notice.
 
-Run `EXPLAIN ANALYZE` before you change anything. Partial and covering indexes are worth knowing well, and the default configuration is rarely right for a production workload. Keep watching `pg_stat_statements` and the statistics views after the first round of fixes, and don't let applications manage database connections directly; put a pooler in between.
+## Where I would start
 
-PostgreSQL performs very well once it's tuned. Start with the changes that have the biggest impact and measure after each one.
+If you are facing the same situation, run `EXPLAIN ANALYZE` before you change anything, so you know what you are fixing. Partial and covering indexes are worth knowing well. Don't trust the default configuration either, because it is rarely right for a production workload. After the first round of fixes, keep watching `pg_stat_statements` and the statistics views, since the slow queries of next month are not the ones of today. And don't let applications manage database connections directly; put a pooler in between.
+
+PostgreSQL performs very well once it is tuned. Start with the changes that have the biggest impact, and measure after each one, so you know which change actually helped.
