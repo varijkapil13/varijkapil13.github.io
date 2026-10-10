@@ -8,7 +8,7 @@ tags: ["postgresql", "database", "performance", "optimization"]
 
 We migrated our enterprise application from Oracle to PostgreSQL, and getting the data across was only the first milestone. A freshly migrated database runs the same queries as before, but the engine makes different decisions about how to run them, and its default configuration is designed to start on almost any machine rather than to perform well on yours. So we spent a while getting it ready for production load. These are the tuning techniques that worked for us.
 
-## Measuring before changing anything
+## Reading the query plan first
 
 Measure before you optimize. Without a measurement you cannot tell whether a change helped or made things worse somewhere else.
 
