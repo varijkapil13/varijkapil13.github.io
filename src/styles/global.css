@@ -1,44 +1,78 @@
 @import "tailwindcss";
-@import "@fontsource-variable/inter";
-@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
 
-@theme {
-  /* Primary color palette (sky-based) */
-  --color-primary-50: #f0f9ff;
-  --color-primary-100: #e0f2fe;
-  --color-primary-200: #bae6fd;
-  --color-primary-300: #7dd3fc;
-  --color-primary-400: #38bdf8;
-  --color-primary-500: #0ea5e9;
-  --color-primary-600: #0284c7;
-  --color-primary-700: #0369a1;
-  --color-primary-800: #075985;
-  --color-primary-900: #0c4a6e;
-  --color-primary-950: #082f49;
-
-  /* Accent color palette (fuchsia-based) */
-  --color-accent-50: #fdf4ff;
-  --color-accent-100: #fae8ff;
-  --color-accent-200: #f5d0fe;
-  --color-accent-300: #f0abfc;
-  --color-accent-400: #e879f9;
-  --color-accent-500: #d946ef;
-  --color-accent-600: #c026d3;
-  --color-accent-700: #a21caf;
-  --color-accent-800: #86198f;
-  --color-accent-900: #701a75;
-  --color-accent-950: #4a044e;
-
-  /* Fonts */
-  --font-sans: 'Inter Variable', 'Inter', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-
-  /* Gradient variables */
-  --gradient-start: #0ea5e9;
-  --gradient-end: #d946ef;
+/* Design tokens. Components use bg-bg, bg-panel, border-line, text-fg,
+   text-muted and text-accent; the values switch with the .dark class. */
+:root {
+  --bg: #ffffff;
+  --panel: #fafafa;
+  --line: #e4e4e7;
+  --line-strong: #d4d4d8;
+  --fg: #09090b;
+  --muted: #71717a;
+  --accent: #15803d;
+  --accent-strong: #166534;
+  --code-bg: #111113;
 }
 
-/* Dark mode support */
+.dark {
+  --bg: #09090b;
+  --panel: #111113;
+  --line: #232326;
+  --line-strong: #3f3f46;
+  --fg: #ededef;
+  --muted: #8b8b93;
+  --accent: #4ade80;
+  --accent-strong: #86efac;
+  --code-bg: #0d0d10;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+
+  /* Older markup uses primary/accent/slate; map them onto the same system:
+     one green accent and neutral zinc greys. */
+  --color-primary-50: #f0fdf4;
+  --color-primary-100: #dcfce7;
+  --color-primary-200: #bbf7d0;
+  --color-primary-300: #86efac;
+  --color-primary-400: #4ade80;
+  --color-primary-500: var(--accent);
+  --color-primary-600: var(--accent-strong);
+  --color-primary-700: #15803d;
+  --color-primary-800: #166534;
+  --color-primary-900: #14532d;
+  --color-primary-950: #0a1f12;
+
+  --color-accent-50: #f0fdf4;
+  --color-accent-100: #dcfce7;
+  --color-accent-500: var(--accent);
+  --color-accent-900: #14532d;
+  --color-accent-950: #0a1f12;
+
+  --color-slate-50: #fafafa;
+  --color-slate-100: #f4f4f5;
+  --color-slate-200: #e4e4e7;
+  --color-slate-300: #d4d4d8;
+  --color-slate-400: #a1a1aa;
+  --color-slate-500: #71717a;
+  --color-slate-600: #52525b;
+  --color-slate-700: #3f3f46;
+  --color-slate-800: #27272a;
+  --color-slate-900: #111113;
+  --color-slate-950: #09090b;
+
+  --font-sans: "Geist Variable", system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, monospace;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
@@ -47,97 +81,71 @@
   }
 
   body {
-    @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100;
-    font-feature-settings: "kern" 1, "liga" 1;
+    @apply bg-bg text-fg antialiased;
+    font-feature-settings: "ss01" 1;
   }
 
   ::selection {
-    @apply bg-primary-500/30;
+    background: color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 }
 
 @layer components {
+  /* Second half of a heading, shown in the muted colour */
   .gradient-text {
-    @apply bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent;
-  }
-
-  .gradient-border {
-    @apply relative;
-  }
-
-  .gradient-border::before {
-    content: "";
-    @apply absolute inset-0 rounded-xl p-[1px];
-    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
+    @apply text-muted;
   }
 
   .glass {
-    @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-lg;
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    @apply backdrop-blur-md;
   }
 
   .card {
-    @apply rounded-2xl bg-white dark:bg-slate-900 shadow-lg shadow-slate-200/50 dark:shadow-slate-950/50 border border-slate-100 dark:border-slate-800;
+    @apply rounded-xl bg-panel border border-line;
   }
 
   .card-hover {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary-500/10;
+    @apply transition-colors duration-200 hover:border-line-strong;
   }
 
   .btn {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300;
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors;
   }
 
   .btn-primary {
-    @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white hover:from-primary-600 hover:to-primary-700 shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40;
+    @apply bg-fg text-bg hover:opacity-90;
   }
 
-  .btn-secondary {
-    @apply bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700;
-  }
-
+  .btn-secondary,
   .btn-outline {
-    @apply border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white;
+    @apply border border-line text-fg hover:bg-panel hover:border-line-strong;
   }
 
   .section {
-    @apply py-20 md:py-28;
+    @apply py-16 md:py-20;
   }
 
   .container-custom {
-    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
-  }
-}
-
-@layer utilities {
-  .animate-float {
-    animation: float 12s ease-in-out infinite;
+    @apply max-w-[1040px] mx-auto px-5 sm:px-8;
   }
 
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-8px);
-    }
+  /* Small monospace label above headings and in meta lines */
+  .eyebrow {
+    @apply font-mono text-xs text-muted;
   }
 
-  .animate-gradient {
-    background-size: 200% 200%;
-    animation: gradient 15s ease infinite;
+  .pill {
+    @apply inline-flex items-center gap-2 font-mono text-xs text-muted border border-line rounded-full px-2.5 py-1;
   }
 
-  @keyframes gradient {
-    0%, 100% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
+  .dot {
+    @apply inline-block w-1.5 h-1.5 rounded-full bg-accent;
   }
 
   .text-balance {
@@ -145,9 +153,10 @@
   }
 }
 
-/* Code block styling */
+/* Code */
 pre {
-  @apply rounded-xl! bg-slate-900! dark:bg-slate-950! p-4 overflow-x-auto text-sm;
+  @apply rounded-xl! border border-line p-4 overflow-x-auto text-[13px] leading-relaxed;
+  background-color: var(--code-bg) !important;
 }
 
 code {
@@ -155,44 +164,44 @@ code {
 }
 
 :not(pre) > code {
-  @apply px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-primary-600 dark:text-primary-400 text-sm;
+  @apply px-1.5 py-0.5 rounded-md bg-panel border border-line text-fg text-[0.85em];
 }
 
-/* Prose styling for blog content */
+/* Blog post content */
 .prose {
-  @apply max-w-none;
+  @apply max-w-none text-[16.5px] leading-[1.75];
+  color: color-mix(in srgb, var(--fg) 88%, var(--muted));
 }
 
-.prose h1, .prose h2, .prose h3, .prose h4 {
-  @apply font-bold text-slate-900 dark:text-slate-100;
-}
-
-.prose h2, .prose h3 {
-  @apply scroll-mt-24;
-}
-
-.prose h1 {
-  @apply text-4xl mt-8 mb-4;
+.prose h2,
+.prose h3,
+.prose h4 {
+  @apply text-fg font-semibold tracking-tight scroll-mt-24;
 }
 
 .prose h2 {
-  @apply text-3xl mt-8 mb-4;
+  @apply text-2xl mt-14 mb-4 pt-8 border-t border-line;
 }
 
 .prose h3 {
-  @apply text-2xl mt-6 mb-3;
+  @apply text-lg mt-10 mb-3;
 }
 
 .prose p {
-  @apply my-4 leading-relaxed;
+  @apply my-5;
 }
 
 .prose a {
-  @apply text-primary-500 hover:text-primary-600 underline decoration-primary-500/30 hover:decoration-primary-500 transition-colors;
+  @apply text-fg underline decoration-line-strong underline-offset-4 hover:decoration-accent transition-colors;
 }
 
-.prose ul, .prose ol {
-  @apply my-4 pl-6;
+.prose strong {
+  @apply text-fg font-semibold;
+}
+
+.prose ul,
+.prose ol {
+  @apply my-5 pl-6;
 }
 
 .prose ul {
@@ -203,24 +212,28 @@ code {
   @apply list-decimal;
 }
 
-.prose li::marker {
-  @apply text-slate-400 dark:text-slate-500;
+.prose li {
+  @apply my-2 pl-1;
 }
 
-.prose li {
-  @apply my-2;
+.prose li::marker {
+  @apply text-muted;
 }
 
 .prose img {
-  @apply rounded-xl my-8;
+  @apply rounded-xl my-8 border border-line;
 }
 
 .prose blockquote {
-  @apply border-l-4 border-primary-500 pl-4 italic text-slate-600 dark:text-slate-400;
+  @apply border-l-2 border-accent pl-5 text-muted;
 }
 
 .prose hr {
-  @apply my-8 border-slate-200 dark:border-slate-800;
+  @apply my-10 border-line;
+}
+
+.prose pre {
+  @apply my-6;
 }
 
 .prose table {
@@ -228,11 +241,11 @@ code {
 }
 
 .prose th {
-  @apply text-left font-semibold px-3 py-2 border-b-2 border-slate-200 dark:border-slate-700;
+  @apply text-left font-mono text-xs font-medium text-muted px-3 py-2 border-b border-line;
 }
 
 .prose td {
-  @apply px-3 py-2 border-b border-slate-100 dark:border-slate-800 align-top;
+  @apply px-3 py-2.5 border-b border-line align-top;
 }
 
 /* Code block copy button (added by the post page script) */
@@ -241,7 +254,7 @@ code {
 }
 
 .copy-code {
-  @apply absolute top-2 right-2 px-2.5 py-1 rounded-md text-xs font-medium text-slate-300 bg-slate-700/80 opacity-0 transition-opacity hover:bg-slate-600 focus:opacity-100;
+  @apply absolute top-2.5 right-2.5 px-2 py-1 rounded-md font-mono text-[11px] text-zinc-300 bg-zinc-800 border border-zinc-700 opacity-0 transition-opacity hover:bg-zinc-700 focus:opacity-100;
 }
 
 .code-block:hover .copy-code {
@@ -256,7 +269,7 @@ code {
 
 /* Heading link icons */
 .heading-anchor {
-  @apply ml-2 font-normal no-underline! text-slate-300 dark:text-slate-600 opacity-0 transition-opacity hover:text-primary-500!;
+  @apply ml-2 font-mono font-normal no-underline! text-muted opacity-0 transition-opacity hover:text-accent!;
 }
 
 .prose h2:hover .heading-anchor,

@@ -4,6 +4,7 @@ description: "Lessons learned from migrating enterprise Java applications from G
 date: 2021-02-20
 image: "/images/blog/payara-glassfish-migration.jpg"
 series: "monolith-to-saas"
+seriesLabel: "GlassFish → Payara"
 tags: ["java", "payara", "glassfish", "enterprise"]
 ---
 

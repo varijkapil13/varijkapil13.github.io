@@ -4,6 +4,7 @@ description: "Hard-won lessons from migrating a VM-per-customer architecture to 
 date: 2024-02-28
 image: "/images/blog/kubernetes-multi-tenant-saas.jpg"
 series: "monolith-to-saas"
+seriesLabel: "Multi-tenant Kubernetes"
 tags: ["kubernetes", "saas", "multi-tenancy", "architecture"]
 ---
 

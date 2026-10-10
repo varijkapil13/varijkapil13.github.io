@@ -1,76 +1,33 @@
 ---
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../i18n/translations';
-import { socialLinks } from '../data/social';
+import { linkedinUrl } from '../data/social';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const currentYear = new Date().getFullYear();
+
+const links = [
+  { href: "/blog", label: t('nav.blog') },
+  { href: getLocalizedPath("/about", lang), label: t('nav.about') },
+  { href: getLocalizedPath("/projects", lang), label: t('nav.projects') },
+  { href: "/rss.xml", label: "RSS" },
+];
 ---
 
-<footer class="bg-slate-100 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
-  <div class="container-custom py-12">
-    <div class="grid md:grid-cols-3 gap-8">
-      <!-- Brand -->
-      <div>
-        <a href={getLocalizedPath("/", lang)} class="text-xl font-bold gradient-text">Varij Kapil</a>
-        <p class="mt-3 text-slate-600 dark:text-slate-400">
-          {t('hero.description')}
-        </p>
-      </div>
-
-      <!-- Quick Links -->
-      <div>
-        <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('footer.quickLinks')}</h3>
-        <ul class="space-y-2">
-          <li>
-            <a href={getLocalizedPath("/about", lang)} class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors">
-              {t('nav.about')}
-            </a>
-          </li>
-          <li>
-            <a href={getLocalizedPath("/projects", lang)} class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors">
-              {t('nav.projects')}
-            </a>
-          </li>
-          <li>
-            <a href="/blog" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors">
-              {t('nav.blog')}
-            </a>
-          </li>
-          <li>
-            <a href="/rss.xml" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors">
-              RSS
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Social Links -->
-      <div>
-        <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('footer.connect')}</h3>
-        <div class="flex gap-4">
-          {socialLinks.map((link) => (
-            <a
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-primary-500 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
-              aria-label={link.name}
-            >
-              <Fragment set:html={link.icon.replace('class="w-6 h-6"', 'class="w-5 h-5"')} />
-            </a>
-          ))}
-        </div>
-      </div>
+<footer class="border-t border-line mt-8">
+  <div class="container-custom py-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6 text-sm">
+    <div>
+      <p class="font-medium">Varij Kapil</p>
+      <p class="text-muted mt-1">{t('hero.title')} · {t('hero.location')}</p>
     </div>
-
-    <div class="mt-10 pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
-      <p class="text-slate-600 dark:text-slate-400 text-sm">
-        &copy; {currentYear} Varij Kapil. {t('footer.rights')}
-      </p>
-      <p class="text-slate-500 dark:text-slate-500 text-sm">
-        Built with <a href="https://astro.build" class="text-primary-500 hover:underline" target="_blank" rel="noopener noreferrer">Astro</a> & <a href="https://tailwindcss.com" class="text-primary-500 hover:underline" target="_blank" rel="noopener noreferrer">Tailwind CSS</a>
-      </p>
-    </div>
+    <nav aria-label="Footer" class="flex flex-wrap items-center gap-x-5 gap-y-2 text-muted">
+      {links.map((link) => (
+        <a href={link.href} class="hover:text-fg transition-colors">{link.label}</a>
+      ))}
+      <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" class="text-fg hover:text-accent transition-colors">LinkedIn ↗</a>
+    </nav>
+  </div>
+  <div class="container-custom pb-10">
+    <p class="eyebrow">© {currentYear} Varij Kapil</p>
   </div>
 </footer>

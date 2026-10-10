@@ -10,7 +10,6 @@ const { currentPath = "/" } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// Homepage, About, and Projects have German translations; Blog stays English only
 // A link is active on its own page and on any page below it (e.g. /blog/some-post)
 const isActive = (href: string) => {
   const path = currentPath.replace(/\/$/, "") || "/";
@@ -19,89 +18,87 @@ const isActive = (href: string) => {
   return path === target || path.startsWith(`${target}/`);
 };
 
+// Home, About and Projects are translated; the blog is English only
 const navLinks = [
   { href: getLocalizedPath("/", lang), label: t('nav.home') },
+  { href: "/blog", label: t('nav.blog') },
   { href: getLocalizedPath("/about", lang), label: t('nav.about') },
   { href: getLocalizedPath("/projects", lang), label: t('nav.projects') },
-  { href: "/blog", label: t('nav.blog') },
 ];
 ---
 
-<header class="fixed top-0 left-0 right-0 z-50 glass border-b border-slate-200/50 dark:border-slate-800/50">
-  <nav class="container-custom">
+<header class="fixed top-0 left-0 right-0 z-50 glass border-b border-line">
+  <nav class="container-custom" aria-label="Main">
     <div class="flex items-center justify-between h-16">
-      <!-- Logo -->
-      <a href="/" class="flex items-center gap-2 text-xl font-bold">
-        <span class="gradient-text">Varij Kapil</span>
+      <a href={getLocalizedPath("/", lang)} class="flex items-center gap-2.5 font-semibold tracking-tight">
+        <span class="w-6 h-6 rounded-md bg-fg text-bg font-mono text-[11px] font-bold flex items-center justify-center" aria-hidden="true">VK</span>
+        Varij Kapil
       </a>
 
-      <!-- Desktop Navigation -->
-      <div class="hidden md:flex items-center gap-1">
-        {navLinks.map((link) => (
-          <a
-            href={link.href}
-            class:list={[
-              "px-4 py-2 rounded-lg font-medium transition-colors",
-              isActive(link.href)
-                ? "text-primary-500 bg-primary-50 dark:bg-primary-950"
-                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800",
-            ]}
-            aria-current={isActive(link.href) ? "page" : undefined}
-          >
-            {link.label}
-          </a>
-        ))}
-      </div>
+      <div class="flex items-center gap-1">
+        <div class="hidden md:flex items-center gap-1 mr-2">
+          {navLinks.map((link) => (
+            <a
+              href={link.href}
+              class:list={[
+                "px-3 py-1.5 rounded-md text-sm transition-colors",
+                isActive(link.href) ? "text-fg" : "text-muted hover:text-fg",
+              ]}
+              aria-current={isActive(link.href) ? "page" : undefined}
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
 
-      <!-- Language Switcher, Theme Toggle & Mobile Menu -->
-      <div class="flex items-center gap-2">
         <div class="hidden md:block">
           <LanguageSwitcher />
         </div>
+
         <button
           id="theme-toggle"
-          class="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-          aria-label="Toggle theme"
+          type="button"
+          class="p-2 rounded-md text-muted hover:text-fg hover:bg-panel transition-colors"
+          aria-label="Toggle light and dark theme"
         >
-          <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" />
+          <svg class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" /><path stroke-linecap="round" d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4m11.4-11.4 1.4-1.4" />
           </svg>
-          <svg class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+          <svg class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
           </svg>
         </button>
 
-        <!-- Mobile Menu Button -->
         <button
           id="mobile-menu-button"
-          class="md:hidden p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          type="button"
+          class="md:hidden p-2 rounded-md text-muted hover:text-fg hover:bg-panel transition-colors"
           aria-label="Toggle menu"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
         >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16" />
           </svg>
         </button>
       </div>
     </div>
 
-    <!-- Mobile Navigation -->
-    <div id="mobile-menu" class="hidden md:hidden pb-4">
-      <div class="flex flex-col gap-1">
+    <div id="mobile-menu" class="hidden md:hidden pb-4 border-t border-line pt-3">
+      <div class="flex flex-col">
         {navLinks.map((link) => (
           <a
             href={link.href}
             class:list={[
-              "px-4 py-2 rounded-lg font-medium transition-colors",
-              isActive(link.href)
-                ? "text-primary-500 bg-primary-50 dark:bg-primary-950"
-                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800",
+              "py-2.5 text-sm transition-colors",
+              isActive(link.href) ? "text-fg" : "text-muted hover:text-fg",
             ]}
             aria-current={isActive(link.href) ? "page" : undefined}
           >
             {link.label}
           </a>
         ))}
-        <div class="mt-2 px-4">
+        <div class="mt-2 -ml-2.5">
           <LanguageSwitcher />
         </div>
       </div>
@@ -110,28 +107,19 @@ const navLinks = [
 </header>
 
 <script>
-  // Theme toggle
+  // Dark is the default; a visitor's choice is remembered
   const themeToggle = document.getElementById("theme-toggle");
 
-  function updateTheme() {
-    const isDark = localStorage.theme === "dark" ||
-      (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches);
-    document.documentElement.classList.toggle("dark", isDark);
-  }
-
   themeToggle?.addEventListener("click", () => {
-    const isDark = document.documentElement.classList.contains("dark");
-    localStorage.theme = isDark ? "light" : "dark";
-    updateTheme();
+    const isDark = document.documentElement.classList.toggle("dark");
+    localStorage.theme = isDark ? "dark" : "light";
   });
 
-  updateTheme();
-
-  // Mobile menu toggle
   const mobileMenuButton = document.getElementById("mobile-menu-button");
   const mobileMenu = document.getElementById("mobile-menu");
 
   mobileMenuButton?.addEventListener("click", () => {
-    mobileMenu?.classList.toggle("hidden");
+    const open = mobileMenu?.classList.toggle("hidden") === false;
+    mobileMenuButton.setAttribute("aria-expanded", String(open));
   });
 </script>

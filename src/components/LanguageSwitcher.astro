@@ -3,12 +3,19 @@ import { languages, getLangFromUrl, getLocalizedPath } from '../i18n/translation
 
 const currentLang = getLangFromUrl(Astro.url);
 const currentPath = Astro.url.pathname.replace(/^\/(en|de|hi)/, '') || '/';
+
+// Only these pages exist in every language; elsewhere (the blog) switch to that language's home page
+const translatedPaths = ['/', '/about', '/projects'];
+const targetPath = (lang: string) => {
+  const isTranslated = translatedPaths.includes(currentPath.replace(/\/$/, '') || '/');
+  return getLocalizedPath(isTranslated || lang === 'en' ? currentPath : '/', lang);
+};
 ---
 
 <div class="lang-switcher relative">
   <button
     type="button"
-    class="lang-toggle flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+    class="lang-toggle flex items-center gap-1.5 px-2.5 py-1.5 rounded-md font-mono text-xs text-muted hover:text-fg hover:bg-panel transition-colors"
     aria-label="Select language"
     aria-expanded="false"
   >
@@ -22,16 +29,16 @@ const currentPath = Astro.url.pathname.replace(/^\/(en|de|hi)/, '') || '/';
   </button>
 
   <div
-    class="lang-dropdown hidden absolute right-0 mt-2 w-32 rounded-lg bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700 py-1 z-50"
+    class="lang-dropdown hidden absolute right-0 mt-2 w-36 rounded-lg bg-bg border border-line shadow-xl py-1 z-50"
   >
     {Object.entries(languages).map(([lang, label]) => (
       <a
-        href={getLocalizedPath(currentPath, lang)}
+        href={targetPath(lang)}
         class:list={[
-          "block px-4 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors",
+          "block px-3 py-2 text-sm hover:bg-panel transition-colors",
           lang === currentLang
-            ? "text-primary-500 font-medium"
-            : "text-slate-600 dark:text-slate-400"
+            ? "text-fg font-medium"
+            : "text-muted"
         ]}
       >
         {label}

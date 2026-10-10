@@ -4,6 +4,7 @@ description: "How we moved enterprise applications from Java EE 8 to Jakarta EE 
 date: 2024-05-10
 image: "/images/blog/jakarta-ee-migration-guide.jpg"
 series: "monolith-to-saas"
+seriesLabel: "Java EE → Jakarta EE"
 tags: ["java", "jakarta-ee", "enterprise", "migration"]
 ---
 

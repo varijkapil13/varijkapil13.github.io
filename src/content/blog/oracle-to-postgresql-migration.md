@@ -4,6 +4,7 @@ description: "What I learned coordinating a large database migration from Oracle
 date: 2023-04-18
 image: "/images/blog/oracle-to-postgresql-migration.jpg"
 series: "monolith-to-saas"
+seriesLabel: "Oracle → PostgreSQL"
 tags: ["postgresql", "oracle", "database", "migration"]
 ---
 

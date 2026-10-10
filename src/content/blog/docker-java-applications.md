@@ -4,6 +4,7 @@ description: "How I containerize Java applications: multi-stage Dockerfiles, JVM
 date: 2022-03-25
 image: "/images/blog/docker-java-applications.jpg"
 series: "monolith-to-saas"
+seriesLabel: "Docker for Java"
 tags: ["docker", "java", "devops", "containers"]
 ---
 

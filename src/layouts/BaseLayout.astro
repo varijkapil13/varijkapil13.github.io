@@ -98,7 +98,7 @@ const articleSchema = article ? {
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={lang} class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -152,13 +152,12 @@ const articleSchema = article ? {
 
     <!-- Theme Script (prevent flash) -->
     <script is:inline>
-      const isDark = localStorage.theme === "dark" ||
-        (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches);
-      document.documentElement.classList.toggle("dark", isDark);
+      // Dark unless the visitor picked light
+      document.documentElement.classList.toggle("dark", localStorage.theme !== "light");
     </script>
   </head>
   <body class="min-h-screen flex flex-col">
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary-500 focus:text-white focus:rounded-lg focus:outline-none">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-fg focus:text-bg focus:rounded-lg focus:outline-none">
       Skip to content
     </a>
     <Header currentPath={currentPath} />
