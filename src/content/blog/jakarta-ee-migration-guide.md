@@ -122,7 +122,7 @@ Only the package names change. The body of the class stays as it was.
 
 ### Automated migration
 
-Nobody wants to edit thousands of imports by hand. The Eclipse Transformer can do the bulk of the work. It rewrites package references according to a set of rules, and it can work on compiled archives such as a WAR as well as on source code:
+Nobody wants to edit thousands of imports by hand. The Eclipse Transformer can do the bulk of the work. It rewrites package references according to a rules file, and as the second command shows, it can transform a compiled archive such as a WAR directly:
 
 ```bash
 # Using Maven plugin
@@ -217,7 +217,7 @@ Because old and new namespaces don't mix at runtime, the server has to move too.
 
 ### Payara Server
 
-Payara 6+ supports Jakarta EE 10. The dependency below is the embedded Payara, scoped to tests, so that tests can run against the same server version as production:
+Payara 6+ supports Jakarta EE 10. The dependency below is the embedded Payara, scoped to tests, so that tests can run inside a Payara 6 server:
 
 ```xml
 <!-- Use Payara 6 for Jakarta EE 10 -->
@@ -361,11 +361,11 @@ public class MigrationVerificationTest {
 }
 ```
 
-Each test checks one specification: CDI injects the service, JPA provides an entity manager, Bean Validation rejects an invalid object, and the REST layer answers. None of them is clever, but together they cover the places where the migration most often goes wrong.
+Each test checks one specification: CDI injects the service, JPA provides an entity manager, Bean Validation rejects an invalid object, and the REST layer answers. None of them is clever, but a missed import, library or descriptor would show up in one of them.
 
 ## Migration checklist
 
-This is the list we worked through, in order:
+Put together as a checklist:
 
 - [ ] Update `pom.xml` dependencies to Jakarta EE
 - [ ] Replace `javax` imports with `jakarta`
