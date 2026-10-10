@@ -85,6 +85,12 @@
     font-feature-settings: "ss01" 1;
   }
 
+  /* Long words (e.g. German compounds) break instead of widening the page on small screens */
+  h1, h2, h3 {
+    hyphens: auto;
+    overflow-wrap: break-word;
+  }
+
   ::selection {
     background: color-mix(in srgb, var(--accent) 30%, transparent);
   }
@@ -165,6 +171,7 @@ code {
 
 :not(pre) > code {
   @apply px-1.5 py-0.5 rounded-md bg-panel border border-line text-fg text-[0.85em];
+  overflow-wrap: anywhere;
 }
 
 /* Blog post content */
@@ -192,6 +199,7 @@ code {
 }
 
 .prose a {
+  overflow-wrap: anywhere;
   @apply text-fg underline decoration-line-strong underline-offset-4 hover:decoration-accent transition-colors;
 }
 

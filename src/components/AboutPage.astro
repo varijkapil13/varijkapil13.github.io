@@ -259,9 +259,9 @@ const skillGroups = [
       <div class="grid md:grid-cols-2 gap-6">
         {projects.map((project) => (
           <div class="card p-6">
-            <div class="flex items-start justify-between mb-3">
+            <div class="flex flex-wrap items-start justify-between gap-x-3 gap-y-1 mb-3">
               <h3 class="font-semibold">{project.name}</h3>
-              <span class="text-sm text-muted whitespace-nowrap ml-2">{project.period}</span>
+              <span class="text-sm text-muted whitespace-nowrap">{project.period}</span>
             </div>
             <p class="eyebrow mb-3">{project.association}</p>
             <p class="text-muted text-sm mb-4">{project.description}</p>

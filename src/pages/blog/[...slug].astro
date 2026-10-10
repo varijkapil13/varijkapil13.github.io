@@ -61,8 +61,8 @@ const relatedPosts = allPosts
       </div>
     </header>
 
-    <div class="grid lg:grid-cols-[minmax(0,700px)_1fr] gap-12 xl:gap-20 border-t border-line pt-10">
-      <div>
+    <div class="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-[minmax(0,700px)_1fr] gap-12 xl:gap-20 border-t border-line pt-10">
+      <div class="min-w-0">
         {post.data.series && (
           <SeriesNav id={post.data.series} posts={seriesPosts} current={post.id} position="top" />
         )}

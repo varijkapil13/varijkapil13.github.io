@@ -32,7 +32,7 @@ const facts = [
 
 <!-- Hero -->
 <section class="border-b border-line">
-  <div class="container-custom grid lg:grid-cols-[1.4fr_1fr] gap-12 lg:gap-16 items-center py-16 md:py-24">
+  <div class="container-custom grid grid-cols-[minmax(0,1fr)] lg:grid-cols-[1.4fr_1fr] gap-12 lg:gap-16 items-center py-16 md:py-24">
     <div>
       <p class="pill mb-7"><span class="dot"></span>{t("hero.title")} · Digital Automotive</p>
       <h1 class="text-4xl sm:text-5xl font-semibold tracking-[-0.035em] leading-[1.06] mb-5 text-balance">
@@ -50,7 +50,7 @@ const facts = [
       {facts.map((fact) => (
         <div class="flex justify-between gap-6 px-5 py-3.5">
           <dt class="text-muted shrink-0">{fact.label}</dt>
-          <dd class:list={["text-right", fact.mono && "font-mono text-[13px]"]}>{fact.value}</dd>
+          <dd class:list={["text-right min-w-0 [overflow-wrap:anywhere] hyphens-auto", fact.mono && "font-mono text-[13px]"]}>{fact.value}</dd>
         </div>
       ))}
     </dl>
