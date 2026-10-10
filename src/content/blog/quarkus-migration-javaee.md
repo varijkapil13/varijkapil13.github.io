@@ -90,7 +90,7 @@ For our Kubernetes deployment, the memory savings alone justified the migration.
 
 ## Lessons learned
 
-Don't migrate everything at once. We extracted seven services over 18 months, and each one taught us something we used on the next.
+Don't migrate everything at once. We extracted seven services over 18 months, and each one taught us something.
 
 Write integration tests first. Before touching any code, we wrote tests that verified the API contract, the requests and responses other systems depend on. When the implementation behind an endpoint moves, those tests are what tell you the outside still looks the same, and they caught regressions we would otherwise have missed.
 
