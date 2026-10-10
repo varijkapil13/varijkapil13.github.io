@@ -207,7 +207,7 @@ The `try` block at the end shows the other half of the decision. Some exceptions
 
 ## Keeping logging cheap
 
-All of this only helps if logging stays switched on, and it only stays switched on if it doesn't slow the application down. There are two places where logging quietly costs more than it should.
+All of this only helps if logging stays switched on, and it only stays switched on if it doesn't slow the application down. There are two places where logging costs more than it should.
 
 The first is building log messages that are never written. If you concatenate a string for a DEBUG message, Java builds that string before the logger ever checks whether DEBUG is enabled. With parameterized logging the logger checks the level first and only formats the message if it will be written. When even computing the argument is expensive, an explicit level check skips the work entirely:
 

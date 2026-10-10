@@ -6,7 +6,7 @@ image: "/images/blog/database-connection-pooling.jpg"
 tags: ["database", "postgresql", "java", "performance"]
 ---
 
-Connection pooling seems simple until it isn't. Over the years I have crashed production systems with a badly sized pool, and I have spent weekends chasing timeouts that turned out to be pool exhaustion. None of these mistakes were exotic. Each one came from a reasonable-sounding assumption, and each one only showed itself under real load. This post goes through them in roughly the order I made them, because each one taught me something that the next one built on.
+Connection pooling seems simple until it isn't. Over the years I have crashed production systems with a badly sized pool, and I have spent weekends chasing timeouts that turned out to be pool exhaustion. None of these mistakes were exotic. Each one came from a reasonable-sounding assumption, and each one only showed itself under real load. This post goes through them one at a time, because several of them only make sense once you understand the one before.
 
 First, some background on what a pool is and why we need one. Opening a connection to a database like PostgreSQL is expensive. The client and server have to set up a network connection, authenticate, and agree on settings, and on the PostgreSQL side every connection gets its own server process. If an application opened a fresh connection for every request and closed it afterwards, it would spend a large part of its time just connecting. A connection pool solves this by opening a set of connections up front and lending them out. Your code asks the pool for a connection, uses it, and hands it back, and the next request reuses it. In Java, the pool I use is HikariCP, and most of the examples here are for it.
 
@@ -24,13 +24,13 @@ The formula I use now as a starting point is this one:
 connections = (cores * 2) + effective_spindle_count
 ```
 
-The idea behind it is that each core can usefully work on about two connections at once, since a connection spends part of its time waiting for I/O, plus some extra for the number of disks that can serve reads in parallel ("spindles", from the days of spinning hard drives). For a 4-core server with SSDs, that comes to about 10 connections. That is a lot fewer than the 200 I used to configure, and it was hard to believe at first that the smaller number would be faster.
+The idea behind it is that each core can usefully work on about two connections at once, since a connection spends part of its time waiting for I/O, plus some extra for the number of disks that can serve reads in parallel ("spindles", from the days of spinning hard drives). For a 4-core server with SSDs, that comes to about 10 connections. That is a lot fewer than the 200 I used to configure.
 
 ## Mistake 2: a pool that is too small
 
-Having learned that lesson, I also managed to make the opposite mistake. I once set a pool size of 5 for an application that had 20 concurrent request handlers. Under load, 15 of those handlers had nothing to do but wait for a connection to come back, and threads waited a very long time.
+Having learned that lesson, I also managed to make the opposite mistake. I once set a pool size of 5 for an application that had 20 concurrent request handlers. Under load, threads waited forever for connections, since only 5 of the 20 handlers could talk to the database at any moment and the rest queued up behind them.
 
-HikariCP does not let a thread wait forever by default. If no connection becomes available within the connection timeout, `getConnection()` gives up and throws an exception:
+Strictly speaking, HikariCP does not let a thread wait forever by default. If no connection becomes available within the connection timeout, `getConnection()` gives up and throws an exception:
 
 ```java
 // HikariCP timeout defaults to 30 seconds
@@ -107,7 +107,7 @@ validationTimeout: 5000
 
 ## Mistake 6: one pool for everything
 
-For a long time we had a single pool shared between transaction processing and reporting queries, and the two workloads behaved very differently. Report queries were slow and held connections for seconds. Transaction queries were fast, but they were starved for connections, because the reports had them all. The fast, important work was waiting behind the slow, less urgent work.
+We had a single pool shared between transaction processing and reporting queries, and the two workloads behaved very differently. Report queries were slow and held connections for seconds. Transaction queries were fast, but they were starved for connections, because the reports had them all. The fast, important work was waiting behind the slow, less urgent work.
 
 We fixed it by giving each workload its own pool:
 
@@ -145,7 +145,7 @@ int idleConnections = poolMXBean.getIdleConnections();
 int threadsAwaitingConnection = poolMXBean.getThreadsAwaitingConnection();
 ```
 
-Active connections are the ones currently lent out, idle connections are waiting in the pool, and threads awaiting a connection are the ones blocked in `getConnection()`. The last one is the number to alert on. If `threadsAwaitingConnection` is consistently above zero, either your pool is too small or something is holding connections too long. A short spike under load is normal; a steady value above zero is the early warning that the earlier mistakes would have given me if I had been looking.
+Active connections are the ones currently lent out, idle connections are waiting in the pool, and threads awaiting a connection are the ones blocked in `getConnection()`. The last one is the number to alert on. If `threadsAwaitingConnection` is consistently above zero, either your pool is too small or something is holding connections too long. A short spike under load is normal, but a steady value above zero is an early warning for several of the problems in this post, from an undersized pool to a slow leak.
 
 ## The configuration I start from
 
@@ -170,4 +170,4 @@ Each line is one of the lessons above. The pool size is small, following the for
 
 The last lesson is about the same problem as mistake 6, one level up. Don't share pools across unrelated applications. Each application should have its own pool with its own limits, because otherwise one misbehaving app can exhaust connections for everyone. A leak or a runaway report in one service then takes down services that had nothing to do with it.
 
-It sounds obvious when written down, but I've seen shared database users with no per-application limits cause outages more than once. Every one of the mistakes in this post looked harmless when the configuration was written, and only showed its cost under load. That is why I now set every one of these values on purpose, before the first deployment, instead of finding them out during an incident.
+It sounds obvious when written down, but I've seen shared database users with no per-application limits cause outages more than once. Most of the mistakes in this post came from a setting nobody had thought about, which is why I now set these values explicitly instead of relying on whatever the defaults happen to be.
