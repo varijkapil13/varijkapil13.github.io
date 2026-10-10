@@ -25,14 +25,14 @@ Traces follow a single request. When a request fails, a trace shows you which se
 Structured logging was the first change. In a monolith you can read the lines around an error in one file. Once the logs of many services are collected in one place, you search them, and free text is hard to search. A line like this says something failed, but not which order, which customer or which request:
 
 ```
-2024-01-15 10:23:45 ERROR Something went wrong with order processing
+2022-10-12 10:23:45 ERROR Something went wrong with order processing
 ```
 
 Structured logging writes each entry as data with named fields. We write JSON, so the same event looks like this:
 
 ```json
 {
-  "timestamp": "2024-01-15T10:23:45.123Z",
+  "timestamp": "2022-10-12T10:23:45.123Z",
   "level": "ERROR",
   "message": "Order processing failed",
   "orderId": "ORD-12345",
@@ -96,8 +96,10 @@ public void processOrder(Order order) {
 
 // Or manually
 Timer.Sample sample = Timer.start(meterRegistry);
+boolean success = false;
 try {
     processOrder(order);
+    success = true;
 } finally {
     sample.stop(meterRegistry.timer("order.process",
         "status", success ? "success" : "failure",

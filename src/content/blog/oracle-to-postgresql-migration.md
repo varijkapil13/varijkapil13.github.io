@@ -143,10 +143,16 @@ Native queries are a different matter. These are queries where the application b
 
 ```java
 // Before - Oracle specific
-@Query(value = "SELECT * FROM orders WHERE ROWNUM <= :limit", nativeQuery = true)
+List<Order> orders = entityManager
+    .createNativeQuery("SELECT * FROM orders WHERE ROWNUM <= :limit", Order.class)
+    .setParameter("limit", limit)
+    .getResultList();
 
 // After - PostgreSQL
-@Query(value = "SELECT * FROM orders LIMIT :limit", nativeQuery = true)
+List<Order> orders = entityManager
+    .createNativeQuery("SELECT * FROM orders LIMIT :limit", Order.class)
+    .setParameter("limit", limit)
+    .getResultList();
 ```
 
 ## Moving the data
@@ -210,13 +216,13 @@ Getting the data across did not mean we were finished. PostgreSQL decides how to
 -- Analyze tables for query planner
 ANALYZE;
 
--- Check for missing indexes
-SELECT schemaname, tablename, indexname, idx_scan
+-- Find indexes that are never used
+SELECT schemaname, relname, indexrelname, idx_scan
 FROM pg_stat_user_indexes
 WHERE idx_scan = 0;
 ```
 
-The second query lists indexes that have not been scanned since statistics were last reset. Despite the comment, that finds unused indexes rather than missing ones: indexes that were carried over from Oracle but that PostgreSQL's planner never chooses. Those are candidates for a closer look, because they still cost time on every write. Finding indexes that are missing is a separate exercise.
+The second query lists indexes that have not been scanned since statistics were last reset. That finds unused indexes rather than missing ones: indexes that were carried over from Oracle but that PostgreSQL's planner never chooses. Those are candidates for a closer look, because they still cost time on every write. Finding indexes that are missing is a separate exercise.
 
 ## What I would tell myself before starting
 

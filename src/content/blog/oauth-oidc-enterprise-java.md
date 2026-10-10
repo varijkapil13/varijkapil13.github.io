@@ -33,7 +33,7 @@ How the frontend gets its tokens is decided by the OAuth flow you pick, and we u
 
 Once the tokens arrive, the frontend has to keep them somewhere. Anything stored in `localStorage` or `sessionStorage` can be read by any JavaScript running on the page, so a single cross-site scripting (XSS) bug would let an attacker copy a token and use it from their own machine. We treated the two kinds of token differently. Access tokens are kept only in memory, in a JavaScript variable, and refresh tokens are stored in HTTP-only cookies. An HTTP-only cookie is one the browser sends with matching requests but never exposes to JavaScript, so page scripts can't read it at all. Here is a simplified version of the token service:
 
-```javascript
+```typescript
 // Token service - simplified example
 class TokenService {
   private accessToken: string | null = null;
@@ -92,6 +92,10 @@ public class OAuthFilter implements ContainerRequestFilter {
             abortWithUnauthorized(requestContext);
         }
     }
+
+    private void abortWithUnauthorized(ContainerRequestContext requestContext) {
+        requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
+    }
 }
 ```
 
@@ -117,7 +121,7 @@ One of the hardest parts of the whole project was handling token expiration in t
 async function apiCall(endpoint, options) {
   const token = tokenService.getAccessToken();
 
-  if (isTokenExpiringSoon(token)) {
+  if (isTokenExpiringSoon(token)) { // helper omitted for brevity
     await tokenService.refreshToken();
   }
 

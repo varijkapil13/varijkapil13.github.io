@@ -12,7 +12,7 @@ For years our enterprise applications ran on GlassFish, a Java EE application se
 
 ## Why Payara
 
-Payara is a fork of GlassFish: its developers took the GlassFish code and kept developing it. That meant the same configuration, the same admin commands and the same deployment model our team already knew, so we were moving to a maintained version of the server we had rather than learning a new one. Payara gets regular releases with bug fixes and new features, and you can buy commercial support if you need it. It also adds production features GlassFish never had, such as request tracing, health checks and cloud connectors. Payara 6 is certified for Jakarta EE 10, which, as I'll explain at the end, reaches into the code as well.
+Payara is a fork of GlassFish: its developers took the GlassFish code and kept developing it. That meant the same configuration, the same admin commands and the same deployment model our team already knew, so we were moving to a maintained version of the server we had rather than learning a new one. Payara gets regular releases with bug fixes and new features, and you can buy commercial support if you need it. It also adds production features GlassFish never had, such as request tracing, health checks and cloud connectors. Payara 5 runs Java EE 8 and Jakarta EE 8 applications, which is what we had, so the code could stay as it was.
 
 ## What we had to move
 
@@ -32,26 +32,27 @@ The first two are code: WAR files are packaged web applications, and EJB modules
 Payara groups its configuration into domains. A domain is a configured server with its own ports, resources and deployed applications, and `domain1` is the one a fresh installation comes with. Everything is managed through the `asadmin` command-line tool:
 
 ```bash
-# Download Payara 6 (Jakarta EE 10)
-wget https://repo1.maven.org/maven2/fish/payara/distributions/payara/6.2024.1/payara-6.2024.1.zip
-unzip payara-6.2024.1.zip
+# Download Payara 5 (Jakarta EE 8)
+wget https://repo1.maven.org/maven2/fish/payara/distributions/payara/5.2021.1/payara-5.2021.1.zip
+unzip payara-5.2021.1.zip
 
 # Start domain
-./payara6/bin/asadmin start-domain domain1
+./payara5/bin/asadmin start-domain domain1
 
 # Verify installation
-./payara6/bin/asadmin list-applications
+./payara5/bin/asadmin list-applications
 ```
 
 On a fresh domain there are no applications to list, so this simply proves that the server is running and `asadmin` can reach it.
 
-A domain's whole configuration lives in one file, `domain.xml`, so before changing anything we saved the GlassFish one:
+A domain's whole configuration lives in one file, `domain.xml`, so before changing anything we backed up the GlassFish domain and kept a separate copy of that file:
 
 ```bash
-# Export domain configuration
-asadmin export-sync-bundle --target=domain1 glassfish-config.zip
+# Back up the whole domain (stop it first)
+asadmin stop-domain domain1
+asadmin backup-domain domain1
 
-# Or manually copy domain.xml
+# Keep a copy of domain.xml as well
 cp glassfish5/glassfish/domains/domain1/config/domain.xml backup/
 ```
 
@@ -78,7 +79,7 @@ asadmin set resources.jdbc-connection-pool.AppPool.max-pool-size=50
 asadmin set resources.jdbc-connection-pool.AppPool.pool-resize-quantity=5
 ```
 
-The steady size is how many connections stay open when the system is quiet, the maximum protects the database during traffic spikes, and the resize quantity is how many idle connections are closed in one step when the pool shrinks again. You'll also notice `javax.sql.DataSource` on a Jakarta EE 10 server. JDBC belongs to the JDK, not to Java EE, so it never moved to the `jakarta` namespace.
+The steady size is how many connections stay open when the system is quiet, the maximum protects the database during traffic spikes, and the resize quantity is how many idle connections are closed in one step when the pool shrinks again. The resource type is `javax.sql.DataSource`, the same as on GlassFish. JDBC belongs to the JDK, not to Java EE.
 
 ## JMS
 
@@ -86,12 +87,12 @@ JMS is Java's messaging API. One part of an application puts a message on a queu
 
 ```bash
 # Create connection factory
-asadmin create-jms-resource --restype jakarta.jms.QueueConnectionFactory \
+asadmin create-jms-resource --restype javax.jms.QueueConnectionFactory \
     --property imqBrokerHostName=localhost:imqBrokerHostPort=7676 \
     jms/ConnectionFactory
 
 # Create queues
-asadmin create-jms-resource --restype jakarta.jms.Queue \
+asadmin create-jms-resource --restype javax.jms.Queue \
     --property Name=OrderQueue \
     jms/OrderQueue
 ```
@@ -217,12 +218,11 @@ asadmin create-jvm-options "-Xms4g"
 asadmin create-jvm-options "-XX:+UseG1GC"
 asadmin create-jvm-options "-XX:MaxGCPauseMillis=200"
 
-# For Jakarta EE 10 / Java 21
-asadmin create-jvm-options "-XX:+UseZGC"
+# Java 11 module access
 asadmin create-jvm-options "--add-opens=java.base/java.lang=ALL-UNNAMED"
 ```
 
-Setting the minimum and maximum heap to the same 4 GB means the JVM never spends time growing the heap under load. G1 is a garbage collector that aims to keep pauses under the target, here 200 milliseconds. ZGC, in the Java 21 block, is a collector built for very short pauses and an alternative to G1: the JVM refuses to start with two collectors selected, so pick one. `--add-opens` is for the module system that Java 9 introduced, which hides JDK internals from libraries that reach into them through reflection unless a package is explicitly opened.
+Setting the minimum and maximum heap to the same 4 GB means the JVM never spends time growing the heap under load. G1 is a garbage collector that aims to keep pauses under the target, here 200 milliseconds, and on Java 11 it is the default and the safe choice for production. `--add-opens` is for the module system that Java 9 introduced, which hides JDK internals from libraries that reach into them through reflection unless a package is explicitly opened.
 
 ## When something breaks
 
@@ -250,7 +250,7 @@ And there is always the server log, with fine-grained logging turned on only for
 
 ```bash
 # Server logs
-tail -f payara6/glassfish/domains/domain1/logs/server.log
+tail -f payara5/glassfish/domains/domain1/logs/server.log
 
 # Enable fine logging for specific packages
 asadmin set-log-levels com.mycompany=FINE
@@ -261,7 +261,7 @@ asadmin set-log-levels com.mycompany=FINE
 Everything above is a series of commands against a running server, which is hard to repeat exactly by hand. Payara provides official Docker images, so the configured server can be built the same way every time:
 
 ```dockerfile
-FROM payara/server-full:6.2024.1-jdk21
+FROM payara/server-full:5.2021.1-jdk11
 
 # Copy configuration
 COPY domain.xml ${PAYARA_DIR}/glassfish/domains/domain1/config/
@@ -289,7 +289,7 @@ set resources.jdbc-connection-pool.AppPool.max-pool-size=50
 
 These are our numbers after the migration and some tuning, so they reflect both the new server and the settings above. P99 latency is the time within which 99 percent of requests finish:
 
-| Metric | GlassFish 5 | Payara 6 |
+| Metric | GlassFish 5 | Payara 5 |
 |--------|-------------|----------|
 | Startup time | 45s | 35s |
 | Memory usage | 1.2GB | 1.1GB |
@@ -298,6 +298,6 @@ These are our numbers after the migration and some tuning, so they reflect both 
 
 ## What I'd tell someone starting this migration
 
-Because Payara grew out of GlassFish, most GlassFish configuration works on it without changes, and the migration itself is not hard. I'd spend the testing time on security realms and JMS, where a mistake stays hidden until someone logs in or a message doesn't arrive. The move needs an application restart, so plan for downtime. And Payara 6 requires the Jakarta namespace, so the code has to move to Jakarta EE as part of the switch, which is a project of its own.
+Because Payara grew out of GlassFish, most GlassFish configuration works on it without changes, and the migration itself is not hard. I'd spend the testing time on security realms and JMS, where a mistake stays hidden until someone logs in or a message doesn't arrive. The move needs an application restart, so plan for downtime. Payara 5 still uses the `javax` namespace, so the code didn't have to change for the switch. Moving to the `jakarta` namespace came later and was a project of its own.
 
 After that, use what GlassFish never had: health checks, request tracing and MicroProfile Config. For us the result was a more stable, better supported platform with modern features, and production got easier to run. It was worth the effort.

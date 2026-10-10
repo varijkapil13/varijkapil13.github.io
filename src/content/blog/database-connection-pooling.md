@@ -26,9 +26,9 @@ The idea behind it is that each core can usefully work on about two connections 
 
 ## Mistake 2: a pool that is too small
 
-Having learned that lesson, I also managed to make the opposite mistake. I once set a pool size of 5 for an application that had 20 concurrent request handlers. Under load, threads waited forever for connections, since only 5 of the 20 handlers could talk to the database at any moment and the rest queued up behind them.
+Having learned that lesson, I also managed to make the opposite mistake. I once set a pool size of 5 for an application that had 20 concurrent request handlers. Under load, threads queued up for connections, since only 5 of the 20 handlers could talk to the database at any moment and the rest waited behind them.
 
-Strictly speaking, HikariCP does not let a thread wait forever by default. If no connection becomes available within the connection timeout, `getConnection()` gives up and throws an exception:
+They didn't wait forever. HikariCP has a connection timeout, 30 seconds by default, and if no connection becomes available within it, `getConnection()` gives up and throws an exception:
 
 ```java
 // HikariCP timeout defaults to 30 seconds
@@ -93,15 +93,14 @@ Turn this on in development and it will find your leaks.
 
 Connections go stale. A network problem, a database restart or a firewall timeout can leave dead connections sitting in the pool. A firewall that drops an idle connection usually tells neither side, so the pool thinks it has a good connection until someone tries to use it.
 
-I learned this the hard way after a database failover, when a standby server took over from the primary. The pool still had connections to the old primary, and they silently failed. The fix is to have the pool check connections before handing them out:
+I learned this the hard way after a database failover, when a standby server took over from the primary. The pool still had connections to the old primary, and they silently failed. The fix is to make sure the pool checks connections before handing them out. HikariCP does this by default: it validates a connection with the JDBC4 `Connection.isValid()` method, and if the check fails, the pool throws the connection away and opens a new one instead of passing a dead one to your code. What I set explicitly is how long that check may take:
 
 ```yaml
-# Validate connections periodically
-connectionTestQuery: SELECT 1
+# HikariCP validates with Connection.isValid() by default
 validationTimeout: 5000
 ```
 
-`SELECT 1` is about the cheapest query there is, so running it costs almost nothing, and if it fails, the pool throws the connection away and opens a new one instead of passing a dead one to your code. `validationTimeout` caps how long that check may take. HikariCP validates connections efficiently, but only if you enable it.
+You will see configurations that set `connectionTestQuery: SELECT 1` as well. That setting is meant for legacy drivers that don't support JDBC4, and HikariCP's documentation advises against it when the driver does, which the PostgreSQL driver does.
 
 ## Mistake 6: one pool for everything
 
@@ -159,10 +158,9 @@ spring:
       idle-timeout: 600000
       max-lifetime: 1800000
       leak-detection-threshold: 60000
-      connection-test-query: SELECT 1
 ```
 
-Each line is one of the lessons above. The pool size is small, following the formula from the first mistake. The connection timeout is short enough that exhaustion shows up as fast errors instead of piled-up threads. Idle connections are trimmed down to a minimum of five, every connection is replaced after 30 minutes, leaks are logged, and connections are tested before use. I keep it conservative at first and adjust once I have real metrics from the monitoring above.
+Each line is one of the lessons above. The pool size is small, following the formula from the first mistake. The connection timeout is short enough that exhaustion shows up as fast errors instead of piled-up threads. Idle connections are trimmed down to a minimum of five, every connection is replaced after 30 minutes, leaks are logged, and HikariCP's default validation tests connections before use. I keep it conservative at first and adjust once I have real metrics from the monitoring above.
 
 ## Keeping applications apart
 

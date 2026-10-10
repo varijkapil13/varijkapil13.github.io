@@ -32,7 +32,7 @@ This is our `.gitlab-ci.yml`. It is long, but most of it is the same pattern rep
 ```yaml
 variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
-  JAVA_VERSION: "21"
+  JAVA_VERSION: "11"
 
 cache:
   paths:
@@ -42,7 +42,7 @@ cache:
 
 build-backend:
   stage: build
-  image: maven:3.9-eclipse-temurin-21
+  image: maven:3.8-openjdk-11
   script:
     - mvn clean compile -DskipTests
   artifacts:
@@ -54,7 +54,7 @@ build-backend:
 
 unit-tests:
   stage: test
-  image: maven:3.9-eclipse-temurin-21
+  image: maven:3.8-openjdk-11
   script:
     - mvn test -Dtest=*UnitTest
   artifacts:
@@ -63,9 +63,9 @@ unit-tests:
 
 integration-tests:
   stage: test
-  image: maven:3.9-eclipse-temurin-21
+  image: maven:3.8-openjdk-11
   services:
-    - name: postgres:16-alpine
+    - name: postgres:14-alpine
       alias: postgres
   variables:
     POSTGRES_DB: testdb
@@ -85,7 +85,7 @@ integration-tests:
 
 sonarqube:
   stage: quality
-  image: maven:3.9-eclipse-temurin-21
+  image: maven:3.8-openjdk-11
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
   cache:
@@ -103,7 +103,7 @@ sonarqube:
 
 dependency-check:
   stage: quality
-  image: maven:3.9-eclipse-temurin-21
+  image: maven:3.8-openjdk-11
   script:
     - mvn org.owasp:dependency-check-maven:check
   artifacts:
@@ -116,7 +116,7 @@ dependency-check:
 
 package-war:
   stage: package
-  image: maven:3.9-eclipse-temurin-21
+  image: maven:3.8-openjdk-11
   script:
     - mvn package -DskipTests
   artifacts:
@@ -130,9 +130,12 @@ package-war:
 
 build-docker:
   stage: package
-  image: docker:24
+  image: docker:20.10
   services:
-    - docker:24-dind
+    - docker:20.10-dind
+  needs:
+    - job: package-war
+      artifacts: true
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
   script:
@@ -201,7 +204,7 @@ unit-tests:
 
 integration-tests:
   services:
-    - postgres:16-alpine
+    - postgres:14-alpine
   script:
     - mvn test -Dtest=*IntegrationTest
 ```
@@ -214,7 +217,7 @@ That database container comes from a GitLab feature called services. A service i
 
 ```yaml
 services:
-  - name: postgres:16-alpine
+  - name: postgres:14-alpine
     alias: postgres
 variables:
   POSTGRES_DB: testdb
@@ -265,7 +268,7 @@ It tells GitLab that this job deploys to an environment called production. GitLa
 The `build-docker` job builds the image that gets deployed. Our applications run on Payara, a Jakarta EE application server, so the image starts from the official Payara image and adds our application to it:
 
 ```dockerfile
-FROM payara/server-full:6.2024.1-jdk21
+FROM payara/server-full:5.2022.2-jdk11
 
 # Copy post-boot commands for configuration
 COPY post-boot-commands.asadmin ${POSTBOOT_COMMANDS}
@@ -280,7 +283,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
 EXPOSE 8080 4848
 ```
 
-The Payara image runs any commands in the post-boot file after the server starts, which is the place for server configuration such as datasources, and it deploys any WAR file found in its deploy directory. The health check gives Payara a 60 second start period, because a full application server takes a while to start, before it begins counting failed checks.
+The Payara image runs any commands in the post-boot file after the server starts, which is the place for server configuration such as datasources, and it deploys any WAR file found in its deploy directory. The WAR itself comes from the `package-war` job: `build-docker` lists that job under `needs`, so it waits for it and downloads its artifacts before running `docker build`. The health check gives Payara a 60 second start period, because a full application server takes a while to start, before it begins counting failed checks.
 
 ## Lighter pipelines for merge requests
 
@@ -376,7 +379,7 @@ Deploying a new version of the application often means changing the database sch
 ```yaml
 migrate-database:
   stage: deploy
-  image: flyway/flyway:10
+  image: flyway/flyway:8
   script:
     - flyway -url=$DATABASE_URL -user=$DB_USER -password=$DB_PASSWORD migrate
   only:

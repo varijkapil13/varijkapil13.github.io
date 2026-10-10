@@ -20,7 +20,7 @@ A multi-stage build solves this. You describe two (or more) images in one Docker
 
 ```dockerfile
 # Build stage
-FROM maven:3.9-eclipse-temurin-21 AS builder
+FROM maven:3.8-eclipse-temurin-17 AS builder
 
 WORKDIR /app
 
@@ -33,7 +33,7 @@ COPY src ./src
 RUN mvn package -DskipTests -B
 
 # Runtime stage
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:17-jre-alpine
 
 # Security: run as non-root user
 RUN addgroup -g 1001 appgroup && \
@@ -59,7 +59,7 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s \
     CMD wget -q --spider http://localhost:8080/health || exit 1
 
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar app.jar"]
 ```
 
 A few things in it are worth pointing out. The build stage copies `pom.xml` on its own and downloads the dependencies before it copies the source code. Docker caches every step of a build and reuses the cached result as long as the inputs of that step haven't changed. Dependencies change rarely and source code changes all the time, so with this order a normal code change skips the slow download step and only recompiles.
@@ -124,7 +124,7 @@ services:
       - app-network
 
   db:
-    image: postgres:16-alpine
+    image: postgres:14-alpine
     environment:
       - POSTGRES_DB=appdb
       - POSTGRES_USER=app
@@ -158,7 +158,7 @@ The application itself is built from a separate development Dockerfile. It uses 
 
 ```dockerfile
 # Dockerfile.dev
-FROM eclipse-temurin:21-jdk
+FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
@@ -208,7 +208,7 @@ public class GracefulShutdownConfig {
 }
 ```
 
-All of that is useless if the signal never reaches Java, and this is where the way you write `ENTRYPOINT` matters. Docker sends SIGTERM to the process with ID 1 in the container. In the exec form, written as a JSON array, Java itself is that process. In the shell form, Docker starts the command through `/bin/sh -c`, so the shell is that process and Java runs as its child, and the shell does not pass the signal on. To get both the signal handling and the `$JAVA_OPTS` expansion that needs a shell, you can use the shell form with `exec`, which replaces the shell with the Java process:
+All of that is useless if the signal never reaches Java, and this is where the way you write `ENTRYPOINT` matters. Docker sends SIGTERM to the process with ID 1 in the container. In the exec form, written as a JSON array, Java itself is that process. In the shell form, Docker starts the command through `/bin/sh -c`, so the shell is that process and Java runs as its child, and the shell does not pass the signal on. To get both the signal handling and the `$JAVA_OPTS` expansion that needs a shell, you can use the shell form with `exec`, which replaces the shell with the Java process. That is what the `sh -c "exec java ..."` entrypoint in the Dockerfile at the top does:
 
 ```dockerfile
 # Use exec form to receive signals
@@ -274,7 +274,7 @@ The cheapest improvement doesn't make the image smaller at all, it makes rebuild
 
 ```dockerfile
 # Rarely changes
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:17-jre-alpine
 
 # Changes occasionally
 COPY --from=builder /app/target/lib/* /app/lib/
@@ -291,16 +291,16 @@ The base image is usually the largest part of the final image, and the choices d
 
 ```bash
 # Full JDK image: ~400MB
-FROM eclipse-temurin:21-jdk
+FROM eclipse-temurin:17-jdk
 
 # JRE only: ~200MB
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:17-jre
 
 # Alpine JRE: ~150MB
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:17-jre-alpine
 
 # Distroless: ~100MB (no shell!)
-FROM gcr.io/distroless/java21-debian12
+FROM gcr.io/distroless/java17-debian11
 ```
 
 A running application doesn't need a compiler, so the JDK image is only worth using for building. Alpine is a very small Linux distribution, which is why its JRE image is smaller still and the one I use in the main Dockerfile. Distroless images go furthest: they contain the Java runtime and the libraries it needs, and nothing else, not even a shell. That is good for security, but it changes how you work with the container. You can't open a shell inside it to look around, and anything that relies on a shell stops working, which in the Dockerfile above includes both the `sh -c` entrypoint and the `wget` health check.
@@ -310,12 +310,17 @@ A running application doesn't need a compiler, so the JDK image is only worth us
 The Java runtime itself is modular, and most applications use only part of it. jlink builds a minimal JRE that contains only the modules your application needs, and its companion jdeps can work out which modules those are by analysing your JAR:
 
 ```dockerfile
-FROM eclipse-temurin:21-jdk-alpine AS jre-builder
+FROM eclipse-temurin:17-jdk-alpine AS jre-builder
+
+WORKDIR /app
+
+# Take the JAR from the build stage
+COPY --from=builder /app/target/*.jar app.jar
 
 # Find required modules
 RUN jdeps --ignore-missing-deps -q \
     --recursive \
-    --multi-release 21 \
+    --multi-release 17 \
     --print-module-deps \
     app.jar > modules.txt
 
@@ -328,7 +333,7 @@ RUN jlink \
     --compress=2 \
     --output /custom-jre
 
-FROM alpine:3.19
+FROM alpine:3.15
 COPY --from=jre-builder /custom-jre /opt/java
 ENV PATH="/opt/java/bin:$PATH"
 # Result: ~50-80MB image!
@@ -342,7 +347,7 @@ The remaining security work for a container image comes down to a handful of sma
 
 ```dockerfile
 # 1. Use specific image tags, not 'latest'
-FROM eclipse-temurin:21.0.1_12-jre-alpine
+FROM eclipse-temurin:17.0.2_8-jre-alpine
 
 # 2. Run as non-root
 USER 1001

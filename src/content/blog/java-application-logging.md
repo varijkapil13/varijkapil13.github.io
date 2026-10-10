@@ -70,7 +70,7 @@ What comes out is one JSON object per log entry, with the message and every fiel
 
 ```json
 {
-  "timestamp": "2024-05-10T14:30:00.000Z",
+  "timestamp": "2021-05-10T14:30:00.000Z",
   "level": "INFO",
   "message": "Order processed",
   "orderId": "ORD-12345",

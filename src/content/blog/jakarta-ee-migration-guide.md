@@ -318,6 +318,14 @@ import jakarta.json.bind.JsonbBuilder;
 Compiling only proves that the imports are consistent. What we needed to know was whether the server still wired everything together, because a missed descriptor or a stray `javax` reference shows up as a bean that doesn't get injected or an endpoint that doesn't respond. We wrote a small test suite to check that injection, persistence, validation, and REST endpoints still work. It uses Arquillian, which deploys a small test archive into a real server and runs the tests against it:
 
 ```java
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.WebTarget;
+import java.net.URL;
+import org.jboss.arquillian.test.api.ArquillianResource;
+// other imports omitted for brevity
+
 @ExtendWith(ArquillianExtension.class)
 public class MigrationVerificationTest {
 
@@ -334,6 +342,12 @@ public class MigrationVerificationTest {
 
     @PersistenceContext
     private EntityManager em;
+
+    @ArquillianResource
+    private URL baseUrl;
+
+    private final Validator validator =
+        Validation.buildDefaultValidatorFactory().getValidator();
 
     @Test
     public void testCDIInjection() {
@@ -355,7 +369,8 @@ public class MigrationVerificationTest {
 
     @Test
     public void testJAXRS() {
-        Response response = target.path("/api/health").request().get();
+        WebTarget target = ClientBuilder.newClient().target(baseUrl.toExternalForm());
+        Response response = target.path("api/health").request().get();
         assertEquals(200, response.getStatus());
     }
 }
@@ -382,8 +397,8 @@ Put together as a checklist:
 
 The namespace change itself gives you nothing new; it is the price of entry. Once you've migrated, you can use what came with Jakarta EE 10:
 
-- CDI 4.0: better event handling and improved interceptors
-- JPA 3.1: Java records support and UUID keys
+- CDI 4.0: CDI Lite, a build-time-friendly subset of CDI, and an empty `beans.xml` now means bean discovery mode `annotated` by default
+- JPA 3.1: UUID as a basic type and new JPQL functions such as `CEILING`, `EXP`, `LN` and `EXTRACT`
 - JAX-RS 3.1: SE bootstrap and better async support
 - JSON-B 3.0: polymorphic type handling
 - Security 3.0: OpenID Connect support

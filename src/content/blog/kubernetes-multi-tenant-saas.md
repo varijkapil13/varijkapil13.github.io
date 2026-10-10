@@ -47,13 +47,15 @@ spec:
     - to:
         - namespaceSelector:
             matchLabels:
-              name: kube-system
+              kubernetes.io/metadata.name: kube-system
       ports:
         - port: 53
           protocol: UDP
+        - port: 53
+          protocol: TCP
 ```
 
-The empty `podSelector: {}` selects every pod in the namespace. Incoming traffic is allowed only from pods in the same namespace, and outgoing traffic only to pods in the same namespace plus UDP port 53 in `kube-system`, where the cluster's DNS runs. The result blocks all cross-namespace traffic while allowing DNS resolution.
+The empty `podSelector: {}` selects every pod in the namespace. Incoming traffic is allowed only from pods in the same namespace, and outgoing traffic only to pods in the same namespace plus port 53 over UDP and TCP in `kube-system`, where the cluster's DNS runs. Kubernetes labels every namespace with `kubernetes.io/metadata.name` set to its own name, so that is the label the selector matches on. DNS mostly uses UDP but falls back to TCP for large responses, so the rule allows both. The result blocks all cross-namespace traffic while allowing DNS resolution.
 
 Keeping tenants from seeing each other doesn't stop them from crowding each other out. On shared machines, a tenant whose workload suddenly needs a lot of CPU or memory takes it from everyone else, which is known as the noisy neighbor problem. We also set up resource quotas, which cap what a whole namespace can claim:
 

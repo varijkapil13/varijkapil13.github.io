@@ -1,7 +1,7 @@
 ---
 title: "Why We Moved from Java EE to Quarkus (And What Broke)"
 description: "How we took a Java EE monolith apart into Quarkus services one piece at a time, why we chose Quarkus in the first place, and the parts that didn't go smoothly."
-date: 2023-08-22
+date: 2025-02-26
 image: "/images/blog/quarkus-migration-javaee.jpg"
 series: "monolith-to-saas"
 seriesLabel: "Java EE → Quarkus"

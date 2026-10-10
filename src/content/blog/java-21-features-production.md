@@ -8,13 +8,13 @@ tags: ["java", "enterprise", "backend"]
 
 Every Java release comes with a long list of new features, and most teams I know read that list, nod, and then keep writing code the way they did before. Java 21 is the latest LTS (long-term support) release, which matters for enterprise teams like ours because LTS versions are the ones we can run in production for years with security updates. So when we moved our enterprise applications onto it, the question I cared about was simple: which of these features would we actually use, and which would stay in the release notes?
 
-We have now been running Java 21 in production for several months, long enough to have an answer. A few features changed how we write code every day, one of them changed what our hardware can handle, and a couple are still marked as previews that we are watching rather than depending on. This post goes through them roughly in the order they mattered to us.
+We have now been running Java 21 in production for several months, long enough to have an answer. A few features changed how we write code every day, one of them changed what our hardware can handle, and a couple were previews that we tried out rather than depended on. This post goes through them roughly in the order they mattered to us.
 
 ## Virtual threads, and why thread pools were always a compromise
 
 To see why virtual threads are the headline feature of Java 21, it helps to remember how Java has handled concurrency until now. A classic Java thread, now called a platform thread, is a thin wrapper around a thread of the operating system. Operating system threads are expensive: each one reserves memory for its stack, and switching between them costs CPU time in the kernel. You can't create one for every incoming request when thousands arrive at once, so for years the standard answer has been a thread pool: create a fixed number of threads up front and let tasks queue up for them.
 
-The trouble is picking that number. In a typical backend service most of the time is spent waiting, for the database, for another service, for a file. A thread that is waiting on I/O does nothing useful, but it still occupies a slot in the pool. If the pool is small, requests queue up behind threads that are just waiting. If it is large, you pay in memory and in context switching. This is what our code looked like, and the comments in it are the dilemma in two lines:
+The trouble is picking that number. In a typical backend service most of the time is spent waiting, for the database, for another service, for a file. A thread that is waiting on I/O does nothing useful, but it still occupies a slot in the pool. If the pool is small, requests queue up behind threads that are just waiting. If it is large, you pay in memory and in context switching. This is what our code looked like, with 200 as an example pool size, and the comments in it are the dilemma in two lines:
 
 ```java
 // Managing thread pools was always a balancing act
@@ -166,18 +166,18 @@ var firstAndLast = List.of(
 );
 ```
 
-## String templates, the preview we're watching
+## String templates, the preview we didn't adopt
 
-String templates are the feature I'm most curious about and least ready to depend on, because in Java 21 they are a preview. The problem they address is old. Building strings by concatenation is hard to read, and when the string is a SQL query it's dangerous, because any user input you glue into the query can change what the query does. That's how SQL injection happens.
+String templates were a preview feature in Java 21 and Java 22, and we experimented with them while we were upgrading. The problem they address is old. Building strings by concatenation is hard to read, and when the string is a SQL query it's dangerous, because any user input you glue into the query can change what the query does. That's how SQL injection happens.
 
-A string template puts expressions directly into the string with `\{...}`, and a template processor decides what to do with them. `STR` simply interpolates, `FMT` adds format specifiers, and the interesting part is that you can write your own processor, for example one that turns a template into a `PreparedStatement` with bound parameters instead of a concatenated string:
+In the preview, a string template put expressions directly into the string with `\{...}`, and a template processor decided what to do with them. `STR` simply interpolated, `FMT` added format specifiers, and the interesting part was that you could write your own processor, for example one that turns a template into a `PreparedStatement` with bound parameters instead of a concatenated string:
 
 ```java
 // Before - error prone
 String query = "SELECT * FROM users WHERE name = '" + name + "' AND age > " + age;
 // SQL injection vulnerability!
 
-// With String Templates
+// With String Templates (Java 21/22 preview only, withdrawn in JDK 23)
 String name = "John";
 int age = 30;
 
@@ -191,7 +191,7 @@ String formatted = FMT."Balance: %.2f\{balance}";
 PreparedStatement stmt = SQL."SELECT * FROM users WHERE name = \{name} AND age > \{age}";
 ```
 
-The `SQL` processor in the last line isn't part of the JDK. It stands for a processor you would write yourself, and the safety comes from the processor binding each value as a parameter. The idea makes strings both safer and easier to read, but as long as the feature is in preview its syntax can still change, so it stays out of our production code for now.
+The `SQL.` processor in the last line was never part of the JDK. It stands for a processor you would write yourself, and the safety comes from the processor binding each value as a parameter. We liked the idea, but we never put it into production code, and that turned out to be the right call: string templates were withdrawn in JDK 23, so the code above no longer compiles on current releases.
 
 ## How we went about the migration
 

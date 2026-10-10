@@ -1,7 +1,7 @@
 ---
 title: "PostgreSQL Performance Tuning: A Practical Guide"
 description: "After moving our enterprise application from Oracle to PostgreSQL, we had to get it ready for production load. This is how we found the slow parts and what we changed."
-date: 2023-02-10
+date: 2023-06-20
 image: "/images/blog/postgresql-performance-tuning.jpg"
 tags: ["postgresql", "database", "performance", "optimization"]
 ---
@@ -35,7 +35,7 @@ An index is a separate data structure, sorted by one or more columns, that lets 
 
 ### Composite indexes
 
-A composite index covers more than one column, and the order of the columns matters, because the index is sorted by the first column, then by the second within each value of the first, and so on. The rule of thumb you will often hear is to put the most selective column first. In our case the deciding factor was how each column is used in the query. Look at this example:
+A composite index covers more than one column, and the order of the columns matters, because the index is sorted by the first column, then by the second within each value of the first, and so on. The rule I follow is to put the columns the query compares with an exact value first, and the column used for a range filter or for sorting after them. Look at this example:
 
 ```sql
 -- Good: status has few distinct values, created_at is the range filter
@@ -45,7 +45,7 @@ ON orders (status, created_at DESC);
 -- Query that benefits from this index
 SELECT * FROM orders
 WHERE status = 'PENDING'
-AND created_at > '2024-01-01'
+AND created_at > '2023-05-01'
 ORDER BY created_at DESC;
 ```
 
@@ -64,10 +64,10 @@ WHERE status IN ('PENDING', 'PROCESSING');
 -- Index only for recent data
 CREATE INDEX idx_orders_recent
 ON orders (customer_id, created_at DESC)
-WHERE created_at > NOW() - INTERVAL '90 days';
+WHERE created_at > '2023-03-01';
 ```
 
-The planner can only use a partial index when it can prove that the query's own `WHERE` clause falls inside the index condition, so the queries have to filter on the same thing. The second example needs a caveat. PostgreSQL only accepts immutable expressions in an index predicate, and `NOW()` changes over time, so the condition has to be written with a fixed date instead, and the index rebuilt from time to time if you want it to keep covering only the most recent data.
+The planner can only use a partial index when it can prove that the query's own `WHERE` clause falls inside the index condition, so the queries have to filter on the same thing. The second example needs a caveat. PostgreSQL only accepts immutable expressions in an index predicate, so a condition like `created_at > NOW() - INTERVAL '90 days'` is rejected, because `NOW()` changes over time. The predicate has to be a constant, which is why the example uses a fixed date. To keep the index covering only recent data, we recreate it periodically with a newer date, and the queries that should use it have to filter on a date at or after that constant.
 
 ### Covering indexes
 
@@ -211,7 +211,7 @@ LIMIT 20 OFFSET 10000;
 
 -- Fast: keyset pagination
 SELECT * FROM orders
-WHERE created_at < '2024-01-15 10:30:00'
+WHERE created_at < '2023-05-15 10:30:00'
 ORDER BY created_at DESC
 LIMIT 20;
 ```
@@ -258,8 +258,8 @@ Unused indexes are the mirror image. An index that is never scanned still costs 
 -- Indexes that are never used (candidates for removal)
 SELECT
     schemaname,
-    tablename,
-    indexname,
+    relname as table_name,
+    indexrelname as index_name,
     idx_scan,
     pg_size_pretty(pg_relation_size(indexrelid)) as index_size
 FROM pg_stat_user_indexes
