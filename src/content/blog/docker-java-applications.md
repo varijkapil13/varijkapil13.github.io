@@ -361,7 +361,7 @@ USER 1001
 # --cap-drop=ALL
 
 # 5. Scan images for vulnerabilities
-# docker scout cves myimage:tag
+# trivy image myimage:tag
 ```
 
 Each of these closes a different gap. A tag like `latest` points at whatever was published most recently, so the same Dockerfile can produce a different image next week, while an exact version gives you the same base every time. A read-only filesystem stops an attacker, or a buggy library, from writing files into the container. Linux capabilities are the individual privileges that root is normally made of, and a Java web service listening on a port like 8080 typically needs none of them, so dropping all of them costs nothing. Scanning the finished image for known vulnerabilities catches the problems that come in through the base image and dependencies rather than through your own code.
