@@ -10,11 +10,11 @@ tags: ["docker", "java", "devops", "containers"]
 
 The first time you put a Java service into a container, it looks like the easy part of the job. You take the JAR you already build, copy it into an image with a Java runtime, and start it. It runs, and for a while that feels like the end of it. The trouble shows up later, in production, and most of it comes from the fact that the JVM was designed long before containers existed. It has its own ideas about how much memory it may use, how it should be shut down and how it reports that it is healthy, and those ideas don't always match what a container runtime expects.
 
-This post is about the setup I've ended up with after running Java services in containers in production for a while. I'll go from the Dockerfile itself through memory, local development, shutdown and health checks, to making images smaller and safer, and I'll try to explain why each piece is there, because most of these settings only make sense once you know what goes wrong without them.
+This post is about the setup I've ended up with after running Java services in containers in production. I'll try to explain why each piece is there, because most of these settings only make sense once you know what goes wrong without them.
 
 ## The Dockerfile, built in two stages
 
-The most natural first Dockerfile for a Java project starts from an image with Maven and a JDK, copies the source in, runs the build and then starts the result. It works, but the image you ship then contains everything that was needed to build the application: Maven, the full JDK, the downloaded dependencies and the source code. None of that is needed at runtime, all of it makes the image larger, and every extra tool in a production image is one more thing that can have a vulnerability.
+The most natural first Dockerfile for a Java project starts from an image with Maven and a JDK, copies the source in, runs the build and then starts the result. It works, but the image you ship then contains everything that was needed to build the application: Maven, the full JDK, the downloaded dependencies and the source code. None of it is needed at runtime, and every extra tool in a production image makes it larger and is one more thing that can have a vulnerability.
 
 A multi-stage build solves this. You describe two (or more) images in one Dockerfile. The first stage has all the build tools and produces the JAR. The second stage starts from a small runtime image and copies in only that JAR. Only the last stage becomes the image you push, so the build tools never reach production. This is the Dockerfile I use as a starting point:
 
@@ -66,13 +66,9 @@ A few things in it are worth pointing out. The build stage copies `pom.xml` on i
 
 The runtime stage creates a dedicated user and switches to it before the application starts. By default a process in a container runs as root, and while the container isolates it, a root process that gets compromised has far more room to do damage than an unprivileged one. For us, running as a non-root user is a requirement for anything that goes to production.
 
-The rest of the file, the `JAVA_OPTS`, the health check and the entrypoint, each deserve their own section, starting with memory.
-
 ## Teaching the JVM about container memory
 
-Most of the trouble I've had with Java in containers came down to memory settings. To see why, it helps to know how the two sides look at memory.
-
-A container gets a memory limit, say 1GB. If the processes inside it use more than that, the kernel doesn't slow them down or ask them nicely; it kills them. From the outside the container simply disappears and gets restarted, which is called an OOM kill (OOM for "out of memory").
+Most of the trouble I've had with Java in containers came down to memory settings. A container gets a memory limit, say 1GB, and if the processes inside it use more than that, the kernel kills them. This is called an OOM kill (OOM for "out of memory").
 
 The JVM, on its side, decides at startup how large its heap may grow, the heap being the area where your Java objects live. Older JVMs made that decision by looking at the memory of the whole machine, so a JVM inside a 1GB container on a large host could happily plan for a heap many times bigger than its container allowed, and the first time it actually grew that large, the kernel killed it. Modern JVMs know when they run in a container and read the container's limit instead. These are the flags that control that behaviour:
 
@@ -86,7 +82,7 @@ The JVM, on its side, decides at startup how large its heap may grow, the heap b
 -Xmx512m -Xms512m                 # Fixed heap size
 ```
 
-The percentage flags let the heap follow whatever limit the container gets, so the same image works in a small and a large container without changes. The alternative at the bottom, a fixed heap with `-Xmx` and `-Xms` set to the same value, is less flexible but completely predictable: the JVM takes that much heap up front and never more. Which one you prefer depends on whether you'd rather adjust the container limit or the heap size when things need to grow.
+The percentage flags let the heap follow whatever limit the container gets, so the same image works in a small and a large container without changes. The alternative at the bottom, a fixed heap with `-Xmx` and `-Xms` set to the same value, is less flexible but completely predictable: the JVM takes that much heap up front and never more.
 
 ### Why 75% and not 100%
 
@@ -156,7 +152,7 @@ networks:
 
 The detail I'd point at first is `depends_on` with `condition: service_healthy`. A plain `depends_on` only waits until the database container has started, which is not the same as the database being ready to accept connections. PostgreSQL needs a few seconds to initialise, especially on the first run, and an application that tries to connect in that window fails on startup. With the health check on the database (`pg_isready`), Compose waits until PostgreSQL actually answers before it starts the application.
 
-The database keeps its data in a named volume, so it survives restarts of the container, and the `init.sql` file in `docker-entrypoint-initdb.d` is run by the PostgreSQL image the first time the database is created. Inside the Compose network, the application reaches the database by its service name, `db`, which is why the JDBC URL points there and not at `localhost`.
+The `init.sql` file in `docker-entrypoint-initdb.d` is run by the PostgreSQL image the first time the database is created, and inside the Compose network the application reaches the database by its service name, `db`, which is why the JDBC URL points there and not at `localhost`.
 
 The application itself is built from a separate development Dockerfile. It uses the full JDK instead of the slim runtime, adds a couple of tools that are handy for poking around inside a container, and runs the application through Maven with the debug agent enabled:
 
@@ -186,11 +182,11 @@ CMD ["./mvnw", "spring-boot:run", \
      "-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"]
 ```
 
-The `jdwp` agent is what makes remote debugging work: the JVM listens on port 5005, and `suspend=n` means it starts normally instead of waiting for a debugger to attach first. Together with Spring Boot DevTools, which restarts the application when the compiled classes change, and the `target` directory mounted into the container, I can recompile in the IDE and see the change without rebuilding the image. This image is only ever meant for a laptop. Everything that makes it convenient, the JDK, the extra tools and the open debug port, is exactly what I keep out of the production image.
+The `jdwp` agent is what makes remote debugging work: the JVM listens on port 5005, and `suspend=n` means it starts normally instead of waiting for a debugger to attach first. Together with Spring Boot DevTools, which restarts the application when the compiled classes change, and the `target` directory mounted into the container, I can recompile in the IDE and see the change without rebuilding the image. This image is only meant for a laptop; the JDK, the extra tools and the open debug port are exactly what I keep out of the production image.
 
 ## Shutting down gracefully
 
-In production, containers get stopped all the time: during deployments, when a host is drained, when a service is scaled down. The runtime does this politely at first. It sends the main process a SIGTERM signal, waits for a grace period, and only then sends SIGKILL, which ends the process immediately. A well-behaved service uses that grace period to stop accepting new requests and finish the ones it is already working on. A service that ignores SIGTERM gets killed in the middle of whatever it was doing, and the users whose requests were in flight get errors.
+In production, containers get stopped all the time, for example on every deployment. The runtime does this politely at first. It sends the main process a SIGTERM signal, waits for a grace period, and only then sends SIGKILL, which ends the process immediately. A well-behaved service uses that grace period to stop accepting new requests and finish the ones it is already working on. A service that ignores SIGTERM gets killed in the middle of whatever it was doing, and the users whose requests were in flight get errors.
 
 On the application side, this is the configuration that registers a graceful shutdown handler with the embedded Tomcat server:
 
@@ -224,9 +220,7 @@ ENTRYPOINT exec java $JAVA_OPTS -jar app.jar
 
 ## Health checks: alive and ready are different questions
 
-A container runtime can see whether a process is running, but not whether it is doing anything useful. A Java process can be up while it is stuck, or while it can't reach its database, and from the outside both look the same as a healthy service. Health checks are how the service tells the platform what state it is really in.
-
-There are two different questions here, and they need different answers. Liveness asks whether the process is still working at all; if it isn't, the right reaction is to restart it. Readiness asks whether it can handle requests right now; if it can't, the right reaction is to stop sending it traffic for a while, but not to restart it. A service whose database is briefly unreachable is alive but not ready, and restarting it would not bring the database back. So I expose separate endpoints for general health, readiness and liveness:
+A container runtime can see whether a process is running, but not whether it is doing anything useful. A Java process can be up while it is stuck or can't reach its database, and health checks are how it tells the platform about that. There are two different questions here, and they need different answers. Liveness asks whether the process is still working at all; if it isn't, the right reaction is to restart it. Readiness asks whether it can handle requests right now; if it can't, the right reaction is to stop sending it traffic for a while, but not to restart it. A service whose database is briefly unreachable is alive but not ready, and restarting it would not bring the database back. So I expose separate endpoints for general health, readiness and liveness:
 
 ```java
 @RestController
@@ -272,7 +266,7 @@ The liveness endpoint is deliberately trivial. If the JVM can answer an HTTP req
 
 ## Making the image smaller
 
-Image size sounds like a cosmetic concern until you count how often images move around. Every deployment pulls the image onto a host, every new host pulls all of them, and a CI pipeline pushes a new one on every build. Smaller images move faster and, because they contain fewer packages, give a vulnerability scanner less to complain about.
+Image size sounds like a cosmetic concern until you count how often images get pushed and pulled. Smaller images move faster and, because they contain fewer packages, give a vulnerability scanner less to complain about.
 
 ### Ordering layers for the cache
 
@@ -344,7 +338,7 @@ The result is an image of roughly 50 to 80MB, a fraction of the full JDK image. 
 
 ## Locking the container down
 
-Most of the security work for a container image is a set of small habits rather than one big measure, and I keep them together in one place:
+The remaining security work for a container image comes down to a handful of small habits, which I keep together in one place:
 
 ```dockerfile
 # 1. Use specific image tags, not 'latest'
@@ -369,7 +363,7 @@ Each of these closes a different gap. A tag like `latest` points at whatever was
 
 ## Logging to stdout
 
-The last piece is logging. On a traditional server, applications write log files to disk and something rotates and collects them. In a container that model works against you: the filesystem disappears with the container, and the platform already captures everything a container writes to stdout. So in containers I log to stdout and let the runtime collect it:
+On a traditional server, applications write log files to disk and something rotates and collects them. In a container that model works against you: the filesystem disappears with the container, and the platform already captures everything a container writes to stdout. So in containers I log to stdout and let the runtime collect it:
 
 ```xml
 <!-- logback.xml -->

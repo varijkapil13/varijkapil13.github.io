@@ -192,7 +192,7 @@ Production is the one place where we kept a human in the loop. The `deploy-produ
 
 ### Separating unit and integration tests
 
-The single most useful change was splitting our tests into two kinds, for faster feedback:
+The first of these was splitting our tests into two kinds, for faster feedback:
 
 ```yaml
 unit-tests:
@@ -246,7 +246,7 @@ dependency-check:
   allow_failure: true  # Don't block pipeline, but report
 ```
 
-We let this job fail without failing the pipeline. A newly published vulnerability in a library we have used for months would otherwise block every unrelated change until someone upgraded it, and that is a good way to get people to look for ways around the check. Instead it doesn't block the pipeline but does report, and the HTML report is kept as an artifact for a week so that we can look at it and plan the upgrade.
+We let this job fail without failing the pipeline. A newly published vulnerability in a library we have used for months would otherwise block every unrelated change until someone upgraded it, and that is a good way to get people to look for ways around the check. So the job reports without blocking, and the HTML report is kept as an artifact for a week so that we can look at it and plan the upgrade.
 
 ### Tracking deployments with environments
 
