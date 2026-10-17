@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-17T00:00:00Z",
+  "title": "Design System: varij.dev (snapshot before redesign)",
+  "extensions": {
+    "colorMeta": {
+      "signal-green": { "role": "primary", "displayName": "Signal Green", "canonical": "#4ade80" },
+      "night-ground": { "role": "neutral", "displayName": "Night Ground", "canonical": "#09090b" }
+    },
+    "breakpoints": [{ "name": "sm", "value": "640px" }, { "name": "md", "value": "768px" }, { "name": "lg", "value": "1024px" }]
+  },
+  "components": [],
+  "narrative": {
+    "northStar": "The Build Log",
+    "keyCharacteristics": ["One accent, used as a signal", "Monospace for metadata", "Hairlines and tonal panels instead of shadows", "Code blocks always dark"],
+    "rules": [
+      { "name": "The Signal Rule", "body": "Green appears only as a signal (dot, number, hover, focus). It never fills a region or a button.", "section": "colors" },
+      { "name": "The Mono Metadata Rule", "body": "Anything that is data about content is mono and muted; content itself is never mono.", "section": "typography" },
+      { "name": "The No-Shadow Rule", "body": "No box shadows anywhere; a border colour change is the hover state.", "section": "elevation" }
+    ]
+  }
+}
