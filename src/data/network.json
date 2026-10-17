@@ -1,0 +1,78 @@
+{
+  "hub": { "en": "Multi-tenant SaaS", "de": "Mandantenfähiges SaaS", "hi": "मल्टी-टेनेंट SaaS" },
+  "lines": [
+    {
+      "id": "runtime",
+      "code": "R",
+      "name": { "en": "Runtime", "de": "Laufzeit", "hi": "रनटाइम" },
+      "stations": [
+        { "label": "GlassFish" },
+        { "label": "Payara", "post": "payara-glassfish-migration" },
+        { "label": "JAX-RS APIs", "post": "jax-rs-rest-api-best-practices" },
+        { "label": "Jakarta EE", "post": "jakarta-ee-migration-guide" },
+        { "label": "WildFly", "post": "payara-wildfly-quarkus" },
+        { "label": "Quarkus", "post": "quarkus-migration-javaee" },
+        { "label": "Java 21", "post": "java-21-features-production" }
+      ],
+      "future": []
+    },
+    {
+      "id": "data",
+      "code": "D",
+      "name": { "en": "Data", "de": "Daten", "hi": "डेटा" },
+      "stations": [
+        { "label": "Oracle" },
+        { "label": { "en": "Connection pooling", "de": "Connection Pooling", "hi": "Connection pooling" }, "post": "database-connection-pooling" },
+        { "label": "PostgreSQL", "post": "oracle-to-postgresql-migration" },
+        { "label": { "en": "Tuning", "de": "Tuning", "hi": "ट्यूनिंग" }, "post": "postgresql-performance-tuning" }
+      ],
+      "future": [{ "label": { "en": "One database per service", "de": "Eine Datenbank pro Service", "hi": "हर सर्विस का अपना डेटाबेस" } }]
+    },
+    {
+      "id": "platform",
+      "code": "P",
+      "name": { "en": "Platform", "de": "Plattform", "hi": "प्लेटफॉर्म" },
+      "stations": [
+        { "label": { "en": "A VM per customer", "de": "Eine VM pro Kunde", "hi": "हर ग्राहक की VM" } },
+        { "label": "Docker", "post": "docker-java-applications" },
+        { "label": "Kubernetes", "post": "kubernetes-multi-tenant-saas" }
+      ],
+      "future": [{ "label": { "en": "Geo-replication", "de": "Geo-Replikation", "hi": "जियो-रेप्लिकेशन" } }]
+    },
+    {
+      "id": "operations",
+      "code": "O",
+      "name": { "en": "Operations", "de": "Betrieb", "hi": "ऑपरेशंस" },
+      "stations": [
+        { "label": { "en": "Debugging", "de": "Debugging", "hi": "डिबगिंग" }, "post": "debugging-production-java" },
+        { "label": { "en": "Logging", "de": "Logging", "hi": "लॉगिंग" }, "post": "java-application-logging" },
+        { "label": "GitLab CI/CD", "post": "gitlab-cicd-java-backend" },
+        { "label": "Observability", "post": "observability-distributed-systems" },
+        { "label": "GitOps", "post": "gitops-pulumi-helm" }
+      ],
+      "future": []
+    },
+    {
+      "id": "security",
+      "code": "S",
+      "name": { "en": "Security", "de": "Sicherheit", "hi": "सुरक्षा" },
+      "stations": [
+        { "label": "OAuth & OIDC", "post": "oauth-oidc-enterprise-java" },
+        { "label": "Vault" }
+      ],
+      "future": [{ "label": { "en": "GDPR · TISAX · ISO 27001", "de": "DSGVO · TISAX · ISO 27001", "hi": "GDPR · TISAX · ISO 27001" } }]
+    },
+    {
+      "id": "team",
+      "code": "T",
+      "name": { "en": "Team", "de": "Team", "hi": "टीम" },
+      "stations": [
+        { "label": { "en": "Developer", "de": "Entwickler", "hi": "डेवलपर" } },
+        { "label": { "en": "Team lead", "de": "Teamleitung", "hi": "टीम लीड" } },
+        { "label": "Team Topologies", "post": "team-topologies-practice" },
+        { "label": { "en": "AI in code review", "de": "KI im Code-Review", "hi": "कोड रिव्यू में AI" } }
+      ],
+      "future": []
+    }
+  ]
+}

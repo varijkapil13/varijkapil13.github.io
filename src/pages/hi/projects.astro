@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProjectsPage from "../../components/ProjectsPage.astro";
 import { getLangFromUrl, useTranslations } from "../../i18n/translations";
 
 const lang = getLangFromUrl(Astro.url);
@@ -35,44 +36,5 @@ const projects = [
 ---
 
 <BaseLayout title="प्रोजेक्ट्स" description="वारिज कपिल के व्यक्तिगत प्रोजेक्ट्स और साइड प्रोजेक्ट्स।">
-  <section class="section">
-    <div class="container-custom">
-      <!-- Header -->
-      <div class="mb-12 max-w-2xl">
-        <h1 class="text-4xl md:text-5xl font-semibold tracking-[-0.035em] mb-4">
-          {t('projects.title')} <span class="gradient-text">{t('projects.titleHighlight')}</span>
-        </h1>
-        <p class="text-lg text-muted">
-          {t('projects.description')}
-        </p>
-      </div>
-
-      <!-- Projects Grid -->
-      <div class="grid md:grid-cols-2 gap-5">
-        {projects.map((project) => {
-          return (
-            <div class="card p-6 md:p-7">
-              <div class="w-10 h-10 rounded-md border border-line bg-bg text-accent flex items-center justify-center mb-5 [&>svg]:w-5 [&>svg]:h-5">
-                <Fragment set:html={project.icon} />
-              </div>
-
-              <h2 class="text-lg font-semibold mb-2">{project.title}</h2>
-              <p class="text-muted mb-5 leading-relaxed">
-                {project.description}
-              </p>
-
-              <div class="flex flex-wrap gap-2">
-                {project.tags.map((tag) => (
-                  <span class="pill">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-    </div>
-  </section>
+  <ProjectsPage lang="hi" projects={projects} />
 </BaseLayout>

@@ -1,0 +1,84 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { findStation, text } from "../data/network";
+import { readingTime } from "../utils/readingTime";
+import LineBullet from "./LineBullet.astro";
+
+interface Props {
+  posts: CollectionEntry<"blog">[];
+  labels: { date: string; line: string; post: string; read: string; minutes: string };
+  // Show each post's description under its title (the full list on /blog)
+  descriptions?: boolean;
+}
+
+const { posts, labels, descriptions = false } = Astro.props;
+---
+
+<div class="board-head" aria-hidden="true">
+  <span>{labels.date}</span>
+  <span>{labels.line}</span>
+  <span>{labels.post}</span>
+  <span class="text-right">{labels.read}</span>
+</div>
+<ul class="board-rows">
+  {posts.map((post) => {
+    const at = findStation(post.id);
+    return (
+      <li class="board-row" data-line={at?.line.id}>
+        <a href={`/blog/${post.id}`} class="board-link group">
+          <time datetime={post.data.date.toISOString()} class="board-date">{post.data.date.toISOString().slice(0, 10)}</time>
+          <span class="board-line">
+            {at && <LineBullet line={at.line} />}
+            <span class="sr-only">{at && `${at.line.name.en} line, ${text(at.station.label)}`}</span>
+          </span>
+          <span class="board-title">
+            <span class="font-semibold text-[18px] leading-snug group-hover:underline underline-offset-2">{post.data.title}</span>
+            {descriptions && post.data.description && <span class="block text-[15px] text-board-muted mt-1 leading-snug">{post.data.description}</span>}
+          </span>
+          <span class="board-read">{readingTime(post.body)} {labels.minutes}</span>
+        </a>
+      </li>
+    );
+  })}
+</ul>
+
+<style>
+  @reference "../styles/global.css";
+
+  .board-head,
+  .board-link {
+    display: grid;
+    grid-template-columns: 2.2rem minmax(0, 1fr) auto;
+    column-gap: 0.9rem;
+  }
+
+  .board-head {
+    @apply hidden md:grid font-sign font-bold text-[15px] pb-2 border-b-[3px] border-board-fg;
+  }
+
+  .board-link {
+    @apply py-3.5 items-baseline;
+    grid-template-areas: "line title title" "line date read";
+    row-gap: 0.25rem;
+  }
+
+  .board-row {
+    border-bottom: 1px solid var(--board-line);
+  }
+
+  .board-date { grid-area: date; @apply font-sign font-semibold text-[16px] text-board-muted; }
+  .board-line { grid-area: line; align-self: start; padding-top: 2px; }
+  .board-title { grid-area: title; min-width: 0; }
+  .board-read { grid-area: read; @apply font-sign font-semibold text-[16px] text-board-muted text-right whitespace-nowrap; }
+
+  @media (min-width: 768px) {
+    .board-head,
+    .board-link {
+      grid-template-columns: 7.5rem 3rem minmax(0, 1fr) 5.5rem;
+      grid-template-areas: "date line title read";
+    }
+    .board-head span:nth-child(1) { grid-column: 1; }
+    .board-date { @apply text-[19px] text-board-fg; }
+    .board-read { @apply text-[19px]; }
+  }
+</style>

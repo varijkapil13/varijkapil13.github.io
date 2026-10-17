@@ -1,0 +1,106 @@
+<!doctype html>
+<!-- Diagrams for the "From Payara to WildFly to Quarkus" post, drawn in the site's
+     transit-map style. Render with: node scripts/render-diagrams.mjs -->
+<html><head><meta charset="utf-8"><style>
+  @font-face { font-family: Barlow; font-weight: 400; src: url(../../node_modules/@fontsource/barlow/files/barlow-latin-400-normal.woff2); }
+  @font-face { font-family: Barlow; font-weight: 600; src: url(../../node_modules/@fontsource/barlow/files/barlow-latin-600-normal.woff2); }
+  @font-face { font-family: "Barlow Condensed"; font-weight: 700; src: url(../../node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2); }
+  @font-face { font-family: "Geist Mono"; font-weight: 400; src: url(../../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2); }
+  :root { --ink: #101318; --muted: #565d68; --line: #d8dbe0; --runtime: #0067b1; --data: #007a4d; }
+  * { box-sizing: border-box; margin: 0; }
+  body { font: 400 15px/1.4 Barlow, sans-serif; color: var(--ink); background: #e9ebee; padding: 20px; }
+  figure { width: 700px; background: #fff; padding: 28px 28px 30px; margin-bottom: 20px; }
+  h2 { font: 700 26px/1 "Barlow Condensed"; display: flex; align-items: center; gap: 10px; margin-bottom: 26px; }
+  .b { display: inline-flex; width: 28px; height: 28px; border-radius: 6px; align-items: center; justify-content: center; color: #fff; font: 700 18px/1 "Barlow Condensed"; }
+  .name { font: 700 22px/1 "Barlow Condensed"; }
+  .sub { color: var(--muted); font-size: 14.5px; margin-top: 5px; }
+  code { font: 400 12.5px "Geist Mono", monospace; background: #f3f4f6; padding: 1px 5px; border-radius: 3px; }
+  .goal { font-weight: 600; font-size: 14px; margin-top: 8px; }
+
+  /* Horizontal line with stations */
+  .h { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 18px; padding-top: 30px; }
+  .h .st { position: relative; }
+  .h .st > .name:first-child { margin-top: 12px; }
+  /* rail from this station to the next */
+  .h .st:not(:last-child)::after { content: ""; position: absolute; top: -21px; left: 8px; width: calc(100% + 18px); height: 7px; background: var(--c); }
+  .h .st::before { content: ""; position: absolute; z-index: 1; top: -32px; left: -3px; width: 30px; height: 30px; border-radius: 50%; background: #fff; border: 6px solid var(--ink); }
+  .h .st.tick::before { width: 7px; height: 18px; border: 0; border-radius: 0; background: var(--c); left: 4px; top: -28px; }
+  .xfer { display: flex; align-items: center; gap: 8px; margin-top: 14px; }
+  .xfer .rail { width: 34px; height: 7px; background: var(--data); }
+  .xfer .t { font: 700 17px/1.1 "Barlow Condensed"; }
+
+  /* Monolith vs services */
+  .shape { margin-top: 14px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .mono { border: 2px solid var(--ink); border-radius: 4px; padding: 6px; display: flex; gap: 5px; }
+  .mod { font-size: 12.5px; padding: 3px 7px; background: #f3f4f6; border-radius: 3px; }
+  .svc { font-size: 12.5px; padding: 4px 8px; border: 2px solid var(--runtime); border-radius: 4px; }
+
+
+  /* Vertical strip */
+  .v li { list-style: none; position: relative; padding: 0 0 18px 44px; }
+  .v li::before { content: ""; position: absolute; left: 13px; top: 0; bottom: 0; width: 7px; background: var(--runtime); }
+  .v li:first-child::before { top: 9px; }
+  .v li::after { content: ""; position: absolute; left: 13px; top: 8px; width: 20px; height: 6px; background: var(--runtime); }
+  .v li.ix::after { left: 4px; top: 0; width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 5px solid var(--ink); }
+  .v li.ix::before { bottom: auto; height: 10px; }
+  .v .xfer { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+  .v .xfer .rail { width: 60px; height: 7px; background: var(--data); }
+</style></head><body>
+
+<figure id="journey" data-out="public/images/blog/payara-wildfly-quarkus/journey.png">
+  <h2><span class="b" style="background: var(--runtime)">R</span> Our route on the Runtime line</h2>
+  <div class="h" style="--c: var(--runtime)">
+    <div class="st tick">
+      <p class="name">Payara</p>
+      <p class="sub">An aging version. One monolith in a full Java EE server, EclipseLink for persistence.</p>
+      <div class="shape"><div class="mono"><span class="mod">module</span><span class="mod">module</span><span class="mod">…</span></div></div>
+    </div>
+    <div class="st tick">
+      <p class="name">WildFly</p>
+      <p class="sub">The same monolith as a bootable JAR, slimmed with Galleon.</p>
+      <p class="goal">Goal: stable ground, quickly</p>
+      <div class="shape"><div class="mono"><span class="mod">module</span><span class="mod">module</span><span class="mod">…</span></div></div>
+    </div>
+    <div class="st">
+      <p class="name">Quarkus</p>
+      <p class="sub">One service per former module, each built and deployed on its own.</p>
+      <p class="goal">Goal: services, planned step by step</p>
+      <div class="shape"><span class="svc">service</span><span class="svc">service</span><span class="svc">…</span></div>
+      <div class="xfer"><span class="rail"></span><span class="b" style="background: var(--data)">D</span><span class="t">Still one shared database</span></div>
+      <p class="sub">Next, still being built: one database per service.</p>
+    </div>
+  </div>
+</figure>
+
+<figure id="services" data-out="public/images/blog/payara-wildfly-quarkus/services.png">
+  <h2><span class="b" style="background: var(--runtime)">R</span> How one module became a service</h2>
+  <ol class="v">
+    <li><p class="name">Start from the sample project</p><p class="sub">A shared Maven BOM: same versions, Docker packaging, logging, metrics, tracing and OpenAPI.</p></li>
+    <li><p class="name">Its own repository and build</p><p class="sub">The module leaves the monolith and is released on its own schedule.</p></li>
+    <li><p class="name">Only the entities it uses</p><p class="sub">The service keeps its own copy of the entities it needs, not the whole model.</p></li>
+    <li><p class="name">Shared code in small libraries</p><p class="sub">What several services need moves into small, versioned libraries.</p></li>
+    <li class="ix"><p class="name">Database changes in one central project</p><p class="sub">The database is still shared, so every schema change goes through one project.</p>
+      <div class="xfer"><span class="rail"></span><span class="b" style="background: var(--data)">D</span><span style="font: 700 18px 'Barlow Condensed'">Change to the Data line: one shared database</span></div></li>
+  </ol>
+</figure>
+
+<figure id="schedulers" data-out="public/images/blog/payara-wildfly-quarkus/schedulers.png">
+  <h2><span class="b" style="background: var(--runtime)">R</span> Three generations of scheduling</h2>
+  <div class="h" style="--c: var(--runtime)">
+    <div class="st tick">
+      <p class="name">EJB timers</p>
+      <p class="sub"><code>@Schedule</code> on a method; the application server calls it on time.</p>
+    </div>
+    <div class="st tick">
+      <p class="name">Quarkus Scheduler</p>
+      <p class="sub"><code>@Scheduled</code>, with the schedule in configuration. State lives in memory and is forgotten on restart.</p>
+    </div>
+    <div class="st">
+      <p class="name">Quartz, JDBC store</p>
+      <p class="sub">The same <code>@Scheduled</code> methods. Jobs, triggers, last and next run times live in database tables, one table prefix per service.</p>
+      <div class="xfer"><span class="rail"></span><span class="b" style="background: var(--data)">D</span><span class="t">State in the database</span></div>
+    </div>
+  </div>
+</figure>
+
+</body></html>

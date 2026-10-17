@@ -1,0 +1,313 @@
+---
+import { getCollection } from "astro:content";
+import { lines, hubName, mapColumns, text, type Lang } from "../data/network";
+import LineBullet from "./LineBullet.astro";
+
+interface Props {
+  lang: Lang;
+  todayLabel: string;
+  buildingLabel: string;
+}
+
+const { lang, todayLabel, buildingLabel } = Astro.props;
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+const titles = new Map(posts.map((p) => [p.id, p.data.title]));
+---
+
+<!-- Wide screens: one row per line, stations right-aligned so every line runs into the interchange -->
+<div class="netmap hidden md:block" style={`--cols: ${mapColumns}; --rows: ${lines.length}`}>
+  <div class="nm-hub-layer" aria-hidden="true">
+    <span class="nm-hub"></span>
+    <span class="nm-hub-label"><strong>{todayLabel}</strong> {hubName[lang]}</span>
+  </div>
+  {lines.map((line) => (
+    <div class="nm-row" style={`--c: var(--line-${line.id})`}>
+      <p class="nm-name"><LineBullet line={line} /> {line.name[lang]}</p>
+      <ol class="nm-track" style={`grid-column: ${mapColumns - line.stations.length + 2} / span ${line.stations.length}`}>
+        {line.stations.map((station) => (
+          <li class="nm-station">
+            {station.post ? (
+              <a href={`/blog/${station.post}`} title={titles.get(station.post)}>{text(station.label, lang)}</a>
+            ) : (
+              <span>{text(station.label, lang)}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+      <span class:list={["nm-through", line.future.length === 0 && "is-terminus"]} aria-hidden="true"></span>
+      {line.future.length > 0 && (
+        <ol class="nm-future" aria-label={buildingLabel}>
+          {line.future.map((station) => <li class="nm-station"><span>{text(station.label, lang)}</span></li>)}
+        </ol>
+      )}
+    </div>
+  ))}
+</div>
+
+<!-- Phones and small tablets: each line as a strip map, like the ones above train doors -->
+<div class="grid grid-cols-2 gap-x-4 gap-y-8 md:hidden">
+  {lines.map((line) => (
+    <div style={`--c: var(--line-${line.id})`}>
+      <p class="nm-name mb-3"><LineBullet line={line} /> {line.name[lang]}</p>
+      <ol class="strip">
+        {line.stations.map((station) => (
+          <li>
+            {station.post ? (
+              <a href={`/blog/${station.post}`} title={titles.get(station.post)}>{text(station.label, lang)}</a>
+            ) : (
+              <span class="text-muted">{text(station.label, lang)}</span>
+            )}
+          </li>
+        ))}
+        <li class="strip-hub"><span><strong>{todayLabel}</strong></span></li>
+        {line.future.map((station) => (
+          <li class="strip-future"><span class="text-muted">{text(station.label, lang)}</span></li>
+        ))}
+      </ol>
+    </div>
+  ))}
+</div>
+
+<style>
+  @reference "../styles/global.css";
+
+  /* Shared column template: line name, the station columns, the interchange, stations still being built */
+  .netmap {
+    --name: 132px;
+    --hub: 44px;
+    --future: 170px;
+    --row: 74px;
+    --rail: 6px;
+    /* distance from a row's top to the centre of its rail */
+    --rail-y: calc(var(--row) - 14px);
+    position: relative;
+  }
+
+  .nm-row,
+  .nm-hub-layer {
+    display: grid;
+    grid-template-columns: var(--name) repeat(var(--cols), minmax(0, 1fr)) var(--hub) var(--future);
+  }
+
+  .nm-row {
+    height: var(--row);
+    position: relative;
+    transition: opacity 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Signature interaction: pointing at a line brings it forward */
+  .netmap:has(.nm-row:hover, .nm-row:focus-within) .nm-row:not(:hover, :focus-within) {
+    opacity: 0.22;
+  }
+
+  .nm-name {
+    @apply flex items-center gap-2 font-sign font-bold text-[17px] leading-none;
+  }
+
+  .netmap .nm-name {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+    height: 28px;
+    margin-top: calc(var(--rail-y) - 14px);
+  }
+
+  .nm-track,
+  .nm-future {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-row: 1;
+    height: var(--row);
+  }
+
+  .nm-future {
+    grid-column: calc(var(--cols) + 3);
+  }
+
+  .nm-station {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0 4px calc(var(--row) - var(--rail-y) + 9px);
+    text-align: center;
+    @apply font-sign font-semibold text-[15px] leading-[1.05];
+  }
+
+  .nm-station a {
+    @apply text-fg hover:underline underline-offset-2;
+  }
+
+  .nm-station span {
+    @apply text-muted;
+  }
+
+  /* The rail: each station draws the half on either side of its tick */
+  .nm-station::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--rail-y) - var(--rail) / 2);
+    height: var(--rail);
+    background: var(--c);
+  }
+
+  .nm-track .nm-station:first-child::before {
+    left: 50%;
+    border-radius: 3px 0 0 3px;
+  }
+
+  /* Station tick, pointing up at the name */
+  .nm-station::after {
+    content: "";
+    position: absolute;
+    left: calc(50% - 3px);
+    width: 6px;
+    height: 9px;
+    top: calc(var(--rail-y) - var(--rail) / 2 - 7px);
+    background: var(--c);
+  }
+
+  /* Rail continuing through the interchange */
+  .nm-through {
+    grid-column: calc(var(--cols) + 2);
+    grid-row: 1;
+    position: relative;
+  }
+
+  .nm-through::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--rail-y) - var(--rail) / 2);
+    height: var(--rail);
+    background: var(--c);
+  }
+
+  .nm-through.is-terminus::before {
+    right: 50%;
+  }
+
+  /* Stations still being built: dashed rail, open circle */
+  .nm-future .nm-station::before {
+    right: 50%;
+    background: repeating-linear-gradient(90deg, var(--c) 0 10px, transparent 10px 16px);
+  }
+
+  .nm-future .nm-station::after {
+    width: 14px;
+    height: 14px;
+    left: calc(50% - 7px);
+    top: calc(var(--rail-y) - 7px);
+    border-radius: 50%;
+    background: var(--bg);
+    border: 3px solid var(--c);
+  }
+
+  /* The interchange every line runs into */
+  .nm-hub-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .nm-hub {
+    grid-column: calc(var(--cols) + 2);
+    grid-row: 1;
+    justify-self: center;
+    width: 28px;
+    margin-top: calc(var(--rail-y) - 14px);
+    height: calc((var(--rows) - 1) * var(--row) + 28px);
+    border-radius: 14px;
+    background: var(--bg);
+    border: 4px solid var(--fg);
+  }
+
+  .nm-hub-label {
+    grid-column: calc(var(--cols) + 3);
+    grid-row: 1;
+    align-self: start;
+    margin-top: calc(var(--rail-y) - 22px);
+    padding-left: 6px;
+    @apply font-sign text-[17px] leading-[1.05] text-fg;
+  }
+
+  .nm-hub-label strong {
+    @apply block font-bold text-[22px];
+  }
+
+  /* Strip maps */
+  .strip li {
+    position: relative;
+    padding: 0 0 0 26px;
+    min-height: 34px;
+    @apply font-sign font-semibold text-[16px] leading-[1.1];
+  }
+
+  .strip li a {
+    @apply text-fg underline decoration-line-strong underline-offset-2;
+  }
+
+  .strip li::before {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background: var(--c);
+  }
+
+  .strip li:first-child::before {
+    top: 6px;
+  }
+
+  .strip li::after {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 6px;
+    width: 14px;
+    height: 5px;
+    background: var(--c);
+  }
+
+  .strip li.strip-hub::after {
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 4px solid var(--fg);
+  }
+
+  .strip li.strip-hub:last-child::before {
+    bottom: auto;
+    height: 10px;
+  }
+
+  .strip li.strip-future::before {
+    background: repeating-linear-gradient(180deg, var(--c) 0 8px, transparent 8px 13px);
+    bottom: auto;
+    height: 12px;
+  }
+
+  .strip li.strip-future::after {
+    left: 3px;
+    top: 10px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 3px solid var(--c);
+  }
+
+  .strip li.strip-future {
+    padding-top: 9px;
+  }
+</style>

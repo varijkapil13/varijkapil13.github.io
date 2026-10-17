@@ -1,18 +1,19 @@
 // Generates a 1200x630 cover image for every blog post that doesn't set `image`
-// (or for all posts with --force). Each cover shows the post's tags and a
-// highlighted snippet from its own first code block.
+// (or for all posts with --force). Each cover is a station sign: the post's
+// title on navy, with its line from the network map drawn underneath and its
+// own station marked. With --og it also redraws the site image, public/og-image.png.
 //
 // Needs Playwright with Chromium, which is not a site dependency:
 //   npm i --no-save playwright && npx playwright install chromium
-//   node scripts/generate-covers.mjs [--force]
+//   node scripts/generate-covers.mjs [--force] [--og]
 
 import { readFileSync, writeFileSync, readdirSync, mkdirSync } from "node:fs";
 import { join, basename } from "node:path";
-import { codeToHtml } from "shiki";
 
 const BLOG_DIR = "src/content/blog";
 const OUT_DIR = "public/images/blog";
 const force = process.argv.includes("--force");
+const og = process.argv.includes("--og");
 
 let chromium;
 try {
@@ -22,78 +23,95 @@ try {
   process.exit(1);
 }
 
-
+const network = JSON.parse(readFileSync("src/data/network.json", "utf8"));
+const colors = {
+  runtime: "#0067b1", data: "#007a4d", platform: "#ef7d00",
+  operations: "#8a3d99", security: "#d3131c", team: "#8c6239",
+};
+const label = (l) => (typeof l === "string" ? l : l.en);
 const escape = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 function parse(file) {
   const raw = readFileSync(file, "utf8");
   const fm = raw.match(/^---\n([\s\S]*?)\n---/)[1];
-  const tags = JSON.parse(fm.match(/^tags:\s*(\[.*\])/m)?.[1] ?? "[]");
-  const date = fm.match(/^date:\s*(\S+)/m)?.[1] ?? "";
   const title = JSON.parse(fm.match(/^title:\s*(".*")/m)?.[1] ?? '""');
   const hasImage = /^image:/m.test(fm);
-  // Prefer the first code block with 7+ lines, then any with 4+
-  const blocks = [...raw.matchAll(/```(\w+)?\n([\s\S]*?)```/g)]
-    .map((m) => ({ lang: m[1] || "text", code: m[2], lines: m[2].trim().split("\n").length }));
-  const block = blocks.find((b) => b.lines >= 7) ?? blocks.find((b) => b.lines >= 4);
-  return { title, tags, date, hasImage, block };
+  return { title, hasImage };
 }
 
-async function snippetHtml(block, title) {
-  if (!block) {
-    // No code in the post: show its title instead
-    return `<div class="title-only">${escape(title)}</div>`;
-  }
-  const lines = block.code.replace(/\s+$/, "").split("\n").slice(0, 13);
-  const lang = { yml: "yaml", sh: "bash", dockerfile: "docker" }[block.lang] ?? block.lang;
-  try {
-    return await codeToHtml(lines.join("\n"), { lang, theme: "github-dark" });
-  } catch {
-    return await codeToHtml(lines.join("\n"), { lang: "text", theme: "github-dark" });
+function findStation(id) {
+  for (const line of network.lines) {
+    const index = line.stations.findIndex((s) => s.post === id);
+    if (index >= 0) return { line, index };
   }
 }
 
 // Site fonts, embedded so the page needs no network or file access
 const font = (pkg, file) =>
-  readFileSync(new URL(`../node_modules/@fontsource-variable/${pkg}/files/${file}`, import.meta.url)).toString("base64");
+  readFileSync(new URL(`../node_modules/@fontsource/${pkg}/files/${file}`, import.meta.url)).toString("base64");
 const fonts = `
-  @font-face { font-family: "Geist"; font-weight: 100 900; src: url(data:font/woff2;base64,${font("geist", "geist-latin-wght-normal.woff2")}) format("woff2"); }
-  @font-face { font-family: "Geist Mono"; font-weight: 100 900; src: url(data:font/woff2;base64,${font("geist-mono", "geist-mono-latin-wght-normal.woff2")}) format("woff2"); }`;
+  @font-face { font-family: "Barlow"; font-weight: 600; src: url(data:font/woff2;base64,${font("barlow", "barlow-latin-600-normal.woff2")}) format("woff2"); }
+  @font-face { font-family: "Barlow Condensed"; font-weight: 700; src: url(data:font/woff2;base64,${font("barlow-condensed", "barlow-condensed-latin-700-normal.woff2")}) format("woff2"); }`;
 
-// Matches the site's dark theme: neutral background, one green accent
-function page({ tags, date, snippet, lang }) {
-  return `<!doctype html><html><head><meta charset="utf-8"><style>${fonts}
-  * { box-sizing: border-box; }
-  body { margin: 0; width: 1200px; height: 630px; overflow: hidden; position: relative;
-    font-family: Geist, sans-serif; color: #ededef; background: #09090b; }
-  .grid { position: absolute; inset: 0; opacity: .05;
-    background-image: linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px);
-    background-size: 48px 48px; }
-  .glow { position: absolute; width: 760px; height: 760px; border-radius: 50%; background: #4ade80;
-    filter: blur(200px); opacity: .10; right: -260px; bottom: -420px; }
-  .meta { position: absolute; left: 64px; right: 64px; top: 44px; display: flex; justify-content: space-between;
-    font: 20px "Geist Mono", monospace; color: #8b8b93; }
-  .meta b { font-weight: 500; color: #ededef; }
-  .win { position: absolute; left: 64px; right: 64px; top: 104px; height: 400px; border-radius: 14px;
-    background: #111113; border: 1px solid #27272a; overflow: hidden; }
-  .bar { height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 18px; border-bottom: 1px solid #232326;
-    font: 16px "Geist Mono", monospace; color: #8b8b93; }
-  .bar i { width: 11px; height: 11px; border-radius: 50%; background: #3f3f46; display: block; }
-  .bar span { margin-left: 10px; }
-  .code { padding: 22px 28px; font: 20px/1.55 "Geist Mono", monospace; }
-  .code pre { margin: 0; background: transparent !important; white-space: pre; font-family: inherit; }
-  .fade { position: absolute; left: 0; right: 0; bottom: 0; height: 110px; background: linear-gradient(transparent, #111113); }
-  .tags { position: absolute; left: 64px; bottom: 46px; display: flex; gap: 22px; align-items: center;
-    font: 21px "Geist Mono", monospace; color: #8b8b93; }
-  .tags .dot { width: 9px; height: 9px; border-radius: 50%; background: #4ade80; }
-  .title-only { font: 600 58px/1.12 Geist, sans-serif; letter-spacing: -.035em; padding: 44px 24px; }
-  .title-only::before { content: "# "; color: #4ade80; font-family: "Geist Mono"; }
+const base = `${fonts}
+  * { box-sizing: border-box; margin: 0; }
+  body { width: 1200px; height: 630px; overflow: hidden; position: relative; background: #fff; color: #101318; font-family: Barlow, sans-serif; }
+  .sign { position: absolute; inset: 0 0 auto 0; height: 420px; background: #0b2b5e; color: #fff; padding: 52px 64px 0; }
+  .bullet { display: inline-flex; width: 52px; height: 52px; border-radius: 9px; align-items: center; justify-content: center; font: 700 34px/1 "Barlow Condensed"; color: #fff; }
+  .line-name { display: flex; align-items: center; gap: 16px; font: 700 30px/1 "Barlow Condensed"; }
+  .line-name span.muted { color: #bccbe3; }
+  h1 { font: 700 70px/0.98 "Barlow Condensed"; letter-spacing: -0.01em; margin-top: 30px; max-width: 1040px; }
+  .foot { position: absolute; left: 64px; right: 64px; bottom: 34px; display: flex; justify-content: space-between; font: 600 22px Barlow; color: #565d68; }
+  .strip { position: absolute; left: 64px; right: 64px; top: 466px; display: flex; }
+  .strip div { position: relative; flex: 1; padding-top: 36px; font: 700 21px/1 "Barlow Condensed"; color: #565d68; white-space: nowrap; }
+  .strip div::before { content: ""; position: absolute; left: 0; right: 0; top: 4px; height: 9px; background: var(--c); }
+  .strip div::after { content: ""; position: absolute; left: 0; top: 0; width: 8px; height: 17px; background: var(--c); }
+  .strip div.here { color: #101318; }
+  .strip div.here::after, .strip div.hub::after { left: -6px; top: -6px; width: 28px; height: 28px; border-radius: 50%; background: #fff; border: 6px solid #101318; }
+  .strip div.hub { flex: 0 0 auto; }
+  .strip div.hub::before { right: auto; width: 12px; }`;
+
+function coverPage(title, { line, index }) {
+  const c = colors[line.id];
+  const textColor = line.id === "platform" ? "#1b1200" : "#fff";
+  const stations = line.stations
+    .map((s, i) => `<div class="${i === index ? "here" : ""}">${escape(label(s.label))}</div>`)
+    .join("");
+  const size = title.length > 70 ? 58 : title.length > 48 ? 64 : 74;
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${base}</style></head><body style="--c:${c}">
+  <div class="sign">
+    <p class="line-name"><span class="bullet" style="background:${c};color:${textColor}">${line.code}</span>${escape(line.name.en)} line <span class="muted">· ${escape(label(line.stations[index].label))}</span></p>
+    <h1 style="font-size:${size}px">${escape(title)}</h1>
+  </div>
+  <div class="strip">${stations}<div class="hub">Today</div></div>
+  <p class="foot"><span>Varij Kapil</span><span>varij.dev</span></p>
+  </body></html>`;
+}
+
+// The site image: the name on a sign, and every line running into today's interchange
+function ogPage() {
+  const rows = network.lines
+    .map((l, i) => {
+      const y = 448 + i * 22;
+      const x = 1000 - l.stations.length * 110;
+      const ticks = l.stations.map((_, j) => `<rect x="${x + j * 110}" y="${y - 7}" width="6" height="10" fill="${colors[l.id]}"/>`).join("");
+      return `<rect x="${x}" y="${y}" width="${1040 - x}" height="7" fill="${colors[l.id]}"/>${ticks}`;
+    })
+    .join("");
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${base}
+    .sign { height: 400px; }
+    h1 { font-size: 120px; margin-top: 18px; }
+    .role { font: 700 40px/1.1 "Barlow Condensed"; margin-top: 18px; }
+    .lead { font: 600 26px/1.3 Barlow; color: #bccbe3; margin-top: 18px; }
+    svg { position: absolute; left: 0; top: 0; }
   </style></head><body>
-  <div class="grid"></div><div class="glow"></div>
-  <div class="meta"><span><b>Varij Kapil</b> · writing</span><span>${escape(date)}</span></div>
-  <div class="win"><div class="bar"><i></i><i></i><i></i><span>${escape(lang)}</span></div>
-  <div class="code">${snippet}</div><div class="fade"></div></div>
-  <div class="tags"><span class="dot"></span>${tags.slice(0, 4).map((t) => `<span>${escape(t)}</span>`).join("")}</div>
+  <div class="sign">
+    <h1>Varij Kapil</h1>
+    <p class="role">Head of Backend Engineering &amp; Operations</p>
+    <p class="lead">Taking a Java EE monolith to multi-tenant SaaS, one station at a time.</p>
+  </div>
+  <svg width="1200" height="630">${rows}<rect x="1026" y="434" width="30" height="${(network.lines.length - 1) * 22 + 34}" rx="15" fill="#fff" stroke="#101318" stroke-width="6"/></svg>
+  <p class="foot"><span>varij.dev</span></p>
   </body></html>`;
 }
 
@@ -106,11 +124,15 @@ for (const name of readdirSync(BLOG_DIR).filter((f) => f.endsWith(".md"))) {
   const id = basename(name, ".md");
   const post = parse(file);
   if (post.hasImage && !force) continue;
+  const at = findStation(id);
+  if (!at) {
+    console.warn(`skip ${id}: not on the network map (src/data/network.json)`);
+    continue;
+  }
 
-  const lang = post.block ? post.block.lang : "notes";
-  await tab.setContent(page({ tags: post.tags, date: post.date, lang, snippet: await snippetHtml(post.block, post.title) }));
+  await tab.setContent(coverPage(post.title, at));
   const out = `${OUT_DIR}/${id}.jpg`;
-  await tab.screenshot({ path: out, type: "jpeg", quality: 82 });
+  await tab.screenshot({ path: out, type: "jpeg", quality: 86 });
 
   // Point the post at its cover
   // Only touch the front matter: a post body can contain `image:` too (e.g. Helm values)
@@ -119,6 +141,12 @@ for (const name of readdirSync(BLOG_DIR).filter((f) => f.endsWith(".md"))) {
     writeFileSync(file, raw.replace(/^(---\n[\s\S]*?^date:.*)$/m, `$1\nimage: "/images/blog/${id}.jpg"`));
   }
   console.log(`cover: ${out}`);
+}
+
+if (og) {
+  await tab.setContent(ogPage());
+  await tab.screenshot({ path: "public/og-image.png" });
+  console.log("site image: public/og-image.png");
 }
 
 await browser.close();

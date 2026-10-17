@@ -1,10 +1,13 @@
 ---
+import Arrow from "../../components/Arrow.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import { readingTime } from "../../utils/readingTime";
+import DepartureBoard from "../../components/DepartureBoard.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
-import SeriesNav from "../../components/SeriesNav.astro";
-import { getSeriesPosts } from "../../utils/series";
+import LineNav from "../../components/LineNav.astro";
+import LineBullet from "../../components/LineBullet.astro";
+import { findStation, text } from "../../data/network";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -22,7 +25,7 @@ const { post } = Astro.props;
 const { Content, headings } = await render(post);
 
 const minutes = readingTime(post.body);
-const seriesPosts = post.data.series ? await getSeriesPosts(post.data.series) : [];
+const at = findStation(post.id);
 
 // Related posts: most shared tags first, then newest
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
@@ -42,46 +45,45 @@ const relatedPosts = allPosts
   publishedDate={post.data.date.toISOString()}
   tags={post.data.tags || []}
 >
-  <article class="container-custom pt-12 md:pt-16 pb-8">
-    <a href="/blog" class="eyebrow hover:text-fg transition-colors">← Writing</a>
-
-    <header class="max-w-[760px] mt-8 mb-10">
-      <p class="eyebrow mb-4">
+  <header class="sign">
+    <div class="container-custom pt-10 pb-10 md:pt-14 md:pb-12">
+      <a href="/blog" class="font-sign font-semibold text-[17px] text-sign-muted hover:text-sign-fg"><Arrow dir="left" /> Writing</a>
+      {at && (
+        <p class="flex items-center gap-2.5 mt-7 font-sign font-semibold text-[19px]">
+          <LineBullet line={at.line} size="lg" />
+          <span>{at.line.name.en} line <span class="text-sign-muted">· {text(at.station.label)}</span></span>
+        </p>
+      )}
+      <h1 class="sign-title text-[2.4rem] sm:text-[3rem] md:text-[3.75rem] max-w-[22ch] mt-5">
+        {post.data.title}
+      </h1>
+      {post.data.description && <p class="text-sign-muted text-lg max-w-[62ch] mt-5">{post.data.description}</p>}
+      <p class="font-sign font-semibold text-[17px] text-sign-muted mt-5">
         <time datetime={post.data.date.toISOString()}>
           {post.data.date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
         </time>{" "}
         · {minutes} min read
       </p>
-      <h1 class="text-3xl md:text-[2.75rem] font-semibold tracking-[-0.035em] leading-[1.1] mb-5 text-balance">
-        {post.data.title}
-      </h1>
-      {post.data.description && <p class="text-lg text-muted">{post.data.description}</p>}
-      <div class="flex flex-wrap gap-2 mt-6">
-        {post.data.tags.map((tag) => <span class="pill">{tag}</span>)}
-      </div>
-    </header>
+    </div>
+  </header>
 
-    <div class="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-[minmax(0,700px)_1fr] gap-12 xl:gap-20 border-t border-line pt-10">
+  <article class="container-custom pt-10 md:pt-14 pb-8" style={at ? `--post-line: var(--line-${at.line.id})` : undefined}>
+    <div class="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-[minmax(0,700px)_1fr] gap-12 xl:gap-20">
       <div class="min-w-0">
-        {post.data.series && (
-          <SeriesNav id={post.data.series} posts={seriesPosts} current={post.id} position="top" />
-        )}
         <TableOfContents headings={headings} variant="inline" />
 
         <div class="prose">
           <Content />
         </div>
 
-        {post.data.series && (
-          <SeriesNav id={post.data.series} posts={seriesPosts} current={post.id} position="bottom" />
-        )}
+        {at && <LineNav line={at.line} index={at.index} />}
 
-        <div class="mt-14 pt-6 border-t border-line flex flex-wrap items-center justify-between gap-4">
+        <div class="mt-12 pt-6 border-t border-line flex flex-wrap items-center justify-between gap-4">
           <div class="flex items-center gap-3">
-            <span class="w-9 h-9 rounded-md bg-fg text-bg font-mono text-xs font-bold flex items-center justify-center" aria-hidden="true">VK</span>
-            <div class="text-sm">
-              <p class="font-medium">Varij Kapil</p>
-              <p class="text-muted">Head of Backend Engineering &amp; Operations</p>
+            <span class="w-10 h-10 rounded-[5px] bg-sign text-sign-fg font-sign font-bold text-[17px] flex items-center justify-center" aria-hidden="true">VK</span>
+            <div>
+              <p class="font-semibold">Varij Kapil</p>
+              <p class="text-muted text-sm">Head of Backend Engineering &amp; Operations</p>
             </div>
           </div>
           <a
@@ -90,7 +92,7 @@ const relatedPosts = allPosts
             rel="noopener noreferrer"
             class="btn btn-secondary"
           >
-            Share on LinkedIn ↗
+            Share on LinkedIn <Arrow />
           </a>
         </div>
       </div>
@@ -100,22 +102,10 @@ const relatedPosts = allPosts
   </article>
 
   {relatedPosts.length > 0 && (
-    <section class="border-t border-line mt-8">
+    <section class="bg-board text-board-fg mt-8">
       <div class="container-custom py-12">
-        <h2 class="text-xl font-semibold tracking-tight mb-6">Related</h2>
-        <ul>
-          {relatedPosts.map((relatedPost) => (
-            <li class="border-t border-line">
-              <a href={`/blog/${relatedPost.id}`} class="grid grid-cols-[1fr_auto] md:grid-cols-[110px_1fr_auto] gap-x-4 gap-y-1 py-4 items-baseline group">
-                <time datetime={relatedPost.data.date.toISOString()} class="eyebrow order-2 md:order-none">
-                  {relatedPost.data.date.toISOString().slice(0, 10)}
-                </time>
-                <span class="font-medium col-span-2 md:col-span-1 group-hover:text-accent transition-colors">{relatedPost.data.title}</span>
-                <span class="eyebrow text-right order-3 md:order-none">{readingTime(relatedPost.body)} min</span>
-              </a>
-            </li>
-          ))}
-        </ul>
+        <h2 class="heading mb-6">Related</h2>
+        <DepartureBoard posts={relatedPosts} labels={{ date: "Date", line: "Line", post: "Post", read: "Read", minutes: "min" }} />
       </div>
     </section>
   )}

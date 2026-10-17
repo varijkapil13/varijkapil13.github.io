@@ -1,10 +1,10 @@
 ---
+import Arrow from "./Arrow.astro";
 import { getCollection } from "astro:content";
-import { useTranslations } from "../i18n/translations";
+import { useTranslations, getLocalizedPath } from "../i18n/translations";
 import { linkedinUrl } from "../data/social";
-import { series } from "../data/series";
-import { getSeriesPosts } from "../utils/series";
-import { readingTime } from "../utils/readingTime";
+import NetworkMap from "./NetworkMap.astro";
+import DepartureBoard from "./DepartureBoard.astro";
 
 interface Props {
   lang: "en" | "de" | "hi";
@@ -16,94 +16,69 @@ const t = useTranslations(lang);
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const latestPosts = allPosts
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 5);
+  .slice(0, 6);
 
-const seriesId = "monolith-to-saas";
-const seriesParts = await getSeriesPosts(seriesId);
-
-const facts = [
-  { label: t("home.fact.based"), value: t("hero.location") },
-  { label: t("home.fact.experience"), value: t("home.fact.experienceValue") },
-  { label: t("home.fact.team"), value: t("home.fact.teamValue") },
-  { label: t("home.fact.stack"), value: "Java · Quarkus · K8s · Postgres", mono: true },
-  { label: t("home.fact.focus"), value: t("home.fact.focusValue") },
-];
+const facts = [t("hero.location"), t("home.fact.experienceValue"), t("home.fact.teamValue")];
+const boardLabels = {
+  date: t("home.board.date"),
+  line: t("home.board.line"),
+  post: t("home.board.post"),
+  read: t("home.board.read"),
+  minutes: t("home.minutes"),
+};
 ---
 
-<!-- Hero -->
-<section class="border-b border-line">
-  <div class="container-custom grid grid-cols-[minmax(0,1fr)] lg:grid-cols-[1.4fr_1fr] gap-12 lg:gap-16 items-center py-16 md:py-24">
-    <div>
-      <p class="pill mb-7"><span class="dot"></span>{t("hero.title")} · Digital Automotive</p>
-      <h1 class="text-4xl sm:text-5xl font-semibold tracking-[-0.035em] leading-[1.06] mb-5 text-balance">
-        {t("home.headline")} <span class="text-muted">{t("home.headlineMuted")}</span>
-      </h1>
-      <p class="text-lg text-muted max-w-xl mb-8">{t("home.lead")}</p>
-      <div class="flex flex-wrap gap-3">
-        <a href="/blog" class="btn btn-primary">{t("home.ctaWriting")}</a>
-        <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">LinkedIn ↗</a>
+<!-- Station sign: who and what -->
+<section class="sign">
+  <div class="container-custom pt-10 pb-9 md:pt-14 md:pb-10">
+    <h1 class="sign-title text-[3.5rem] sm:text-[5rem] md:text-[6rem]">{t("hero.name")}</h1>
+    <div class="grid gap-7 md:grid-cols-[minmax(0,1fr)_auto] md:items-end mt-3">
+      <div>
+        <p class="font-sign font-semibold text-[22px] sm:text-[28px] leading-tight">{t("hero.title")}</p>
+        <p class="text-sign-muted text-[17px] sm:text-lg max-w-[60ch] mt-3">{t("home.lead")}</p>
+        <ul class="flex flex-wrap gap-x-5 gap-y-1 mt-3 font-sign font-semibold text-[18px] text-sign-muted">
+          {facts.map((fact) => <li>{fact}</li>)}
+        </ul>
       </div>
-      {t("blog.englishOnly") && <p class="eyebrow mt-4">{t("blog.englishOnly")}</p>}
+      <div class="flex flex-wrap gap-3 md:justify-end">
+        <a href="/blog" class="btn border-2 border-sign-fg/60 text-sign-fg hover:border-sign-fg md:order-first">{t("home.ctaWriting")}</a>
+        <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" class="btn btn-plate order-first md:order-none">
+          {t("home.ctaLinkedIn")} <Arrow />
+        </a>
+      </div>
     </div>
-
-    <dl class="card text-sm divide-y divide-line">
-      {facts.map((fact) => (
-        <div class="flex justify-between gap-6 px-5 py-3.5">
-          <dt class="text-muted shrink-0">{fact.label}</dt>
-          <dd class:list={["text-right min-w-0 [overflow-wrap:anywhere] hyphens-auto", fact.mono && "font-mono text-[13px]"]}>{fact.value}</dd>
-        </div>
-      ))}
-    </dl>
   </div>
 </section>
 
-<!-- Series timeline -->
-{seriesParts.length > 0 && (
-  <section class="border-b border-line">
-    <div class="container-custom py-14">
-      <div class="flex items-baseline justify-between gap-4 mb-6">
-        <h2 class="text-xl font-semibold tracking-tight">{series[seriesId].title}</h2>
-        <a href={`/blog/series/${seriesId}`} class="text-sm text-muted hover:text-fg shrink-0">
-          {t("home.seriesCount").replace("{n}", String(seriesParts.length))} →
-        </a>
-      </div>
-      <ol class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 border border-line rounded-xl overflow-hidden bg-line gap-px">
-        {seriesParts.map((post, i) => (
-          <li class="bg-panel last:odd:col-span-2 sm:last:odd:col-span-1 sm:last:col-span-2 lg:last:col-span-1">
-            <a href={`/blog/${post.id}`} class="block h-full p-4 hover:bg-bg transition-colors group">
-              <div class="flex justify-between font-mono text-xs">
-                <span class="text-accent">{String(i + 1).padStart(2, "0")}</span>
-                <span class="text-muted">{post.data.date.getFullYear()}</span>
-              </div>
-              <p class="mt-3 text-sm leading-snug group-hover:text-accent transition-colors">{post.data.seriesLabel ?? post.data.title}</p>
-            </a>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
-)}
+<!-- The network -->
+<section class="container-custom pt-8 pb-14 md:pt-9 md:pb-20">
+  <div class="grid gap-x-10 gap-y-2 md:grid-cols-[auto_minmax(0,1fr)] md:items-baseline mb-6 md:mb-2">
+    <h2 class="heading">{t("home.network")}</h2>
+    <p class="text-muted max-w-[70ch]">{t("home.networkLead")}</p>
+  </div>
+  <NetworkMap lang={lang} todayLabel={t("home.today")} buildingLabel={t("home.building")} />
+</section>
 
-<!-- Latest writing -->
-<section>
-  <div class="container-custom py-14">
-    <div class="flex items-baseline justify-between gap-4 mb-6">
-      <h2 class="text-xl font-semibold tracking-tight">{t("home.latest")}</h2>
-      <a href="/blog" class="text-sm text-muted hover:text-fg shrink-0">{t("home.allPosts")} ({allPosts.length}) →</a>
+<!-- Departures: latest writing -->
+<section class="bg-board text-board-fg">
+  <div class="container-custom py-14 md:py-16">
+    <div class="flex flex-wrap items-baseline justify-between gap-4 mb-6">
+      <h2 class="heading">{t("home.latest")}</h2>
+      <a href="/blog" class="font-sign font-bold text-[19px] underline underline-offset-4 decoration-2">{t("home.allPosts")} ({allPosts.length}) <Arrow /></a>
     </div>
-    <ul>
-      {latestPosts.map((post) => (
-        <li class="border-t border-line">
-          <a href={`/blog/${post.id}`} class="grid grid-cols-[1fr_auto] md:grid-cols-[110px_1fr_180px_56px] gap-x-4 gap-y-1 py-4 items-baseline group">
-            <time datetime={post.data.date.toISOString()} class="eyebrow order-2 md:order-none">
-              {post.data.date.toISOString().slice(0, 10)}
-            </time>
-            <span class="font-medium col-span-2 md:col-span-1 group-hover:text-accent transition-colors">{post.data.title}</span>
-            <span class="eyebrow hidden md:block truncate">{post.data.tags.slice(0, 2).join(" · ")}</span>
-            <span class="eyebrow text-right order-3 md:order-none">{readingTime(post.body)} min</span>
-          </a>
-        </li>
-      ))}
-    </ul>
+    {t("blog.englishOnly") && <p class="text-board-muted mb-6">{t("blog.englishOnly")}</p>}
+    <DepartureBoard posts={latestPosts} labels={boardLabels} />
+  </div>
+</section>
+
+<!-- Close -->
+<section class="container-custom py-16 md:py-20 grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
+  <div>
+    <h2 class="heading">{t("home.closing")}</h2>
+    <p class="text-muted text-[17px] max-w-[60ch] mt-3">{t("home.closingText")}</p>
+  </div>
+  <div class="flex flex-wrap gap-3">
+    <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">{t("home.ctaLinkedIn")} <Arrow /></a>
+    <a href={getLocalizedPath("/about", lang)} class="btn btn-secondary">{t("nav.about")}</a>
   </div>
 </section>

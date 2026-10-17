@@ -1,0 +1,65 @@
+---
+import { useTranslations } from "../i18n/translations";
+
+interface Props {
+  lang: "en" | "de" | "hi";
+  projects: { title: string; description: string; tags: string[] }[];
+}
+
+const { lang, projects } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="sign">
+  <div class="container-custom pt-12 pb-10 md:pt-16 md:pb-12">
+    <h1 class="sign-title text-[3.25rem] md:text-[5rem]">{t('projects.title')} {t('projects.titleHighlight')}</h1>
+    <p class="text-sign-muted text-lg max-w-[62ch] mt-4">{t('projects.description')}</p>
+  </div>
+</section>
+
+<section class="container-custom py-12 md:py-16">
+  <!-- Side projects as stations on a branch line of their own -->
+  <ul class="side-line">
+    {projects.map((project) => (
+      <li class="grid md:grid-cols-[18rem_minmax(0,1fr)] gap-x-8 gap-y-2 pb-9">
+        <h2 class="font-sign font-bold text-[24px] leading-tight">{project.title}</h2>
+        <div>
+          <p class="text-[17px] max-w-[65ch]">{project.description}</p>
+          <p class="text-sm text-muted mt-2">{project.tags.join(" · ")}</p>
+        </div>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  @reference "../styles/global.css";
+
+  .side-line li {
+    position: relative;
+    padding-left: 44px;
+  }
+
+  .side-line li::before {
+    content: "";
+    position: absolute;
+    left: 11px;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background: var(--line-strong);
+  }
+
+  .side-line li:first-child::before { top: 12px; }
+  .side-line li:last-child::before { bottom: auto; height: 14px; }
+
+  .side-line li::after {
+    content: "";
+    position: absolute;
+    left: 11px;
+    top: 11px;
+    width: 20px;
+    height: 5px;
+    background: var(--line-strong);
+  }
+</style>

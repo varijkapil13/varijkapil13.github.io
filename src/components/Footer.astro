@@ -1,4 +1,5 @@
 ---
+import Arrow from "./Arrow.astro";
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '../i18n/translations';
 import { linkedinUrl } from '../data/social';
 
@@ -14,20 +15,20 @@ const links = [
 ];
 ---
 
-<footer class="border-t border-line mt-8">
-  <div class="container-custom py-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6 text-sm">
+<footer class="sign mt-16">
+  <div class="container-custom py-12 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
     <div>
-      <p class="font-medium">Varij Kapil</p>
-      <p class="text-muted mt-1">{t('hero.title')} · {t('hero.location')}</p>
+      <p class="sign-title text-[34px]">Varij Kapil</p>
+      <p class="text-sign-muted mt-2">{t('hero.title')} · {t('hero.location')}</p>
     </div>
-    <nav aria-label="Footer" class="flex flex-wrap items-center gap-x-5 gap-y-2 text-muted">
+    <nav aria-label="Footer" class="flex flex-wrap items-center gap-x-6 gap-y-3">
       {links.map((link) => (
-        <a href={link.href} class="hover:text-fg transition-colors">{link.label}</a>
+        <a href={link.href} class="font-sign font-semibold text-[18px] text-sign-muted hover:text-sign-fg">{link.label}</a>
       ))}
-      <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" class="text-fg hover:text-accent transition-colors">LinkedIn ↗</a>
+      <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" class="btn btn-plate">LinkedIn <Arrow /></a>
     </nav>
   </div>
-  <div class="container-custom pb-10">
-    <p class="eyebrow">© {currentYear} Varij Kapil</p>
+  <div class="container-custom pb-8">
+    <p class="text-sm text-sign-muted">© {currentYear} Varij Kapil</p>
   </div>
 </footer>

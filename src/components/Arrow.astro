@@ -1,0 +1,12 @@
+---
+// The site's one arrow: square-ended, like the arrows on station signs
+interface Props {
+  dir?: "right" | "left";
+}
+
+const { dir = "right" } = Astro.props;
+---
+
+<svg class:list={["inline-block w-[1em] h-[1em] shrink-0 align-[-0.12em]", dir === "left" && "rotate-180"]} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">
+  <path d="M4 12h15M13 6l6 6-6 6" />
+</svg>

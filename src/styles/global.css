@@ -1,31 +1,68 @@
 @import "tailwindcss";
-@import "@fontsource-variable/geist";
+@import "@fontsource/barlow/400.css";
+@import "@fontsource/barlow/400-italic.css";
+@import "@fontsource/barlow/500.css";
+@import "@fontsource/barlow/600.css";
+@import "@fontsource/barlow/700.css";
+@import "@fontsource/barlow-condensed/600.css";
+@import "@fontsource/barlow-condensed/700.css";
+@import "@fontsource/noto-sans-devanagari/400.css";
+@import "@fontsource/noto-sans-devanagari/600.css";
 @import "@fontsource-variable/geist-mono";
 
-/* Design tokens. Components use bg-bg, bg-panel, border-line, text-fg,
-   text-muted and text-accent; the values switch with the .dark class. */
+/* Design tokens. The site is drawn as a transit network: a white map ground,
+   ink type, navy station signs, a yellow departure board, and one colour per
+   line. Values switch with the .dark class. */
 :root {
   --bg: #ffffff;
-  --panel: #fafafa;
-  --line: #e4e4e7;
-  --line-strong: #d4d4d8;
-  --fg: #09090b;
-  --muted: #71717a;
-  --accent: #15803d;
-  --accent-strong: #166534;
-  --code-bg: #111113;
+  --panel: #f3f4f6;
+  --line: #d8dbe0;
+  --line-strong: #9aa1ab;
+  --fg: #101318;
+  --muted: #565d68;
+  --accent: #0060a8;
+  --code-bg: #12161d;
+
+  --sign: #0b2b5e;
+  --sign-fg: #ffffff;
+  --sign-muted: #bccbe3;
+  --board: #ffd400;
+  --board-fg: #111111;
+  --board-muted: #4a3f00;
+  --board-line: #1111112e;
+
+  --line-runtime: #0067b1;
+  --line-data: #007a4d;
+  --line-platform: #ef7d00;
+  --line-operations: #8a3d99;
+  --line-security: #d3131c;
+  --line-team: #8c6239;
 }
 
 .dark {
-  --bg: #09090b;
-  --panel: #111113;
-  --line: #232326;
-  --line-strong: #3f3f46;
-  --fg: #ededef;
-  --muted: #8b8b93;
-  --accent: #4ade80;
-  --accent-strong: #86efac;
-  --code-bg: #0d0d10;
+  --bg: #0a111c;
+  --panel: #111b2b;
+  --line: #233148;
+  --line-strong: #4a5b77;
+  --fg: #e9eef6;
+  --muted: #9aa7bb;
+  --accent: #6cb4ff;
+  --code-bg: #070c14;
+
+  --sign: #13366f;
+  --sign-fg: #ffffff;
+  --sign-muted: #c3d2ea;
+  --board: #050709;
+  --board-fg: #ffbf2e;
+  --board-muted: #c99a35;
+  --board-line: #ffbf2e33;
+
+  --line-runtime: #3b93e0;
+  --line-data: #1fb877;
+  --line-platform: #ff9a2e;
+  --line-operations: #b06cc2;
+  --line-security: #f0484f;
+  --line-team: #b98a5c;
 }
 
 @theme inline {
@@ -36,40 +73,15 @@
   --color-fg: var(--fg);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
+  --color-sign: var(--sign);
+  --color-sign-fg: var(--sign-fg);
+  --color-sign-muted: var(--sign-muted);
+  --color-board: var(--board);
+  --color-board-fg: var(--board-fg);
+  --color-board-muted: var(--board-muted);
 
-  /* Older markup uses primary/accent/slate; map them onto the same system:
-     one green accent and neutral zinc greys. */
-  --color-primary-50: #f0fdf4;
-  --color-primary-100: #dcfce7;
-  --color-primary-200: #bbf7d0;
-  --color-primary-300: #86efac;
-  --color-primary-400: #4ade80;
-  --color-primary-500: var(--accent);
-  --color-primary-600: var(--accent-strong);
-  --color-primary-700: #15803d;
-  --color-primary-800: #166534;
-  --color-primary-900: #14532d;
-  --color-primary-950: #0a1f12;
-
-  --color-accent-50: #f0fdf4;
-  --color-accent-100: #dcfce7;
-  --color-accent-500: var(--accent);
-  --color-accent-900: #14532d;
-  --color-accent-950: #0a1f12;
-
-  --color-slate-50: #fafafa;
-  --color-slate-100: #f4f4f5;
-  --color-slate-200: #e4e4e7;
-  --color-slate-300: #d4d4d8;
-  --color-slate-400: #a1a1aa;
-  --color-slate-500: #71717a;
-  --color-slate-600: #52525b;
-  --color-slate-700: #3f3f46;
-  --color-slate-800: #27272a;
-  --color-slate-900: #111113;
-  --color-slate-950: #09090b;
-
-  --font-sans: "Geist Variable", system-ui, sans-serif;
+  --font-sans: "Barlow", "Noto Sans Devanagari", system-ui, sans-serif;
+  --font-sign: "Barlow Condensed", "Noto Sans Devanagari", "Barlow", system-ui, sans-serif;
   --font-mono: "Geist Mono Variable", ui-monospace, monospace;
 }
 
@@ -78,90 +90,103 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scrollbar-color: var(--line-strong) var(--bg);
   }
 
   body {
     @apply bg-bg text-fg antialiased;
-    font-feature-settings: "ss01" 1;
+    font-variant-numeric: tabular-nums;
   }
 
-  /* Long words (e.g. German compounds) break instead of widening the page on small screens */
+  /* Long words (e.g. German compounds) break instead of widening the page */
   h1, h2, h3 {
     hyphens: auto;
     overflow-wrap: break-word;
+    text-wrap: balance;
   }
 
   ::selection {
-    background: color-mix(in srgb, var(--accent) 30%, transparent);
+    background: var(--board);
+    color: var(--board-fg);
   }
 
   :focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 3px solid var(--accent);
     outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { transition-duration: 0s !important; }
   }
 }
 
 @layer components {
-  /* Second half of a heading, shown in the muted colour */
-  .gradient-text {
-    @apply text-muted;
+  .container-custom {
+    @apply max-w-[1200px] mx-auto px-4 sm:px-8;
   }
 
-  .glass {
-    background: color-mix(in srgb, var(--bg) 85%, transparent);
-    @apply backdrop-blur-md;
+  /* Station sign: the navy band that names a page */
+  .sign {
+    @apply bg-sign text-sign-fg;
   }
 
-  .card {
-    @apply rounded-xl bg-panel border border-line;
+  .sign-title {
+    @apply font-sign font-bold tracking-[-0.01em] leading-[0.98];
   }
 
-  .card-hover {
-    @apply transition-colors duration-200 hover:border-line-strong;
-  }
-
+  /* Buttons are sign plates */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors;
+    @apply inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-[4px] font-semibold text-[15px] transition-colors;
   }
 
   .btn-primary {
-    @apply bg-fg text-bg hover:opacity-90;
+    @apply bg-sign text-sign-fg hover:bg-fg;
   }
 
-  .btn-secondary,
-  .btn-outline {
-    @apply border border-line text-fg hover:bg-panel hover:border-line-strong;
+  .dark .btn-primary {
+    @apply bg-sign-fg text-sign hover:bg-board hover:text-board-fg;
   }
 
-  .section {
-    @apply py-16 md:py-20;
+  .btn-plate {
+    @apply bg-sign-fg text-sign hover:bg-board hover:text-board-fg;
   }
 
-  .container-custom {
-    @apply max-w-[1040px] mx-auto px-5 sm:px-8;
+  .btn-secondary {
+    @apply border-2 border-fg text-fg hover:bg-fg hover:text-bg;
   }
 
-  /* Small monospace label above headings and in meta lines */
-  .eyebrow {
-    @apply font-mono text-xs text-muted;
+  /* Line bullet: a rounded square in the line's colour carrying its letter */
+  .bullet {
+    @apply inline-flex items-center justify-center shrink-0 w-6 h-6 rounded-[5px] font-sign font-bold text-[15px] leading-none text-white;
+    background: var(--c);
   }
 
-  .pill {
-    @apply inline-flex items-center gap-2 font-mono text-xs text-muted border border-line rounded-full px-2.5 py-1;
+  .bullet[data-line="platform"] {
+    @apply text-[#1b1200];
   }
 
-  .dot {
-    @apply inline-block w-1.5 h-1.5 rounded-full bg-accent;
+  .dark .bullet {
+    @apply text-[#0a111c];
   }
 
-  .text-balance {
-    text-wrap: balance;
+  .bullet-lg {
+    @apply w-9 h-9 text-[22px] rounded-[7px];
+  }
+
+  /* Section heading inside the map world */
+  .heading {
+    @apply font-sign font-bold text-[28px] md:text-[34px] leading-none tracking-[-0.01em];
+  }
+
+  .meta {
+    @apply text-sm text-muted;
   }
 }
 
 /* Code */
 pre {
-  @apply rounded-xl! border border-line p-4 overflow-x-auto text-[13px] leading-relaxed;
+  @apply rounded-[3px] p-4 overflow-x-auto text-[13px] leading-relaxed;
   background-color: var(--code-bg) !important;
 }
 
@@ -170,28 +195,27 @@ code {
 }
 
 :not(pre) > code {
-  @apply px-1.5 py-0.5 rounded-md bg-panel border border-line text-fg text-[0.85em];
+  @apply px-1.5 py-0.5 rounded-[4px] bg-panel text-fg text-[0.84em];
   overflow-wrap: anywhere;
 }
 
 /* Blog post content */
 .prose {
-  @apply max-w-none text-[16.5px] leading-[1.75];
-  color: color-mix(in srgb, var(--fg) 88%, var(--muted));
+  @apply max-w-none text-[17.5px] leading-[1.7];
 }
 
 .prose h2,
 .prose h3,
 .prose h4 {
-  @apply text-fg font-semibold tracking-tight scroll-mt-24;
+  @apply text-fg scroll-mt-24;
 }
 
 .prose h2 {
-  @apply text-2xl mt-14 mb-4 pt-8 border-t border-line;
+  @apply font-sign font-bold text-[30px] leading-[1.05] mt-16 mb-4;
 }
 
 .prose h3 {
-  @apply text-lg mt-10 mb-3;
+  @apply font-semibold text-[20px] mt-10 mb-3;
 }
 
 .prose p {
@@ -200,11 +224,11 @@ code {
 
 .prose a {
   overflow-wrap: anywhere;
-  @apply text-fg underline decoration-line-strong underline-offset-4 hover:decoration-accent transition-colors;
+  @apply text-accent underline decoration-1 underline-offset-[3px] hover:decoration-2;
 }
 
 .prose strong {
-  @apply text-fg font-semibold;
+  @apply font-semibold;
 }
 
 .prose ul,
@@ -213,7 +237,7 @@ code {
 }
 
 .prose ul {
-  @apply list-disc;
+  list-style: square;
 }
 
 .prose ol {
@@ -225,19 +249,19 @@ code {
 }
 
 .prose li::marker {
-  @apply text-muted;
+  color: var(--post-line, var(--muted));
 }
 
 .prose img {
-  @apply rounded-xl my-8 border border-line;
+  @apply rounded-[6px] my-8 border border-line;
 }
 
 .prose blockquote {
-  @apply border-l-2 border-accent pl-5 text-muted;
+  @apply bg-panel px-5 py-1 rounded-[6px] text-fg;
 }
 
 .prose hr {
-  @apply my-10 border-line;
+  @apply my-12 border-line;
 }
 
 .prose pre {
@@ -245,11 +269,11 @@ code {
 }
 
 .prose table {
-  @apply w-full my-6 text-sm border-collapse block overflow-x-auto;
+  @apply w-full my-6 text-[15px] border-collapse block overflow-x-auto;
 }
 
 .prose th {
-  @apply text-left font-mono text-xs font-medium text-muted px-3 py-2 border-b border-line;
+  @apply text-left font-semibold px-3 py-2 border-b-2 border-fg;
 }
 
 .prose td {
@@ -262,7 +286,7 @@ code {
 }
 
 .copy-code {
-  @apply absolute top-2.5 right-2.5 px-2 py-1 rounded-md font-mono text-[11px] text-zinc-300 bg-zinc-800 border border-zinc-700 opacity-0 transition-opacity hover:bg-zinc-700 focus:opacity-100;
+  @apply absolute top-2.5 right-2.5 px-2.5 py-1 rounded-[4px] text-[12px] font-semibold text-white bg-white/10 opacity-0 transition-opacity hover:bg-white/20 focus:opacity-100;
 }
 
 .code-block:hover .copy-code {
@@ -277,7 +301,7 @@ code {
 
 /* Heading link icons */
 .heading-anchor {
-  @apply ml-2 font-mono font-normal no-underline! text-muted opacity-0 transition-opacity hover:text-accent!;
+  @apply ml-2 font-sans font-normal no-underline! text-muted opacity-0 transition-opacity hover:text-accent!;
 }
 
 .prose h2:hover .heading-anchor,
