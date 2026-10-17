@@ -1,22 +1,617 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-17T00:00:00Z",
-  "title": "Design System: varij.dev (snapshot before redesign)",
+  "generatedAt": "2026-10-17T22:04:05+00:00",
+  "title": "Design System: varij.dev",
   "extensions": {
     "colorMeta": {
-      "signal-green": { "role": "primary", "displayName": "Signal Green", "canonical": "#4ade80" },
-      "night-ground": { "role": "neutral", "displayName": "Night Ground", "canonical": "#09090b" }
+      "map-ground": {
+        "role": "neutral",
+        "displayName": "Map White",
+        "canonical": "#ffffff",
+        "cssVar": "--bg",
+        "dark": "#0a111c",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(15% 0.000 89.9)",
+          "oklch(26% 0.000 89.9)",
+          "oklch(37% 0.000 89.9)",
+          "oklch(48% 0.000 89.9)",
+          "oklch(59% 0.000 89.9)",
+          "oklch(70% 0.000 89.9)",
+          "oklch(82% 0.000 89.9)",
+          "oklch(95% 0.000 89.9)"
+        ]
+      },
+      "map-panel": {
+        "role": "neutral",
+        "displayName": "Platform Grey",
+        "canonical": "#f3f4f6",
+        "cssVar": "--panel",
+        "dark": "#111b2b",
+        "oklch": "oklch(96.7% 0.003 264.5)",
+        "tonalRamp": [
+          "oklch(15% 0.003 264.5)",
+          "oklch(26% 0.003 264.5)",
+          "oklch(37% 0.003 264.5)",
+          "oklch(48% 0.003 264.5)",
+          "oklch(59% 0.003 264.5)",
+          "oklch(70% 0.003 264.5)",
+          "oklch(82% 0.003 264.5)",
+          "oklch(95% 0.003 264.5)"
+        ]
+      },
+      "map-line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#d8dbe0",
+        "cssVar": "--line",
+        "dark": "#233148",
+        "oklch": "oklch(89.1% 0.008 260.7)",
+        "tonalRamp": [
+          "oklch(15% 0.008 260.7)",
+          "oklch(26% 0.008 260.7)",
+          "oklch(37% 0.008 260.7)",
+          "oklch(48% 0.008 260.7)",
+          "oklch(59% 0.008 260.7)",
+          "oklch(70% 0.008 260.7)",
+          "oklch(82% 0.008 260.7)",
+          "oklch(95% 0.008 260.7)"
+        ]
+      },
+      "map-line-strong": {
+        "role": "neutral",
+        "displayName": "Side-Line Grey",
+        "canonical": "#9aa1ab",
+        "cssVar": "--line-strong",
+        "dark": "#4a5b77",
+        "oklch": "oklch(70.7% 0.017 257.2)",
+        "tonalRamp": [
+          "oklch(15% 0.017 257.2)",
+          "oklch(26% 0.017 257.2)",
+          "oklch(37% 0.017 257.2)",
+          "oklch(48% 0.017 257.2)",
+          "oklch(59% 0.017 257.2)",
+          "oklch(70% 0.017 257.2)",
+          "oklch(82% 0.017 257.2)",
+          "oklch(95% 0.017 257.2)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#101318",
+        "cssVar": "--fg",
+        "dark": "#e9eef6",
+        "oklch": "oklch(18.6% 0.011 260.6)",
+        "tonalRamp": [
+          "oklch(15% 0.011 260.6)",
+          "oklch(26% 0.011 260.6)",
+          "oklch(37% 0.011 260.6)",
+          "oklch(48% 0.011 260.6)",
+          "oklch(59% 0.011 260.6)",
+          "oklch(70% 0.011 260.6)",
+          "oklch(82% 0.011 260.6)",
+          "oklch(95% 0.011 260.6)"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Ink Muted",
+        "canonical": "#565d68",
+        "cssVar": "--muted",
+        "dark": "#9aa7bb",
+        "oklch": "oklch(47.6% 0.020 259.4)",
+        "tonalRamp": [
+          "oklch(15% 0.020 259.4)",
+          "oklch(26% 0.020 259.4)",
+          "oklch(37% 0.020 259.4)",
+          "oklch(48% 0.020 259.4)",
+          "oklch(59% 0.020 259.4)",
+          "oklch(70% 0.020 259.4)",
+          "oklch(82% 0.020 259.4)",
+          "oklch(95% 0.020 259.4)"
+        ]
+      },
+      "link-blue": {
+        "role": "neutral",
+        "displayName": "Link Blue",
+        "canonical": "#0060a8",
+        "cssVar": "--accent",
+        "dark": "#6cb4ff",
+        "oklch": "oklch(48.2% 0.138 250.3)",
+        "tonalRamp": [
+          "oklch(15% 0.138 250.3)",
+          "oklch(26% 0.138 250.3)",
+          "oklch(37% 0.138 250.3)",
+          "oklch(48% 0.138 250.3)",
+          "oklch(59% 0.138 250.3)",
+          "oklch(70% 0.138 250.3)",
+          "oklch(82% 0.138 250.3)",
+          "oklch(95% 0.138 250.3)"
+        ]
+      },
+      "code-ground": {
+        "role": "neutral",
+        "displayName": "Tunnel",
+        "canonical": "#12161d",
+        "cssVar": "--code-bg",
+        "dark": "#070c14",
+        "oklch": "oklch(19.9% 0.015 261.6)",
+        "tonalRamp": [
+          "oklch(15% 0.015 261.6)",
+          "oklch(26% 0.015 261.6)",
+          "oklch(37% 0.015 261.6)",
+          "oklch(48% 0.015 261.6)",
+          "oklch(59% 0.015 261.6)",
+          "oklch(70% 0.015 261.6)",
+          "oklch(82% 0.015 261.6)",
+          "oklch(95% 0.015 261.6)"
+        ]
+      },
+      "sign-navy": {
+        "role": "primary",
+        "displayName": "Station-Sign Navy",
+        "canonical": "#0b2b5e",
+        "cssVar": "--sign",
+        "dark": "#13366f",
+        "oklch": "oklch(30.0% 0.099 259.7)",
+        "tonalRamp": [
+          "oklch(15% 0.099 259.7)",
+          "oklch(26% 0.099 259.7)",
+          "oklch(37% 0.099 259.7)",
+          "oklch(48% 0.099 259.7)",
+          "oklch(59% 0.099 259.7)",
+          "oklch(70% 0.099 259.7)",
+          "oklch(82% 0.099 259.7)",
+          "oklch(95% 0.099 259.7)"
+        ]
+      },
+      "sign-white": {
+        "role": "primary",
+        "displayName": "Sign White",
+        "canonical": "#ffffff",
+        "cssVar": "--sign-fg",
+        "dark": "#ffffff",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(15% 0.000 89.9)",
+          "oklch(26% 0.000 89.9)",
+          "oklch(37% 0.000 89.9)",
+          "oklch(48% 0.000 89.9)",
+          "oklch(59% 0.000 89.9)",
+          "oklch(70% 0.000 89.9)",
+          "oklch(82% 0.000 89.9)",
+          "oklch(95% 0.000 89.9)"
+        ]
+      },
+      "sign-muted": {
+        "role": "primary",
+        "displayName": "Sign Haze",
+        "canonical": "#bccbe3",
+        "cssVar": "--sign-muted",
+        "dark": "#c3d2ea",
+        "oklch": "oklch(83.8% 0.037 259.8)",
+        "tonalRamp": [
+          "oklch(15% 0.037 259.8)",
+          "oklch(26% 0.037 259.8)",
+          "oklch(37% 0.037 259.8)",
+          "oklch(48% 0.037 259.8)",
+          "oklch(59% 0.037 259.8)",
+          "oklch(70% 0.037 259.8)",
+          "oklch(82% 0.037 259.8)",
+          "oklch(95% 0.037 259.8)"
+        ]
+      },
+      "board-yellow": {
+        "role": "secondary",
+        "displayName": "Departure Yellow",
+        "canonical": "#ffd400",
+        "cssVar": "--board",
+        "dark": "#050709",
+        "oklch": "oklch(88.1% 0.181 94.0)",
+        "tonalRamp": [
+          "oklch(15% 0.181 94.0)",
+          "oklch(26% 0.181 94.0)",
+          "oklch(37% 0.181 94.0)",
+          "oklch(48% 0.181 94.0)",
+          "oklch(59% 0.181 94.0)",
+          "oklch(70% 0.181 94.0)",
+          "oklch(82% 0.181 94.0)",
+          "oklch(95% 0.181 94.0)"
+        ]
+      },
+      "board-ink": {
+        "role": "secondary",
+        "displayName": "Board Ink",
+        "canonical": "#111111",
+        "cssVar": "--board-fg",
+        "dark": "#ffbf2e",
+        "oklch": "oklch(17.8% 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(15% 0.000 89.9)",
+          "oklch(26% 0.000 89.9)",
+          "oklch(37% 0.000 89.9)",
+          "oklch(48% 0.000 89.9)",
+          "oklch(59% 0.000 89.9)",
+          "oklch(70% 0.000 89.9)",
+          "oklch(82% 0.000 89.9)",
+          "oklch(95% 0.000 89.9)"
+        ]
+      },
+      "board-muted": {
+        "role": "secondary",
+        "displayName": "Board Umber",
+        "canonical": "#4a3f00",
+        "cssVar": "--board-muted",
+        "dark": "#c99a35",
+        "oklch": "oklch(36.8% 0.076 98.0)",
+        "tonalRamp": [
+          "oklch(15% 0.076 98.0)",
+          "oklch(26% 0.076 98.0)",
+          "oklch(37% 0.076 98.0)",
+          "oklch(48% 0.076 98.0)",
+          "oklch(59% 0.076 98.0)",
+          "oklch(70% 0.076 98.0)",
+          "oklch(82% 0.076 98.0)",
+          "oklch(95% 0.076 98.0)"
+        ]
+      },
+      "board-rule": {
+        "role": "secondary",
+        "displayName": "Board Rule",
+        "canonical": "#1111112e",
+        "cssVar": "--board-line",
+        "dark": "#ffbf2e33",
+        "oklch": "oklch(17.8% 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(15% 0.000 89.9)",
+          "oklch(26% 0.000 89.9)",
+          "oklch(37% 0.000 89.9)",
+          "oklch(48% 0.000 89.9)",
+          "oklch(59% 0.000 89.9)",
+          "oklch(70% 0.000 89.9)",
+          "oklch(82% 0.000 89.9)",
+          "oklch(95% 0.000 89.9)"
+        ]
+      },
+      "line-runtime": {
+        "role": "tertiary",
+        "displayName": "Runtime Blue",
+        "canonical": "#0067b1",
+        "cssVar": "--line-runtime",
+        "dark": "#3b93e0",
+        "oklch": "oklch(50.5% 0.141 249.6)",
+        "tonalRamp": [
+          "oklch(15% 0.141 249.6)",
+          "oklch(26% 0.141 249.6)",
+          "oklch(37% 0.141 249.6)",
+          "oklch(48% 0.141 249.6)",
+          "oklch(59% 0.141 249.6)",
+          "oklch(70% 0.141 249.6)",
+          "oklch(82% 0.141 249.6)",
+          "oklch(95% 0.141 249.6)"
+        ]
+      },
+      "line-data": {
+        "role": "tertiary",
+        "displayName": "Data Green",
+        "canonical": "#007a4d",
+        "cssVar": "--line-data",
+        "dark": "#1fb877",
+        "oklch": "oklch(51.1% 0.117 159.1)",
+        "tonalRamp": [
+          "oklch(15% 0.117 159.1)",
+          "oklch(26% 0.117 159.1)",
+          "oklch(37% 0.117 159.1)",
+          "oklch(48% 0.117 159.1)",
+          "oklch(59% 0.117 159.1)",
+          "oklch(70% 0.117 159.1)",
+          "oklch(82% 0.117 159.1)",
+          "oklch(95% 0.117 159.1)"
+        ]
+      },
+      "line-platform": {
+        "role": "tertiary",
+        "displayName": "Platform Orange",
+        "canonical": "#ef7d00",
+        "cssVar": "--line-platform",
+        "dark": "#ff9a2e",
+        "oklch": "oklch(70.5% 0.174 55.5)",
+        "tonalRamp": [
+          "oklch(15% 0.174 55.5)",
+          "oklch(26% 0.174 55.5)",
+          "oklch(37% 0.174 55.5)",
+          "oklch(48% 0.174 55.5)",
+          "oklch(59% 0.174 55.5)",
+          "oklch(70% 0.174 55.5)",
+          "oklch(82% 0.174 55.5)",
+          "oklch(95% 0.174 55.5)"
+        ]
+      },
+      "line-operations": {
+        "role": "tertiary",
+        "displayName": "Operations Violet",
+        "canonical": "#8a3d99",
+        "cssVar": "--line-operations",
+        "dark": "#b06cc2",
+        "oklch": "oklch(50.0% 0.159 320.8)",
+        "tonalRamp": [
+          "oklch(15% 0.159 320.8)",
+          "oklch(26% 0.159 320.8)",
+          "oklch(37% 0.159 320.8)",
+          "oklch(48% 0.159 320.8)",
+          "oklch(59% 0.159 320.8)",
+          "oklch(70% 0.159 320.8)",
+          "oklch(82% 0.159 320.8)",
+          "oklch(95% 0.159 320.8)"
+        ]
+      },
+      "line-security": {
+        "role": "tertiary",
+        "displayName": "Security Red",
+        "canonical": "#d3131c",
+        "cssVar": "--line-security",
+        "dark": "#f0484f",
+        "oklch": "oklch(55.1% 0.217 27.1)",
+        "tonalRamp": [
+          "oklch(15% 0.217 27.1)",
+          "oklch(26% 0.217 27.1)",
+          "oklch(37% 0.217 27.1)",
+          "oklch(48% 0.217 27.1)",
+          "oklch(59% 0.217 27.1)",
+          "oklch(70% 0.217 27.1)",
+          "oklch(82% 0.217 27.1)",
+          "oklch(95% 0.217 27.1)"
+        ]
+      },
+      "line-team": {
+        "role": "tertiary",
+        "displayName": "Team Brown",
+        "canonical": "#8c6239",
+        "cssVar": "--line-team",
+        "dark": "#b98a5c",
+        "oklch": "oklch(53.1% 0.079 64.1)",
+        "tonalRamp": [
+          "oklch(15% 0.079 64.1)",
+          "oklch(26% 0.079 64.1)",
+          "oklch(37% 0.079 64.1)",
+          "oklch(48% 0.079 64.1)",
+          "oklch(59% 0.079 64.1)",
+          "oklch(70% 0.079 64.1)",
+          "oklch(82% 0.079 64.1)",
+          "oklch(95% 0.079 64.1)"
+        ]
+      }
     },
-    "breakpoints": [{ "name": "sm", "value": "640px" }, { "name": "md", "value": "768px" }, { "name": "lg", "value": "1024px" }]
+    "typographyMeta": {
+      "display": {
+        "displayName": "Sign Display",
+        "purpose": "Page names and post titles on the navy sign band; 3.5rem/5rem/6rem on Home, 3.25-5rem inner pages, 2.4-3.75rem post titles."
+      },
+      "headline": {
+        "displayName": "Section Heading",
+        "purpose": "Section headings in the map world; 28px on phones, 34px from 768px. Prose h2 uses 30px."
+      },
+      "title": {
+        "displayName": "Line / Item Title",
+        "purpose": "Line names, roles, projects, skill groups (20-24px)."
+      },
+      "station": {
+        "displayName": "Station Label",
+        "purpose": "Station names on the map (15px) and strip maps (16px), board dates and minutes, nav links (18px)."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text; 17.5px/1.7 in posts in a 700px column, 16-18px elsewhere, tabular figures site-wide."
+      },
+      "label": {
+        "displayName": "Button Label",
+        "purpose": "Button and plate text."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Code blocks (13px) and inline code (0.84em) only."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "line-highlight",
+        "value": "opacity 200ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Hovering or focusing a line on the network map dims the other lines to 0.22 opacity. The site's one authored moment."
+      },
+      {
+        "name": "state-colour",
+        "value": "color, background-color, border-color 150ms (Tailwind transition-colors default)",
+        "purpose": "Hover on buttons, plates, chips, links."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "transition-duration: 0s; scroll-behavior: auto",
+        "purpose": "Applied under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px",
+        "purpose": "Container gutter 16px to 32px; larger display sizes."
+      },
+      {
+        "name": "md",
+        "value": "768px",
+        "purpose": "Network map switches from strip maps to the full grid map; board gets column heads."
+      },
+      {
+        "name": "lg",
+        "value": "1024px",
+        "purpose": "Post table of contents moves into a sticky sidebar strip map."
+      }
+    ],
+    "theme": {
+      "default": "light",
+      "toggle": ".dark class on <html>, remembered in localStorage",
+      "darkNotes": "Night map: navy-black ground, brighter line colours with dark bullet letters, departure board becomes black with amber type, primary button inverts to a white plate."
+    },
+    "rasters": {
+      "covers": "scripts/generate-covers.mjs draws 1200x630 covers: title on navy sign, the post's line drawn underneath with its station marked, Barlow/Barlow Condensed embedded.",
+      "diagrams": "scripts/diagrams/*.html draw article diagrams with the same line colours, bullets and type."
+    }
   },
-  "components": [],
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Navy sign plate on the white map; the closing LinkedIn call to action.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Message me on LinkedIn <svg width=\"1em\" height=\"1em\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"square\" stroke-linejoin=\"miter\" aria-hidden=\"true\" style=\"vertical-align:-0.12em\"><path d=\"M4 12h15M13 6l6 6-6 6\"/></svg></a>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 20px;border-radius:4px;font-family: \"Barlow\", \"Noto Sans Devanagari\", system-ui, sans-serif;font-weight:600;font-size:15px;text-decoration:none;transition:background-color .15s,color .15s,border-color .15s;cursor:pointer;border:none;background:var(--sign,#0b2b5e);color:var(--sign-fg,#fff)} .ds-btn-primary:hover{background:var(--fg,#101318)} .ds-btn-primary:focus-visible{outline:3px solid var(--accent,#0060a8);outline-offset:2px}"
+    },
+    {
+      "name": "Sign Plate Button",
+      "kind": "button",
+      "refersTo": "button-plate",
+      "description": "White plate on a navy sign; lights yellow on hover.",
+      "html": "<div style=\"background:#0b2b5e;padding:24px\"><a class=\"ds-btn-plate\" href=\"#\">Message me on LinkedIn <svg width=\"1em\" height=\"1em\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"square\" stroke-linejoin=\"miter\" aria-hidden=\"true\" style=\"vertical-align:-0.12em\"><path d=\"M4 12h15M13 6l6 6-6 6\"/></svg></a></div>",
+      "css": ".ds-btn-plate{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 20px;border-radius:4px;font-family: \"Barlow\", \"Noto Sans Devanagari\", system-ui, sans-serif;font-weight:600;font-size:15px;text-decoration:none;transition:background-color .15s,color .15s,border-color .15s;cursor:pointer;border:none;background:var(--sign-fg,#fff);color:var(--sign,#0b2b5e)} .ds-btn-plate:hover{background:var(--board,#ffd400);color:var(--board-fg,#111)} .ds-btn-plate:focus-visible{outline:3px solid var(--accent,#0060a8);outline-offset:2px}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "2px ink outline plate; fills ink on hover.",
+      "html": "<a class=\"ds-btn-secondary\" href=\"#\">About</a>",
+      "css": ".ds-btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 20px;border-radius:4px;font-family: \"Barlow\", \"Noto Sans Devanagari\", system-ui, sans-serif;font-weight:600;font-size:15px;text-decoration:none;transition:background-color .15s,color .15s,border-color .15s;cursor:pointer;border:none;background:transparent;color:var(--fg,#101318);border:2px solid var(--fg,#101318)} .ds-btn-secondary:hover{background:var(--fg,#101318);color:var(--bg,#fff)} .ds-btn-secondary:focus-visible{outline:3px solid var(--accent,#0060a8);outline-offset:2px}"
+    },
+    {
+      "name": "Line Bullets",
+      "kind": "chip",
+      "refersTo": "line-bullet",
+      "description": "One rounded square per line, its colour and letter; the line's identity everywhere.",
+      "html": "<span class=\"ds-bullet\" style=\"--c:var(--line-runtime,#0067b1);margin-right:6px\">R</span><span class=\"ds-bullet\" style=\"--c:var(--line-data,#007a4d);margin-right:6px\">D</span><span class=\"ds-bullet p\" style=\"--c:var(--line-platform,#ef7d00);margin-right:6px\">P</span><span class=\"ds-bullet\" style=\"--c:var(--line-operations,#8a3d99);margin-right:6px\">O</span><span class=\"ds-bullet\" style=\"--c:var(--line-security,#d3131c);margin-right:6px\">S</span><span class=\"ds-bullet\" style=\"--c:var(--line-team,#8c6239);margin-right:6px\">T</span>",
+      "css": ".ds-bullet{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:5px;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:700;font-size:15px;line-height:1;color:#fff;background:var(--c);flex-shrink:0} .ds-bullet.p{color:#1b1200}"
+    },
+    {
+      "name": "Line Filter Chip",
+      "kind": "chip",
+      "refersTo": "line-filter",
+      "description": "Filter chip on the yellow departure board; pressed state fills board ink.",
+      "html": "<div style=\"background:#ffd400;padding:16px;display:flex;gap:8px\"><button class=\"ds-filter\" aria-pressed=\"true\">All lines</button><button class=\"ds-filter b\" aria-pressed=\"false\"><span class=\"ds-bullet\" style=\"--c:#0067b1\">R</span> Runtime</button></div>",
+      "css": ".ds-bullet{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:5px;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:700;font-size:15px;line-height:1;color:#fff;background:var(--c);flex-shrink:0} .ds-bullet.p{color:#1b1200} .ds-filter{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px;border-radius:4px;border:2px solid #1111113f;background:transparent;color:#111;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:700;font-size:17px;cursor:pointer;transition:border-color .15s,background-color .15s} .ds-filter.b{padding-left:8px} .ds-filter:hover{border-color:#111} .ds-filter[aria-pressed=true]{background:#111;color:#ffd400;border-color:#111} .ds-filter:focus-visible{outline:3px solid #0060a8;outline-offset:2px}"
+    },
+    {
+      "name": "Header Navigation",
+      "kind": "nav",
+      "refersTo": "",
+      "description": "White sticky header; current page marked by a 4px ink platform bar.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-brand\" href=\"#\"><span class=\"ds-vk\">VK</span>Varij Kapil</a><div class=\"ds-links\"><a class=\"on\" href=\"#\">Home</a><a href=\"#\">Blog</a><a href=\"#\">About</a><a href=\"#\">Projects</a></div></nav>",
+      "css": ".ds-nav{display:flex;align-items:center;justify-content:space-between;height:60px;padding:0 16px;background:var(--bg,#fff);border-bottom:1px solid var(--line,#d8dbe0)} .ds-brand{display:flex;align-items:center;gap:10px;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:700;font-size:21px;color:var(--fg,#101318);text-decoration:none} .ds-vk{width:28px;height:28px;border-radius:5px;background:var(--sign,#0b2b5e);color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center} .ds-links{display:flex;align-self:stretch} .ds-links a{position:relative;display:flex;align-items:center;padding:0 12px;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:600;font-size:18px;color:var(--muted,#565d68);text-decoration:none;transition:color .15s} .ds-links a:hover,.ds-links a.on{color:var(--fg,#101318)} .ds-links a.on::after{content:'';position:absolute;left:12px;right:12px;bottom:-1px;height:4px;background:var(--fg,#101318)} .ds-links a:focus-visible{outline:3px solid var(--accent,#0060a8);outline-offset:2px}"
+    },
+    {
+      "name": "Station Sign",
+      "kind": "custom",
+      "refersTo": "station-sign",
+      "description": "Navy band that names every page.",
+      "html": "<header class=\"ds-sign\"><h1>Varij Kapil</h1><p class=\"t\">Head of Backend Engineering &amp; Operations</p><p class=\"m\">Bonn, Germany &nbsp; 10+ years</p></header>",
+      "css": ".ds-sign{background:var(--sign,#0b2b5e);color:var(--sign-fg,#fff);padding:40px 32px 36px} .ds-sign h1{margin:0;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:700;font-size:4rem;line-height:.98;letter-spacing:-.01em} .ds-sign .t{margin:12px 0 0;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:600;font-size:26px} .ds-sign .m{margin:10px 0 0;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:600;font-size:18px;color:var(--sign-muted,#bccbe3)}"
+    },
+    {
+      "name": "Departure Board",
+      "kind": "custom",
+      "refersTo": "departure-board",
+      "description": "Yellow field listing posts: date, line bullet, title, minutes.",
+      "html": "<div class=\"ds-board\"><div class=\"h\"><span>Date</span><span>Line</span><span>Post</span><span style=\"text-align:right\">Read</span></div><a class=\"r\" href=\"#\"><span class=\"d\">2025-06-12</span><span><span class=\"ds-bullet\" style=\"--c:#0067b1\">R</span></span><span class=\"ti\">From Payara to WildFly to Quarkus</span><span class=\"m\">12 min</span></a><a class=\"r\" href=\"#\"><span class=\"d\">2025-04-02</span><span><span class=\"ds-bullet\" style=\"--c:#007a4d\">D</span></span><span class=\"ti\">Oracle to PostgreSQL migration</span><span class=\"m\">9 min</span></a></div>",
+      "css": ".ds-bullet{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:5px;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:700;font-size:15px;line-height:1;color:#fff;background:var(--c);flex-shrink:0} .ds-bullet.p{color:#1b1200} .ds-board{background:var(--board,#ffd400);color:var(--board-fg,#111);padding:24px;font-family: \"Barlow\", \"Noto Sans Devanagari\", system-ui, sans-serif;} .ds-board .h,.ds-board .r{display:grid;grid-template-columns:7.5rem 3rem minmax(0,1fr) 5.5rem;column-gap:.9rem;align-items:baseline} .ds-board .h{font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:700;font-size:15px;padding-bottom:8px;border-bottom:3px solid var(--board-fg,#111)} .ds-board .r{padding:14px 0;border-bottom:1px solid #1111112e;color:inherit;text-decoration:none} .ds-board .d,.ds-board .m{font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:600;font-size:19px} .ds-board .m{text-align:right;color:var(--board-muted,#4a3f00)} .ds-board .ti{font-weight:600;font-size:18px} .ds-board .r:hover .ti{text-decoration:underline;text-underline-offset:2px} .ds-board .r:focus-visible{outline:3px solid #0060a8;outline-offset:2px}"
+    },
+    {
+      "name": "Strip Map",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Vertical rail with ticks; the interchange ring marks Today and a dashed segment with an open circle marks a station still being built.",
+      "html": "<ol class=\"ds-strip\" style=\"--c:#007a4d\"><li><span class=\"mu\">Oracle</span></li><li><a href=\"#\">PostgreSQL</a></li><li><a href=\"#\">Tuning</a></li><li class=\"hub\"><strong>Today</strong></li><li class=\"fut\"><span class=\"mu\">One database per service</span></li></ol>",
+      "css": ".ds-strip{list-style:none;margin:0;padding:0;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:600;font-size:16px;line-height:1.1} .ds-strip li{position:relative;padding-left:26px;min-height:34px} .ds-strip li::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:6px;background:var(--c)} .ds-strip li:first-child::before{top:6px} .ds-strip li::after{content:'';position:absolute;left:7px;top:6px;width:14px;height:5px;background:var(--c)} .ds-strip .hub::after{left:0;top:0;width:20px;height:20px;box-sizing:border-box;border-radius:50%;background:var(--bg,#fff);border:4px solid var(--fg,#101318)} .ds-strip .fut{padding-top:9px} .ds-strip .fut::before{bottom:auto;height:12px;background:repeating-linear-gradient(180deg,var(--c) 0 8px,transparent 8px 13px)} .ds-strip .fut::after{left:3px;top:10px;width:14px;height:14px;box-sizing:border-box;border-radius:50%;background:var(--bg,#fff);border:3px solid var(--c)} .ds-strip a{color:var(--fg,#101318);text-decoration:underline;text-decoration-color:var(--line-strong,#9aa1ab);text-underline-offset:2px} .ds-strip .mu{color:var(--muted,#565d68)}"
+    },
+    {
+      "name": "Inline Code",
+      "kind": "custom",
+      "refersTo": "code-inline",
+      "description": "The only place mono appears in running text.",
+      "html": "<p style=\"font-family:Barlow,sans-serif;font-size:17px\">Set <code class=\"ds-code\">quarkus.datasource.jdbc.url</code> per tenant.</p>",
+      "css": ".ds-code{font-family:\"Geist Mono Variable\",ui-monospace,monospace;font-size:.84em;padding:2px 6px;border-radius:4px;background:var(--panel,#f3f4f6);color:var(--fg,#101318)}"
+    }
+  ],
   "narrative": {
-    "northStar": "The Build Log",
-    "keyCharacteristics": ["One accent, used as a signal", "Monospace for metadata", "Hairlines and tonal panels instead of shadows", "Code blocks always dark"],
+    "northStar": "The Network Map",
+    "overview": "The platform's modernization, from a Java EE monolith to a multi-tenant SaaS platform, is drawn as a transit network. Six coloured lines (Runtime, Data, Platform, Operations, Security, Team) carry stations, each station a migration step and usually a post, and every line runs into one tall interchange marked \"Today\". The site borrows the whole vocabulary of a U-Bahn or DB network diagram: navy station signs name every page, line bullets mark which line a thing belongs to, station ticks and strip maps show sequence, and a yellow departure board lists the writing. Lines still being built are dashed and end in an open circle.\n\nThe ground is a white map with ink black type. Colour is spent almost entirely on data: the six line colours appear only where they identify a line, and the navy and yellow fields are structural bands, not accents. Density is that of a real wayfinding system: compact condensed signage over readable Barlow body text, flat planes, hard edges with small plate radii, and no ornament that does not mean something on the map. Motion is a single authored moment: pointing at a line on the map brings it forward and dims the others (opacity to 0.22, 200ms, cubic-bezier(0.16, 1, 0.3, 1)); everything is visible by default and reduced motion turns transitions off.\n\nThe world explicitly refuses the developer-blog default it replaced: a near-black console with a neon accent, a hero and a card grid.",
+    "keyCharacteristics": [
+      "Navy station-sign band (white Barlow Condensed) opens every page and closes it as the footer.",
+      "Six saturated line colours, one per line, used as categorical data only.",
+      "Line bullets: rounded squares in the line's colour carrying its letter (R, D, P, O, S, T).",
+      "Rails 6px thick with square station ticks; the interchange is a white pill with a heavy ink outline.",
+      "Dashed rails and open circles mean \"still being built\"; the interchange means \"today\".",
+      "Yellow departure-board field is the one place lists of posts appear.",
+      "Flat: no shadows, no gradients, no glass."
+    ],
     "rules": [
-      { "name": "The Signal Rule", "body": "Green appears only as a signal (dot, number, hover, focus). It never fills a region or a button.", "section": "colors" },
-      { "name": "The Mono Metadata Rule", "body": "Anything that is data about content is mono and muted; content itself is never mono.", "section": "typography" },
-      { "name": "The No-Shadow Rule", "body": "No box shadows anywhere; a border colour change is the hover state.", "section": "elevation" }
+      {
+        "name": "The Line Colour Is Data Rule",
+        "body": "Each of the six line colours belongs to exactly one line and appears only where it identifies that line: rails, ticks, bullets, list markers, a post's strip map. Never use a line colour for decoration, emphasis, buttons or backgrounds, and never introduce a seventh hue on the map.",
+        "section": "colors"
+      },
+      {
+        "name": "The Sign Names the Page Rule",
+        "body": "Every page opens with a full-width navy sign band carrying its title in white Barlow Condensed; the footer closes on the same band. Navy is for naming, not for panels or cards inside content.",
+        "section": "colors"
+      },
+      {
+        "name": "The Departure Board Rule",
+        "body": "Lists of posts appear on the yellow (night: black and amber) departure board and nowhere else. Board rows read date, line bullet, title, minutes; filtering happens with line-bullet chips on the board itself.",
+        "section": "colors"
+      },
+      {
+        "name": "The Signage Face Rule",
+        "body": "Anything that names a place (a page, a line, a station, a section, a nav destination) is set in Barlow Condensed. Running text, descriptions and button labels are Barlow.",
+        "section": "typography"
+      },
+      {
+        "name": "The Mono Is Code Rule",
+        "body": "Geist Mono appears only in code. Dates, counts and metadata use condensed signage with tabular figures, never mono.",
+        "section": "typography"
+      },
+      {
+        "name": "The Printed Map Rule",
+        "body": "Surfaces are printed, not lifted. No box-shadow, no glow, no blur, no gradients. The only gradient-built mark is the dashed rail of a station still being built (a repeating hard-stop gradient, 10px dash, 6px gap on the map; 8px/5px vertical on strip maps).",
+        "section": "elevation"
+      },
+      {
+        "name": "The Interchange Is Today Rule",
+        "body": "The ink-ringed white circle or pill means the present: the multi-tenant SaaS platform, or the reader's current station. Use it for nothing else.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Dashed Is Unbuilt Rule",
+        "body": "A dashed rail ending in an open circle means a station still under construction. Solid rails are built history. Never dash a line for style.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do open every page with the navy sign band and its title in white Barlow Condensed 700.",
+      "Do give each line exactly one colour and use it for that line's rails, ticks, bullet, markers and cover, nothing else.",
+      "Do list posts only on the departure board, with date, line bullet, title and minutes.",
+      "Do mark the present with the ink-ringed white interchange and unbuilt work with a dashed rail ending in an open circle.",
+      "Do use the one SVG arrow for direction and calls to action.",
+      "Do keep rails 6px, plates 4px and bullets 5px or 7px.",
+      "Do keep content visible by default; the only motion is the 200ms line highlight, off under reduced motion."
+    ],
+    "donts": [
+      "Don't use shadows, glows or gradients; the only gradient is the dashed under-construction rail.",
+      "Don't use a line colour as decoration, an accent, a button fill or a section background.",
+      "Don't put eyebrow or kicker labels above headings.",
+      "Don't put coloured side borders on cards or panels, and don't build card grids.",
+      "Don't use text arrow glyphs; use the SVG arrow.",
+      "Don't set anything but code in mono.",
+      "Don't dash a rail or draw an interchange circle for style; both carry meaning.",
+      "Don't return to the near-black console with a neon accent, or a hero plus card grid."
     ]
   }
 }

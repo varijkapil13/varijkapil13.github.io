@@ -48,21 +48,23 @@ const relatedPosts = allPosts
   <header class="sign">
     <div class="container-custom pt-10 pb-10 md:pt-14 md:pb-12">
       <a href="/blog" class="font-sign font-semibold text-[17px] text-sign-muted hover:text-sign-fg"><Arrow dir="left" /> Writing</a>
-      {at && (
-        <p class="flex items-center gap-2.5 mt-7 font-sign font-semibold text-[19px]">
-          <LineBullet line={at.line} size="lg" />
-          <span>{at.line.name.en} line <span class="text-sign-muted">· {text(at.station.label)}</span></span>
-        </p>
-      )}
-      <h1 class="sign-title text-[2.4rem] sm:text-[3rem] md:text-[3.75rem] max-w-[22ch] mt-5">
+      <h1 class="sign-title text-[2.4rem] sm:text-[3rem] md:text-[3.75rem] max-w-[22ch] mt-7">
         {post.data.title}
       </h1>
       {post.data.description && <p class="text-sign-muted text-lg max-w-[62ch] mt-5">{post.data.description}</p>}
-      <p class="font-sign font-semibold text-[17px] text-sign-muted mt-5">
+      <p class="flex flex-wrap items-center gap-x-2.5 gap-y-2 font-sign font-semibold text-[17px] text-sign-muted mt-6">
+        {at && (
+          <>
+            <LineBullet line={at.line} />
+            <span class="text-sign-fg">{at.line.name.en} line · {text(at.station.label)}</span>
+            <span aria-hidden="true">·</span>
+          </>
+        )}
         <time datetime={post.data.date.toISOString()}>
           {post.data.date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
-        </time>{" "}
-        · {minutes} min read
+        </time>
+        <span aria-hidden="true">·</span>
+        <span>{minutes} min read</span>
       </p>
     </div>
   </header>
