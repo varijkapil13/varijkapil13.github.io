@@ -45,7 +45,7 @@ const titles = new Map(posts.map((p) => [p.id, p.data.title]));
 </div>
 
 <!-- Phones and small tablets: each line as a strip map, like the ones above train doors -->
-<div class="grid grid-cols-2 gap-x-4 gap-y-8 md:hidden">
+<div class="grid grid-cols-2 gap-x-4 gap-y-7 md:hidden">
   {lines.map((line) => (
     <div style={`--c: var(--line-${line.id})`}>
       <p class="nm-name mb-3"><LineBullet line={line} /> {line.name[lang]}</p>
@@ -73,13 +73,14 @@ const titles = new Map(posts.map((p) => [p.id, p.data.title]));
 
   /* Shared column template: line name, the station columns, the interchange, stations still being built */
   .netmap {
-    --name: 132px;
-    --hub: 44px;
-    --future: 170px;
-    --row: 74px;
-    --rail: 6px;
+    --name: 128px;
+    --hub: 40px;
+    --future: 168px;
+    --row: 62px;
+    --rail: 3px;
+    --dot: 9px;
     /* distance from a row's top to the centre of its rail */
-    --rail-y: calc(var(--row) - 14px);
+    --rail-y: calc(var(--row) - 16px);
     position: relative;
   }
 
@@ -92,24 +93,24 @@ const titles = new Map(posts.map((p) => [p.id, p.data.title]));
   .nm-row {
     height: var(--row);
     position: relative;
-    transition: opacity 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 220ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   /* Signature interaction: pointing at a line brings it forward */
   .netmap:has(.nm-row:hover, .nm-row:focus-within) .nm-row:not(:hover, :focus-within) {
-    opacity: 0.22;
+    opacity: 0.18;
   }
 
   .nm-name {
-    @apply flex items-center gap-2 font-sign font-bold text-[17px] leading-none;
+    @apply flex items-center gap-2 font-medium text-[13px] leading-none text-fg;
   }
 
   .netmap .nm-name {
     grid-column: 1;
     grid-row: 1;
     align-self: start;
-    height: 28px;
-    margin-top: calc(var(--rail-y) - 14px);
+    height: 20px;
+    margin-top: calc(var(--rail-y) - 10px);
   }
 
   .nm-track,
@@ -130,20 +131,20 @@ const titles = new Map(posts.map((p) => [p.id, p.data.title]));
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    padding: 0 4px calc(var(--row) - var(--rail-y) + 9px);
+    padding: 0 4px calc(var(--row) - var(--rail-y) + 10px);
     text-align: center;
-    @apply font-sign font-semibold text-[15px] leading-[1.05];
+    @apply text-[12.5px] leading-[1.15];
   }
 
   .nm-station a {
-    @apply text-fg hover:underline underline-offset-2;
+    @apply text-fg hover:text-accent transition-colors;
   }
 
   .nm-station span {
     @apply text-muted;
   }
 
-  /* The rail: each station draws the half on either side of its tick */
+  /* The rail: each station draws the half on either side of its dot */
   .nm-station::before {
     content: "";
     position: absolute;
@@ -156,21 +157,32 @@ const titles = new Map(posts.map((p) => [p.id, p.data.title]));
 
   .nm-track .nm-station:first-child::before {
     left: 50%;
-    border-radius: 3px 0 0 3px;
+    border-radius: 2px 0 0 2px;
   }
 
-  /* Station tick, pointing up at the name */
+  /* Station dot */
   .nm-station::after {
     content: "";
     position: absolute;
-    left: calc(50% - 3px);
-    width: 6px;
-    height: 9px;
-    top: calc(var(--rail-y) - var(--rail) / 2 - 7px);
+    left: calc(50% - var(--dot) / 2);
+    top: calc(var(--rail-y) - var(--dot) / 2);
+    width: var(--dot);
+    height: var(--dot);
+    border-radius: 50%;
+    background: var(--panel);
+    border: 2px solid var(--c);
+  }
+
+  .nm-station:has(a)::after {
     background: var(--c);
   }
 
-  /* Rail continuing through the interchange */
+  .nm-station:has(a:hover)::after,
+  .nm-station:has(a:focus-visible)::after {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 25%, transparent);
+  }
+
+  /* Rail continuing into the interchange */
   .nm-through {
     grid-column: calc(var(--cols) + 2);
     grid-row: 1;
@@ -191,20 +203,15 @@ const titles = new Map(posts.map((p) => [p.id, p.data.title]));
     right: 50%;
   }
 
-  /* Stations still being built: dashed rail, open circle */
+  /* Stations still being built: dashed rail, open dot */
   .nm-future .nm-station::before {
     right: 50%;
-    background: repeating-linear-gradient(90deg, var(--c) 0 10px, transparent 10px 16px);
+    background: repeating-linear-gradient(90deg, var(--c) 0 6px, transparent 6px 11px);
+    opacity: 0.8;
   }
 
   .nm-future .nm-station::after {
-    width: 14px;
-    height: 14px;
-    left: calc(50% - 7px);
-    top: calc(var(--rail-y) - 7px);
-    border-radius: 50%;
-    background: var(--bg);
-    border: 3px solid var(--c);
+    background: var(--panel);
   }
 
   /* The interchange every line runs into */
@@ -219,95 +226,94 @@ const titles = new Map(posts.map((p) => [p.id, p.data.title]));
     grid-column: calc(var(--cols) + 2);
     grid-row: 1;
     justify-self: center;
-    width: 28px;
-    margin-top: calc(var(--rail-y) - 14px);
-    height: calc((var(--rows) - 1) * var(--row) + 28px);
-    border-radius: 14px;
-    background: var(--bg);
-    border: 4px solid var(--fg);
+    width: 16px;
+    margin-top: calc(var(--rail-y) - 8px);
+    height: calc((var(--rows) - 1) * var(--row) + 16px);
+    border-radius: 8px;
+    background: var(--panel);
+    border: 2px solid var(--fg);
   }
 
   .nm-hub-label {
     grid-column: calc(var(--cols) + 3);
     grid-row: 1;
     align-self: start;
-    margin-top: calc(var(--rail-y) - 22px);
-    padding-left: 6px;
-    @apply font-sign text-[17px] leading-[1.05] text-fg;
+    margin-top: calc(var(--rail-y) - 18px);
+    padding-left: 8px;
+    @apply text-[12.5px] leading-[1.2] text-muted;
   }
 
   .nm-hub-label strong {
-    @apply block font-bold text-[22px];
+    @apply block font-semibold text-[14px] text-fg;
   }
 
-  /* Strip maps */
+  /* Strip maps (phones) */
   .strip li {
     position: relative;
-    padding: 0 0 0 26px;
-    min-height: 34px;
-    @apply font-sign font-semibold text-[16px] leading-[1.1];
+    padding: 0 0 0 22px;
+    min-height: 30px;
+    @apply text-[14px] leading-[1.2];
   }
 
   .strip li a {
-    @apply text-fg underline decoration-line-strong underline-offset-2;
+    @apply text-fg;
   }
 
   .strip li::before {
     content: "";
     position: absolute;
-    left: 7px;
+    left: 6px;
     top: 0;
     bottom: 0;
-    width: 6px;
+    width: 3px;
     background: var(--c);
   }
 
   .strip li:first-child::before {
-    top: 6px;
+    top: 7px;
   }
 
   .strip li::after {
     content: "";
     position: absolute;
-    left: 7px;
-    top: 6px;
-    width: 14px;
-    height: 5px;
+    left: 3px;
+    top: 4px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--panel);
+    border: 2px solid var(--c);
+  }
+
+  .strip li:has(a)::after {
     background: var(--c);
   }
 
   .strip li.strip-hub::after {
     left: 0;
-    top: 0;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--bg);
-    border: 4px solid var(--fg);
+    top: 1px;
+    width: 15px;
+    height: 15px;
+    border: 2px solid var(--fg);
+    background: var(--panel);
   }
 
   .strip li.strip-hub:last-child::before {
     bottom: auto;
-    height: 10px;
+    height: 8px;
   }
 
   .strip li.strip-future::before {
-    background: repeating-linear-gradient(180deg, var(--c) 0 8px, transparent 8px 13px);
+    background: repeating-linear-gradient(180deg, var(--c) 0 5px, transparent 5px 9px);
     bottom: auto;
     height: 12px;
   }
 
   .strip li.strip-future::after {
-    left: 3px;
-    top: 10px;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--bg);
-    border: 3px solid var(--c);
+    top: 12px;
   }
 
   .strip li.strip-future {
-    padding-top: 9px;
+    padding-top: 8px;
   }
 </style>

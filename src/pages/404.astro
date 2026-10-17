@@ -3,14 +3,14 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="Page not found" description="This page doesn't exist or has moved.">
-  <section class="sign">
+  <section class="masthead">
     <div class="container-custom py-20 md:py-28 min-h-[50vh]">
-      <h1 class="sign-title text-[3.25rem] md:text-[5rem]">This stop doesn't exist</h1>
-      <p class="text-sign-muted text-lg max-w-[55ch] mt-4">The page may have moved, or the link has a typo. Pick a line from the map or start at the beginning.</p>
+      <h1 class="page-title text-[2.5rem] md:text-[3.5rem]">This stop doesn't exist</h1>
+      <p class="text-muted text-lg max-w-[55ch] mt-4">The page may have moved, or the link has a typo. Pick a line from the map or start at the beginning.</p>
       <div class="flex flex-wrap gap-3 mt-8">
-        <a href="/" class="btn btn-plate">Home</a>
-        <a href="/blog/series/monolith-to-saas" class="btn border-2 border-sign-fg/60 text-sign-fg hover:border-sign-fg">The network map</a>
-        <a href="/blog" class="btn border-2 border-sign-fg/60 text-sign-fg hover:border-sign-fg">Writing</a>
+        <a href="/" class="btn btn-primary">Home</a>
+        <a href="/blog/series/monolith-to-saas" class="btn btn-secondary">The network map</a>
+        <a href="/blog" class="btn btn-secondary">Writing</a>
       </div>
     </div>
   </section>

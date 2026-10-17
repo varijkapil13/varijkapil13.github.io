@@ -32,8 +32,8 @@ const { posts, labels, descriptions = false } = Astro.props;
             <span class="sr-only">{at && `${at.line.name.en} line, ${text(at.station.label)}`}</span>
           </span>
           <span class="board-title">
-            <span class="font-semibold text-[18px] leading-snug group-hover:underline underline-offset-2">{post.data.title}</span>
-            {descriptions && post.data.description && <span class="block text-[15px] text-board-muted mt-1 leading-snug">{post.data.description}</span>}
+            <span class="font-medium text-[15.5px] leading-snug transition-colors">{post.data.title}</span>
+            {descriptions && post.data.description && <span class="block text-[14px] text-muted mt-1 leading-snug">{post.data.description}</span>}
           </span>
           <span class="board-read">{readingTime(post.body)} {labels.minutes}</span>
         </a>
@@ -48,37 +48,38 @@ const { posts, labels, descriptions = false } = Astro.props;
   .board-head,
   .board-link {
     display: grid;
-    grid-template-columns: 2.2rem minmax(0, 1fr) auto;
-    column-gap: 0.9rem;
+    grid-template-columns: 1.4rem minmax(0, 1fr) auto;
+    column-gap: 0.85rem;
   }
 
   .board-head {
-    @apply hidden md:grid font-sign font-bold text-[15px] pb-2 border-b-[3px] border-board-fg;
+    @apply hidden md:grid font-mono text-[11.5px] text-muted pt-4 pb-3 border-b border-line;
   }
 
   .board-link {
-    @apply py-3.5 items-baseline;
+    @apply py-4 items-baseline;
     grid-template-areas: "line title title" "line date read";
-    row-gap: 0.25rem;
+    row-gap: 0.2rem;
   }
 
-  .board-row {
-    border-bottom: 1px solid var(--board-line);
+  .board-row + .board-row {
+    border-top: 1px solid var(--line);
   }
 
-  .board-date { grid-area: date; @apply font-sign font-semibold text-[16px] text-board-muted; }
+  .board-link:hover .board-title > span:first-child {
+    @apply text-accent;
+  }
+
+  .board-date { grid-area: date; @apply font-mono text-[12.5px] text-muted; }
   .board-line { grid-area: line; align-self: start; padding-top: 2px; }
   .board-title { grid-area: title; min-width: 0; }
-  .board-read { grid-area: read; @apply font-sign font-semibold text-[16px] text-board-muted text-right whitespace-nowrap; }
+  .board-read { grid-area: read; @apply font-mono text-[12.5px] text-muted text-right whitespace-nowrap; }
 
   @media (min-width: 768px) {
     .board-head,
     .board-link {
-      grid-template-columns: 7.5rem 3rem minmax(0, 1fr) 5.5rem;
+      grid-template-columns: 6.5rem 2rem minmax(0, 1fr) 4.5rem;
       grid-template-areas: "date line title read";
     }
-    .board-head span:nth-child(1) { grid-column: 1; }
-    .board-date { @apply text-[19px] text-board-fg; }
-    .board-read { @apply text-[19px]; }
   }
 </style>

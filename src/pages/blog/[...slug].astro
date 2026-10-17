@@ -45,18 +45,18 @@ const relatedPosts = allPosts
   publishedDate={post.data.date.toISOString()}
   tags={post.data.tags || []}
 >
-  <header class="sign">
-    <div class="container-custom pt-10 pb-10 md:pt-14 md:pb-12">
-      <a href="/blog" class="font-sign font-semibold text-[17px] text-sign-muted hover:text-sign-fg"><Arrow dir="left" /> Writing</a>
-      <h1 class="sign-title text-[2.4rem] sm:text-[3rem] md:text-[3.75rem] max-w-[22ch] mt-7">
+  <header class="masthead">
+    <div class="container-custom pt-12 pb-12 md:pt-20 md:pb-14">
+      <a href="/blog" class="text-sm text-muted hover:text-fg transition-colors"><Arrow dir="left" /> Writing</a>
+      <h1 class="page-title text-[2rem] sm:text-[2.5rem] md:text-[3rem] max-w-[24ch] mt-7">
         {post.data.title}
       </h1>
-      {post.data.description && <p class="text-sign-muted text-lg max-w-[62ch] mt-5">{post.data.description}</p>}
-      <p class="flex flex-wrap items-center gap-x-2.5 gap-y-2 font-sign font-semibold text-[17px] text-sign-muted mt-6">
+      {post.data.description && <p class="text-muted text-[17px] leading-relaxed max-w-[62ch] mt-5">{post.data.description}</p>}
+      <p class="flex flex-wrap items-center gap-x-2.5 gap-y-2 text-sm text-muted mt-6">
         {at && (
           <>
             <LineBullet line={at.line} />
-            <span class="text-sign-fg">{at.line.name.en} line · {text(at.station.label)}</span>
+            <span class="text-fg font-medium">{at.line.name.en} line · {text(at.station.label)}</span>
             <span aria-hidden="true">·</span>
           </>
         )}
@@ -82,7 +82,7 @@ const relatedPosts = allPosts
 
         <div class="mt-12 pt-6 border-t border-line flex flex-wrap items-center justify-between gap-4">
           <div class="flex items-center gap-3">
-            <span class="w-10 h-10 rounded-[5px] bg-sign text-sign-fg font-sign font-bold text-[17px] flex items-center justify-center" aria-hidden="true">VK</span>
+            <span class="w-9 h-9 rounded-full bg-fg text-bg font-semibold text-[12px] flex items-center justify-center" aria-hidden="true">VK</span>
             <div>
               <p class="font-semibold">Varij Kapil</p>
               <p class="text-muted text-sm">Head of Backend Engineering &amp; Operations</p>
@@ -104,10 +104,10 @@ const relatedPosts = allPosts
   </article>
 
   {relatedPosts.length > 0 && (
-    <section class="bg-board text-board-fg mt-8">
+    <section class="mt-8">
       <div class="container-custom py-12">
         <h2 class="heading mb-6">Related</h2>
-        <DepartureBoard posts={relatedPosts} labels={{ date: "Date", line: "Line", post: "Post", read: "Read", minutes: "min" }} />
+        <div class="panel px-5 sm:px-6"><DepartureBoard posts={relatedPosts} labels={{ date: "Date", line: "Line", post: "Post", read: "Read", minutes: "min" }} /></div>
       </div>
     </section>
   )}

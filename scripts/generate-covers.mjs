@@ -25,8 +25,8 @@ try {
 
 const network = JSON.parse(readFileSync("src/data/network.json", "utf8"));
 const colors = {
-  runtime: "#0067b1", data: "#007a4d", platform: "#ef7d00",
-  operations: "#8a3d99", security: "#d3131c", team: "#8c6239",
+  runtime: "#5b8cff", data: "#34c48b", platform: "#f5a524",
+  operations: "#a78bfa", security: "#f2555a", team: "#c99a66",
 };
 const label = (l) => (typeof l === "string" ? l : l.en);
 const escape = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -47,40 +47,43 @@ function findStation(id) {
 }
 
 // Site fonts, embedded so the page needs no network or file access
-const font = (pkg, file) =>
-  readFileSync(new URL(`../node_modules/@fontsource/${pkg}/files/${file}`, import.meta.url)).toString("base64");
+const font = (path) => readFileSync(new URL(`../node_modules/${path}`, import.meta.url)).toString("base64");
 const fonts = `
-  @font-face { font-family: "Barlow"; font-weight: 600; src: url(data:font/woff2;base64,${font("barlow", "barlow-latin-600-normal.woff2")}) format("woff2"); }
-  @font-face { font-family: "Barlow Condensed"; font-weight: 700; src: url(data:font/woff2;base64,${font("barlow-condensed", "barlow-condensed-latin-700-normal.woff2")}) format("woff2"); }`;
+  @font-face { font-family: "Geist"; font-weight: 100 900; src: url(data:font/woff2;base64,${font("@fontsource-variable/geist/files/geist-latin-wght-normal.woff2")}) format("woff2"); }
+  @font-face { font-family: "Geist Mono"; font-weight: 100 900; src: url(data:font/woff2;base64,${font("@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2")}) format("woff2"); }`;
 
+// Matches the site's dark theme: near-black ground, hairlines, one colour per line
 const base = `${fonts}
   * { box-sizing: border-box; margin: 0; }
-  body { width: 1200px; height: 630px; overflow: hidden; position: relative; background: #fff; color: #101318; font-family: Barlow, sans-serif; }
-  .sign { position: absolute; inset: 0 0 auto 0; height: 420px; background: #0b2b5e; color: #fff; padding: 52px 64px 0; }
-  .bullet { display: inline-flex; width: 52px; height: 52px; border-radius: 9px; align-items: center; justify-content: center; font: 700 34px/1 "Barlow Condensed"; color: #fff; }
-  .line-name { display: flex; align-items: center; gap: 16px; font: 700 30px/1 "Barlow Condensed"; }
-  .line-name span.muted { color: #bccbe3; }
-  h1 { font: 700 70px/0.98 "Barlow Condensed"; letter-spacing: -0.01em; margin-top: 30px; max-width: 1040px; }
-  .foot { position: absolute; left: 64px; right: 64px; bottom: 34px; display: flex; justify-content: space-between; font: 600 22px Barlow; color: #565d68; }
-  .strip { position: absolute; left: 64px; right: 64px; top: 466px; display: flex; }
-  .strip div { position: relative; flex: 1; padding-top: 36px; font: 700 21px/1 "Barlow Condensed"; color: #565d68; white-space: nowrap; }
-  .strip div::before { content: ""; position: absolute; left: 0; right: 0; top: 4px; height: 9px; background: var(--c); }
-  .strip div::after { content: ""; position: absolute; left: 0; top: 0; width: 8px; height: 17px; background: var(--c); }
-  .strip div.here { color: #101318; }
-  .strip div.here::after, .strip div.hub::after { left: -6px; top: -6px; width: 28px; height: 28px; border-radius: 50%; background: #fff; border: 6px solid #101318; }
-  .strip div.hub { flex: 0 0 auto; }
-  .strip div.hub::before { right: auto; width: 12px; }`;
+  body { width: 1200px; height: 630px; overflow: hidden; position: relative; background: #08090a; color: #f4f5f6; font-family: Geist, sans-serif; }
+  .glow { position: absolute; inset: 0; background: radial-gradient(60% 90% at 50% -25%, rgb(110 140 255 / 0.16), transparent 70%); }
+  .grid { position: absolute; inset: 0; background-image: radial-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px); background-size: 24px 24px; }
+  .wrap { position: absolute; inset: 0; padding: 60px 72px; }
+  .bullet { display: inline-flex; width: 30px; height: 30px; border-radius: 8px; align-items: center; justify-content: center; font: 600 17px/1 Geist; color: #08090a; }
+  .line-name { display: flex; align-items: center; gap: 14px; font: 500 24px/1 Geist; color: #f4f5f6; }
+  .line-name span.muted { color: #8b8f98; }
+  h1 { font: 600 66px/1.04 Geist; letter-spacing: -0.04em; margin-top: 34px; max-width: 1020px; }
+  .foot { position: absolute; left: 72px; right: 72px; bottom: 52px; display: flex; justify-content: space-between; font: 400 20px "Geist Mono"; color: #8b8f98; }
+  .strip { position: absolute; left: 72px; right: 72px; top: 452px; display: flex; }
+  .strip div { position: relative; flex: 1; padding-top: 28px; font: 400 18px/1 Geist; color: #8b8f98; white-space: nowrap; }
+  .strip div::before { content: ""; position: absolute; left: 0; right: 0; top: 6px; height: 4px; background: var(--c); }
+  .strip div::after { content: ""; position: absolute; left: 0; top: 2px; width: 12px; height: 12px; border-radius: 50%; background: var(--c); }
+  .strip div.here { color: #f4f5f6; font-weight: 600; }
+  .strip div.here::after { left: -3px; top: -1px; width: 18px; height: 18px; box-shadow: 0 0 0 6px color-mix(in srgb, var(--c) 30%, transparent); }
+  .strip div.hub { flex: 0 0 auto; color: #f4f5f6; }
+  .strip div.hub::after { left: -3px; top: -1px; width: 18px; height: 18px; background: #08090a; border: 3px solid #f4f5f6; }
+  .strip div.hub::before { right: auto; width: 8px; }`;
 
 function coverPage(title, { line, index }) {
   const c = colors[line.id];
-  const textColor = line.id === "platform" ? "#1b1200" : "#fff";
   const stations = line.stations
-    .map((s, i) => `<div class="${i === index ? "here" : ""}">${escape(label(s.label))}</div>`)
+    .map((st, i) => `<div class="${i === index ? "here" : ""}">${escape(label(st.label))}</div>`)
     .join("");
-  const size = title.length > 70 ? 58 : title.length > 48 ? 64 : 74;
+  const size = title.length > 70 ? 54 : title.length > 48 ? 60 : 68;
   return `<!doctype html><html><head><meta charset="utf-8"><style>${base}</style></head><body style="--c:${c}">
-  <div class="sign">
-    <p class="line-name"><span class="bullet" style="background:${c};color:${textColor}">${line.code}</span>${escape(line.name.en)} line <span class="muted">· ${escape(label(line.stations[index].label))}</span></p>
+  <div class="grid"></div><div class="glow"></div>
+  <div class="wrap">
+    <p class="line-name"><span class="bullet" style="background:${c}">${line.code}</span>${escape(line.name.en)} line <span class="muted">· ${escape(label(line.stations[index].label))}</span></p>
     <h1 style="font-size:${size}px">${escape(title)}</h1>
   </div>
   <div class="strip">${stations}<div class="hub">Today</div></div>
@@ -88,29 +91,27 @@ function coverPage(title, { line, index }) {
   </body></html>`;
 }
 
-// The site image: the name on a sign, and every line running into today's interchange
+// The site image: name and role, and every line running into today's interchange
 function ogPage() {
   const rows = network.lines
     .map((l, i) => {
-      const y = 448 + i * 22;
-      const x = 1000 - l.stations.length * 110;
-      const ticks = l.stations.map((_, j) => `<rect x="${x + j * 110}" y="${y - 7}" width="6" height="10" fill="${colors[l.id]}"/>`).join("");
-      return `<rect x="${x}" y="${y}" width="${1040 - x}" height="7" fill="${colors[l.id]}"/>${ticks}`;
+      const y = 420 + i * 24;
+      const x = 1000 - l.stations.length * 104;
+      const dots = l.stations.map((_, j) => `<circle cx="${x + j * 104}" cy="${y + 1.5}" r="5" fill="${colors[l.id]}"/>`).join("");
+      return `<rect x="${x}" y="${y}" width="${1040 - x}" height="3" rx="1.5" fill="${colors[l.id]}"/>${dots}`;
     })
     .join("");
   return `<!doctype html><html><head><meta charset="utf-8"><style>${base}
-    .sign { height: 400px; }
-    h1 { font-size: 120px; margin-top: 18px; }
-    .role { font: 700 40px/1.1 "Barlow Condensed"; margin-top: 18px; }
-    .lead { font: 600 26px/1.3 Barlow; color: #bccbe3; margin-top: 18px; }
+    h1 { font-size: 104px; margin-top: 0; }
+    .role { font: 500 36px/1.2 Geist; letter-spacing: -0.02em; color: #8b8f98; margin-top: 16px; }
     svg { position: absolute; left: 0; top: 0; }
   </style></head><body>
-  <div class="sign">
+  <div class="grid"></div><div class="glow"></div>
+  <div class="wrap">
     <h1>Varij Kapil</h1>
     <p class="role">Head of Backend Engineering &amp; Operations</p>
-    <p class="lead">Taking a Java EE monolith to multi-tenant SaaS, one station at a time.</p>
   </div>
-  <svg width="1200" height="630">${rows}<rect x="1026" y="434" width="30" height="${(network.lines.length - 1) * 22 + 34}" rx="15" fill="#fff" stroke="#101318" stroke-width="6"/></svg>
+  <svg width="1200" height="630">${rows}<rect x="1032" y="408" width="18" height="${(network.lines.length - 1) * 24 + 27}" rx="9" fill="#08090a" stroke="#f4f5f6" stroke-width="3"/></svg>
   <p class="foot"><span>varij.dev</span></p>
   </body></html>`;
 }

@@ -2,60 +2,57 @@
 <!-- Diagrams for the "From Payara to WildFly to Quarkus" post, drawn in the site's
      transit-map style. Render with: node scripts/render-diagrams.mjs -->
 <html><head><meta charset="utf-8"><style>
-  @font-face { font-family: Barlow; font-weight: 400; src: url(../../node_modules/@fontsource/barlow/files/barlow-latin-400-normal.woff2); }
-  @font-face { font-family: Barlow; font-weight: 600; src: url(../../node_modules/@fontsource/barlow/files/barlow-latin-600-normal.woff2); }
-  @font-face { font-family: "Barlow Condensed"; font-weight: 700; src: url(../../node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2); }
-  @font-face { font-family: "Geist Mono"; font-weight: 400; src: url(../../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2); }
-  :root { --ink: #101318; --muted: #565d68; --line: #d8dbe0; --runtime: #0067b1; --data: #007a4d; }
+  @font-face { font-family: Geist; font-weight: 100 900; src: url(../../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2); }
+  @font-face { font-family: "Geist Mono"; font-weight: 100 900; src: url(../../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2); }
+  :root { --bg: #0f1011; --ink: #f4f5f6; --muted: #8b8f98; --line: #1d1e21; --runtime: #5b8cff; --data: #34c48b; }
   * { box-sizing: border-box; margin: 0; }
-  body { font: 400 15px/1.4 Barlow, sans-serif; color: var(--ink); background: #e9ebee; padding: 20px; }
-  figure { width: 700px; background: #fff; padding: 28px 28px 30px; margin-bottom: 20px; }
-  h2 { font: 700 26px/1 "Barlow Condensed"; display: flex; align-items: center; gap: 10px; margin-bottom: 26px; }
-  .b { display: inline-flex; width: 28px; height: 28px; border-radius: 6px; align-items: center; justify-content: center; color: #fff; font: 700 18px/1 "Barlow Condensed"; }
-  .name { font: 700 22px/1 "Barlow Condensed"; }
-  .sub { color: var(--muted); font-size: 14.5px; margin-top: 5px; }
-  code { font: 400 12.5px "Geist Mono", monospace; background: #f3f4f6; padding: 1px 5px; border-radius: 3px; }
-  .goal { font-weight: 600; font-size: 14px; margin-top: 8px; }
+  body { font: 400 14.5px/1.5 Geist, sans-serif; color: var(--ink); background: #08090a; padding: 20px; }
+  figure { width: 700px; background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 28px 28px 30px; margin-bottom: 20px;
+    background-image: radial-gradient(rgb(255 255 255 / 0.05) 1px, transparent 1px); background-size: 20px 20px; }
+  h2 { font: 600 17px/1 Geist; letter-spacing: -0.02em; display: flex; align-items: center; gap: 10px; margin-bottom: 30px; }
+  .b { display: inline-flex; width: 20px; height: 20px; border-radius: 6px; align-items: center; justify-content: center; color: #08090a; font: 600 11.5px/1 Geist; }
+  .name { font: 600 16px/1.2 Geist; letter-spacing: -0.02em; }
+  .sub { color: var(--muted); font-size: 13.5px; margin-top: 5px; }
+  code { font: 400 12px "Geist Mono", monospace; background: #1a1b1e; padding: 1px 5px; border-radius: 4px; }
+  .goal { font-weight: 500; font-size: 13px; margin-top: 8px; }
 
   /* Horizontal line with stations */
   .h { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 18px; padding-top: 30px; }
   .h .st { position: relative; }
-  .h .st > .name:first-child { margin-top: 12px; }
+  .h .st > .name:first-child { margin-top: 4px; }
   /* rail from this station to the next */
-  .h .st:not(:last-child)::after { content: ""; position: absolute; top: -21px; left: 8px; width: calc(100% + 18px); height: 7px; background: var(--c); }
-  .h .st::before { content: ""; position: absolute; z-index: 1; top: -32px; left: -3px; width: 30px; height: 30px; border-radius: 50%; background: #fff; border: 6px solid var(--ink); }
-  .h .st.tick::before { width: 7px; height: 18px; border: 0; border-radius: 0; background: var(--c); left: 4px; top: -28px; }
+  .h .st:not(:last-child)::after { content: ""; position: absolute; top: -21px; left: 6px; width: calc(100% + 18px); height: 3px; border-radius: 2px; background: var(--c); }
+  .h .st::before { content: ""; position: absolute; z-index: 1; top: -26px; left: 0; width: 13px; height: 13px; border-radius: 50%; background: var(--c); }
+  .h .st:last-child::before { background: var(--bg); border: 2px solid var(--ink); width: 15px; height: 15px; top: -27px; left: -1px; }
   .xfer { display: flex; align-items: center; gap: 8px; margin-top: 14px; }
-  .xfer .rail { width: 34px; height: 7px; background: var(--data); }
-  .xfer .t { font: 700 17px/1.1 "Barlow Condensed"; }
+  .xfer .rail { width: 26px; height: 3px; border-radius: 2px; background: var(--data); }
+  .xfer .t { font: 500 13.5px/1.2 Geist; }
 
   /* Monolith vs services */
   .shape { margin-top: 14px; display: flex; gap: 6px; flex-wrap: wrap; }
-  .mono { border: 2px solid var(--ink); border-radius: 4px; padding: 6px; display: flex; gap: 5px; }
-  .mod { font-size: 12.5px; padding: 3px 7px; background: #f3f4f6; border-radius: 3px; }
-  .svc { font-size: 12.5px; padding: 4px 8px; border: 2px solid var(--runtime); border-radius: 4px; }
-
+  .mono { border: 1px solid #2e3035; border-radius: 8px; padding: 5px; display: flex; gap: 5px; }
+  .mod { font: 400 11.5px "Geist Mono"; padding: 3px 7px; background: #1a1b1e; border-radius: 5px; color: var(--muted); }
+  .svc { font: 400 11.5px "Geist Mono"; padding: 3px 8px; border: 1px solid var(--runtime); border-radius: 6px; color: var(--ink); }
 
   /* Vertical strip */
-  .v li { list-style: none; position: relative; padding: 0 0 18px 44px; }
-  .v li::before { content: ""; position: absolute; left: 13px; top: 0; bottom: 0; width: 7px; background: var(--runtime); }
+  .v li { list-style: none; position: relative; padding: 0 0 18px 36px; }
+  .v li::before { content: ""; position: absolute; left: 9px; top: 0; bottom: 0; width: 3px; background: var(--runtime); }
   .v li:first-child::before { top: 9px; }
-  .v li::after { content: ""; position: absolute; left: 13px; top: 8px; width: 20px; height: 6px; background: var(--runtime); }
-  .v li.ix::after { left: 4px; top: 0; width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 5px solid var(--ink); }
-  .v li.ix::before { bottom: auto; height: 10px; }
-  .v .xfer { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
-  .v .xfer .rail { width: 60px; height: 7px; background: var(--data); }
+  .v li::after { content: ""; position: absolute; left: 4px; top: 4px; width: 13px; height: 13px; border-radius: 50%; background: var(--runtime); }
+  .v li.ix::after { background: var(--bg); border: 2px solid var(--ink); width: 15px; height: 15px; left: 3px; top: 3px; }
+  .v li.ix::before { bottom: auto; height: 8px; }
+  .v .xfer .rail { width: 40px; }
 </style></head><body>
 
 <figure id="journey" data-out="public/images/blog/payara-wildfly-quarkus/journey.png">
   <h2><span class="b" style="background: var(--runtime)">R</span> Our route on the Runtime line</h2>
   <div class="h" style="--c: var(--runtime)">
-    <div class="st tick">
+    <div class="st">
       <p class="name">Payara</p>
       <p class="sub">An aging version. One monolith in a full Java EE server, EclipseLink for persistence.</p>
       <div class="shape"><div class="mono"><span class="mod">module</span><span class="mod">module</span><span class="mod">…</span></div></div>
     </div>
-    <div class="st tick">
+    <div class="st">
       <p class="name">WildFly</p>
       <p class="sub">The same monolith as a bootable JAR, slimmed with Galleon.</p>
       <p class="goal">Goal: stable ground, quickly</p>
@@ -80,18 +77,18 @@
     <li><p class="name">Only the entities it uses</p><p class="sub">The service keeps its own copy of the entities it needs, not the whole model.</p></li>
     <li><p class="name">Shared code in small libraries</p><p class="sub">What several services need moves into small, versioned libraries.</p></li>
     <li class="ix"><p class="name">Database changes in one central project</p><p class="sub">The database is still shared, so every schema change goes through one project.</p>
-      <div class="xfer"><span class="rail"></span><span class="b" style="background: var(--data)">D</span><span style="font: 700 18px 'Barlow Condensed'">Change to the Data line: one shared database</span></div></li>
+      <div class="xfer"><span class="rail"></span><span class="b" style="background: var(--data)">D</span><span class="t">Change to the Data line: one shared database</span></div></li>
   </ol>
 </figure>
 
 <figure id="schedulers" data-out="public/images/blog/payara-wildfly-quarkus/schedulers.png">
   <h2><span class="b" style="background: var(--runtime)">R</span> Three generations of scheduling</h2>
   <div class="h" style="--c: var(--runtime)">
-    <div class="st tick">
+    <div class="st">
       <p class="name">EJB timers</p>
       <p class="sub"><code>@Schedule</code> on a method; the application server calls it on time.</p>
     </div>
-    <div class="st tick">
+    <div class="st">
       <p class="name">Quarkus Scheduler</p>
       <p class="sub"><code>@Scheduled</code>, with the schedule in configuration. State lives in memory and is forgotten on restart.</p>
     </div>

@@ -11,16 +11,16 @@ const labels = { date: "Date", line: "Line", post: "Post", read: "Read", minutes
 ---
 
 <BaseLayout title="Blog" description="Notes from running Java backends in production: migrations, Kubernetes, PostgreSQL, CI/CD, and leading platform teams.">
-  <section class="sign">
-    <div class="container-custom pt-12 pb-10 md:pt-16 md:pb-12">
-      <h1 class="sign-title text-[3.25rem] md:text-[5rem]">Writing</h1>
-      <p class="text-sign-muted text-lg max-w-[62ch] mt-4">
-        {sortedPosts.length} posts from running Java backends in production: migrations, Kubernetes, databases, and the team side of platform work. Each one is a station on the <a href="/blog/series/monolith-to-saas" class="text-sign-fg underline underline-offset-4">network map</a>.
+  <section class="masthead">
+    <div class="container-custom pt-16 pb-12 md:pt-24 md:pb-16">
+      <h1 class="page-title text-[2.5rem] md:text-[3.5rem]">Writing</h1>
+      <p class="text-muted text-[17px] leading-relaxed max-w-[62ch] mt-4">
+        {sortedPosts.length} posts from running Java backends in production: migrations, Kubernetes, databases, and the team side of platform work. Each one is a station on the <a href="/blog/series/monolith-to-saas" class="text-fg underline underline-offset-4">network map</a>.
       </p>
     </div>
   </section>
 
-  <section class="bg-board text-board-fg">
+  <section>
     <div class="container-custom py-10 md:py-14">
       <div class="flex flex-wrap gap-2 mb-8" role="group" aria-label="Filter posts by line">
         <button type="button" class="line-filter" data-line="all" aria-pressed="true">All lines</button>
@@ -30,7 +30,9 @@ const labels = { date: "Date", line: "Line", post: "Post", read: "Read", minutes
           </button>
         ))}
       </div>
-      <DepartureBoard posts={sortedPosts} labels={labels} descriptions />
+      <div class="panel px-5 sm:px-6">
+        <DepartureBoard posts={sortedPosts} labels={labels} descriptions />
+      </div>
     </div>
   </section>
 </BaseLayout>
@@ -39,16 +41,16 @@ const labels = { date: "Date", line: "Line", post: "Post", read: "Read", minutes
   @reference "../../styles/global.css";
 
   .line-filter {
-    @apply inline-flex items-center gap-2 h-10 pl-2 pr-3.5 rounded-[4px] border-2 border-board-fg/25 font-sign font-bold text-[17px] transition-colors;
+    @apply inline-flex items-center gap-2 h-8 pl-2 pr-3 rounded-full border border-line text-[13px] text-muted transition-colors;
   }
   .line-filter[data-line="all"] {
-    @apply pl-3.5;
+    @apply pl-3;
   }
   .line-filter:hover {
-    @apply border-board-fg;
+    @apply text-fg border-line-strong;
   }
   .line-filter[aria-pressed="true"] {
-    @apply bg-board-fg text-board border-board-fg;
+    @apply text-fg border-fg bg-panel;
   }
 </style>
 

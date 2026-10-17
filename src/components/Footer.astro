@@ -15,20 +15,20 @@ const links = [
 ];
 ---
 
-<footer class="sign mt-16">
+<footer class="border-t border-line mt-16">
   <div class="container-custom py-12 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
     <div>
-      <p class="sign-title text-[34px]">Varij Kapil</p>
-      <p class="text-sign-muted mt-2">{t('hero.title')} · {t('hero.location')}</p>
+      <p class="font-semibold tracking-tight text-[15px]">Varij Kapil</p>
+      <p class="text-muted text-sm mt-1">{t('hero.title')} · {t('hero.location')}</p>
     </div>
     <nav aria-label="Footer" class="flex flex-wrap items-center gap-x-6 gap-y-3">
       {links.map((link) => (
-        <a href={link.href} class="font-sign font-semibold text-[18px] text-sign-muted hover:text-sign-fg">{link.label}</a>
+        <a href={link.href} class="text-sm text-muted hover:text-fg transition-colors">{link.label}</a>
       ))}
-      <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" class="btn btn-plate">LinkedIn <Arrow /></a>
+      <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">LinkedIn <Arrow /></a>
     </nav>
   </div>
   <div class="container-custom pb-8">
-    <p class="text-sm text-sign-muted">© {currentYear} Varij Kapil</p>
+    <p class="text-sm text-muted">© {currentYear} Varij Kapil</p>
   </div>
 </footer>

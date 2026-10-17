@@ -13,8 +13,8 @@ const items = headings.filter((h) => h.depth === 2);
 ---
 
 {items.length >= 3 && variant === "inline" && (
-  <details class="lg:hidden border-y-2 border-fg py-3 mb-10">
-    <summary class="cursor-pointer font-sign font-bold text-[19px]">On this page · {items.length} sections</summary>
+  <details class="lg:hidden panel px-4 py-3 mb-10">
+    <summary class="cursor-pointer text-[14px] font-medium">On this page · {items.length} sections</summary>
     <ol class="toc-strip mt-4">
       {items.map((h) => (
         <li><a href={`#${h.slug}`}>{h.text}</a></li>
@@ -26,7 +26,7 @@ const items = headings.filter((h) => h.depth === 2);
 {items.length >= 3 && variant === "sidebar" && (
   <nav aria-label="Table of contents" class="hidden lg:block">
     <div class="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto pb-4">
-      <p class="font-sign font-bold text-[19px] mb-4">On this page</p>
+      <p class="label mb-4">On this page</p>
       <ol class="toc-strip">
         {items.map((h) => (
           <li><a href={`#${h.slug}`} data-toc-link={h.slug}>{h.text}</a></li>
@@ -42,18 +42,18 @@ const items = headings.filter((h) => h.depth === 2);
   /* The post's sections as stops on its line */
   .toc-strip li {
     position: relative;
-    padding: 0 0 14px 26px;
-    @apply text-[15px] leading-snug;
+    padding: 0 0 12px 20px;
+    @apply text-[13px] leading-snug;
   }
 
   .toc-strip li::before {
     content: "";
     position: absolute;
-    left: 7px;
+    left: 4px;
     top: 0;
     bottom: 0;
-    width: 5px;
-    background: var(--post-line, var(--fg));
+    width: 2px;
+    background: color-mix(in srgb, var(--post-line, var(--fg)) 45%, transparent);
   }
 
   .toc-strip li:first-child::before { top: 6px; }
@@ -62,30 +62,27 @@ const items = headings.filter((h) => h.depth === 2);
   .toc-strip li::after {
     content: "";
     position: absolute;
-    left: 7px;
-    top: 6px;
-    width: 13px;
-    height: 4px;
-    background: var(--post-line, var(--fg));
+    left: 1px;
+    top: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--post-line, var(--fg));
   }
 
   .toc-strip a {
-    @apply text-muted hover:text-fg;
+    @apply text-muted hover:text-fg transition-colors;
   }
 
   /* You are here */
   .toc-strip li:has(a.is-current)::after {
-    left: 1px;
-    top: 0;
-    width: 17px;
-    height: 17px;
-    border-radius: 50%;
-    background: var(--bg);
-    border: 4px solid var(--fg);
+    background: var(--post-line, var(--fg));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--post-line, var(--fg)) 25%, transparent);
   }
 
   .toc-strip a.is-current {
-    @apply text-fg font-semibold;
+    @apply text-fg;
   }
 </style>
 

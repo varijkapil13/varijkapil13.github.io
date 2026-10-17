@@ -17,11 +17,11 @@ Constraints: LinkedIn is the only contact; no employer-internal details; EN/DE/H
 
 THESIS: The modernization is a transit network. Every migration is a station on one of six coloured lines (Runtime, Data, Platform, Operations, Security, Team) that run into one interchange, today's multi-tenant SaaS platform; lines still being built are dashed. Refuses the category default: a near-black console with a neon accent, hero plus card grid.
 
-OWN-WORLD: White map ground, ink black type, six saturated line colours used as categorical data; navy station-sign bands (white Barlow Condensed) for mastheads; a yellow departure-board field for the writing list. Line bullets (rounded squares with a letter), station ticks, white interchange pills with black outline, dashed under-construction segments. Barlow body, Barlow Condensed signage. No shadows, no gradients.
+OWN-WORLD: Rendered in the register of Linear and Vercel (user's reference after the first rendition read as outdated): dark-first near-black ground (light theme supported), hairline borders, quiet bordered panels, Geist and Geist Mono, a faint light from above each masthead and a dot grid under the map. The six line colours are the only saturated colour on a page and stay categorical data. Thin 3px rails, small station dots (filled when the station has a post, open when not), a hairline interchange pill, dashed rails for work still being built. No heavy colour bands, no shadows except a soft focus/hover ring on station dots.
 
 STORY: Visitors learn who he is (sign), see the whole modernization at a glance (map), pick a station to read (post), and contact him on LinkedIn.
 
-FIRST VIEWPORT: Full-width navy sign: name in white condensed at display scale, role and team scope below, LinkedIn as a white sign button with arrow, right-aligned. Directly beneath, the network map fills the container width: six horizontal lines with labelled stations converging on a tall interchange marked "Today". On phones the map becomes stacked strip maps per line.
+FIRST VIEWPORT: Name in Geist semibold at display scale, role in muted below, one-line lead, a small fact row, then the primary LinkedIn button and a secondary "Read the writing" button. Directly beneath, the network map in a bordered panel on a dot grid: six lines with labelled stations converging on the "Today" interchange. On phones the map becomes stacked strip maps per line.
 
 FORM: Transit line map (U-Bahn / DB network diagram), position 1 on my ordered list (chosen by the user as IMPECCABLE'S PICK over assigned index 5). seed:90e7552925ed1a6d
 

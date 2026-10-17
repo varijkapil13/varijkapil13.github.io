@@ -98,11 +98,11 @@ const articleSchema = article ? {
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={lang} class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0b2b5e" />
+    <meta name="theme-color" content="#08090a" />
     <meta name="robots" content="index, follow" />
     <meta name="author" content="Varij Kapil" />
     <meta name="keywords" content="Java, Kubernetes, Backend Engineering, Platform Engineering, SaaS, Microservices, DevOps, {tags.join(', ')}" />
@@ -153,12 +153,12 @@ const articleSchema = article ? {
 
     <!-- Theme Script (prevent flash) -->
     <script is:inline>
-      // Light unless the visitor picked dark
-      document.documentElement.classList.toggle("dark", localStorage.theme === "dark");
+      // Dark unless the visitor picked light
+      document.documentElement.classList.toggle("dark", localStorage.theme !== "light");
     </script>
   </head>
   <body class="min-h-screen flex flex-col">
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-board focus:text-board-fg focus:rounded-[4px] focus:outline-none">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-fg focus:text-bg focus:rounded-[4px] focus:outline-none">
       Skip to content
     </a>
     <Header currentPath={currentPath} />

@@ -1,68 +1,49 @@
 @import "tailwindcss";
-@import "@fontsource/barlow/400.css";
-@import "@fontsource/barlow/400-italic.css";
-@import "@fontsource/barlow/500.css";
-@import "@fontsource/barlow/600.css";
-@import "@fontsource/barlow/700.css";
-@import "@fontsource/barlow-condensed/600.css";
-@import "@fontsource/barlow-condensed/700.css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
 @import "@fontsource/noto-sans-devanagari/400.css";
 @import "@fontsource/noto-sans-devanagari/600.css";
-@import "@fontsource-variable/geist-mono";
 
-/* Design tokens. The site is drawn as a transit network: a white map ground,
-   ink type, navy station signs, a yellow departure board, and one colour per
-   line. Values switch with the .dark class. */
+/* Design tokens. The site is drawn as a transit network, rendered quietly:
+   a near-black ground, hairlines, Geist, and one colour per line of the map.
+   The colours are the only saturated thing on a page. Values switch with the
+   .dark class (dark is the default). */
 :root {
   --bg: #ffffff;
-  --panel: #f3f4f6;
-  --line: #d8dbe0;
-  --line-strong: #9aa1ab;
-  --fg: #101318;
-  --muted: #565d68;
-  --accent: #0060a8;
-  --code-bg: #12161d;
+  --panel: #fafafa;
+  --line: #ebebeb;
+  --line-strong: #d4d4d4;
+  --fg: #0a0a0a;
+  --muted: #666670;
+  --accent: #2563eb;
+  --code-bg: #0b0c0e;
+  --glow: rgb(37 99 235 / 0.07);
 
-  --sign: #0b2b5e;
-  --sign-fg: #ffffff;
-  --sign-muted: #bccbe3;
-  --board: #ffd400;
-  --board-fg: #111111;
-  --board-muted: #4a3f00;
-  --board-line: #1111112e;
-
-  --line-runtime: #0067b1;
-  --line-data: #007a4d;
-  --line-platform: #ef7d00;
-  --line-operations: #8a3d99;
-  --line-security: #d3131c;
-  --line-team: #8c6239;
+  --line-runtime: #2563eb;
+  --line-data: #0b7a53;
+  --line-platform: #d97706;
+  --line-operations: #7c3aed;
+  --line-security: #dc2626;
+  --line-team: #a16207;
 }
 
 .dark {
-  --bg: #0a111c;
-  --panel: #111b2b;
-  --line: #233148;
-  --line-strong: #4a5b77;
-  --fg: #e9eef6;
-  --muted: #9aa7bb;
-  --accent: #6cb4ff;
-  --code-bg: #070c14;
+  --bg: #08090a;
+  --panel: #0f1011;
+  --line: #1d1e21;
+  --line-strong: #2e3035;
+  --fg: #f4f5f6;
+  --muted: #8b8f98;
+  --accent: #8ab4ff;
+  --code-bg: #0d0e10;
+  --glow: rgb(110 140 255 / 0.10);
 
-  --sign: #13366f;
-  --sign-fg: #ffffff;
-  --sign-muted: #c3d2ea;
-  --board: #050709;
-  --board-fg: #ffbf2e;
-  --board-muted: #c99a35;
-  --board-line: #ffbf2e33;
-
-  --line-runtime: #3b93e0;
-  --line-data: #1fb877;
-  --line-platform: #ff9a2e;
-  --line-operations: #b06cc2;
-  --line-security: #f0484f;
-  --line-team: #b98a5c;
+  --line-runtime: #5b8cff;
+  --line-data: #34c48b;
+  --line-platform: #f5a524;
+  --line-operations: #a78bfa;
+  --line-security: #f2555a;
+  --line-team: #c99a66;
 }
 
 @theme inline {
@@ -73,15 +54,8 @@
   --color-fg: var(--fg);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
-  --color-sign: var(--sign);
-  --color-sign-fg: var(--sign-fg);
-  --color-sign-muted: var(--sign-muted);
-  --color-board: var(--board);
-  --color-board-fg: var(--board-fg);
-  --color-board-muted: var(--board-muted);
 
-  --font-sans: "Barlow", "Noto Sans Devanagari", system-ui, sans-serif;
-  --font-sign: "Barlow Condensed", "Noto Sans Devanagari", "Barlow", system-ui, sans-serif;
+  --font-sans: "Geist Variable", "Noto Sans Devanagari", system-ui, sans-serif;
   --font-mono: "Geist Mono Variable", ui-monospace, monospace;
 }
 
@@ -95,7 +69,7 @@
 
   body {
     @apply bg-bg text-fg antialiased;
-    font-variant-numeric: tabular-nums;
+    font-feature-settings: "ss01" 1;
   }
 
   /* Long words (e.g. German compounds) break instead of widening the page */
@@ -106,87 +80,101 @@
   }
 
   ::selection {
-    background: var(--board);
-    color: var(--board-fg);
+    background: color-mix(in srgb, var(--accent) 35%, transparent);
   }
 
   :focus-visible {
-    outline: 3px solid var(--accent);
+    outline: 2px solid var(--accent);
     outline-offset: 2px;
+    border-radius: 4px;
   }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    *, *::before, *::after { transition-duration: 0s !important; }
+    *, *::before, *::after { transition-duration: 0s !important; animation: none !important; }
   }
 }
 
 @layer components {
   .container-custom {
-    @apply max-w-[1200px] mx-auto px-4 sm:px-8;
+    @apply max-w-[1120px] mx-auto px-5 sm:px-8;
   }
 
-  /* Station sign: the navy band that names a page */
-  .sign {
-    @apply bg-sign text-sign-fg;
+  /* Page masthead: the page's name over a faint light from above */
+  .masthead {
+    position: relative;
+    isolation: isolate;
+    @apply border-b border-line;
   }
 
-  .sign-title {
-    @apply font-sign font-bold tracking-[-0.01em] leading-[0.98];
+  .masthead::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(60% 120% at 50% -20%, var(--glow), transparent 70%);
+    pointer-events: none;
   }
 
-  /* Buttons are sign plates */
+  .page-title {
+    @apply font-semibold tracking-[-0.04em] leading-[1.02];
+  }
+
+  .lead {
+    @apply text-muted text-[17px] leading-relaxed;
+  }
+
   .btn {
-    @apply inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-[4px] font-semibold text-[15px] transition-colors;
+    @apply inline-flex items-center justify-center gap-2 h-10 px-4 rounded-[8px] font-medium text-[14px] transition-[background-color,border-color,opacity] duration-150;
   }
 
   .btn-primary {
-    @apply bg-sign text-sign-fg hover:bg-fg;
-  }
-
-  .dark .btn-primary {
-    @apply bg-sign-fg text-sign hover:bg-board hover:text-board-fg;
-  }
-
-  .btn-plate {
-    @apply bg-sign-fg text-sign hover:bg-board hover:text-board-fg;
+    @apply bg-fg text-bg hover:opacity-85;
   }
 
   .btn-secondary {
-    @apply border-2 border-fg text-fg hover:bg-fg hover:text-bg;
+    @apply border border-line-strong text-fg hover:bg-panel hover:border-muted;
   }
 
-  /* Line bullet: a rounded square in the line's colour carrying its letter */
+  /* Line bullet: a small rounded square in the line's colour carrying its letter */
   .bullet {
-    @apply inline-flex items-center justify-center shrink-0 w-6 h-6 rounded-[5px] font-sign font-bold text-[15px] leading-none text-white;
+    @apply inline-flex items-center justify-center shrink-0 w-[18px] h-[18px] rounded-[5px] font-semibold text-[11px] leading-none text-white;
     background: var(--c);
   }
 
-  .bullet[data-line="platform"] {
-    @apply text-[#1b1200];
-  }
-
+  .bullet[data-line="platform"],
   .dark .bullet {
-    @apply text-[#0a111c];
+    @apply text-[#08090a];
   }
 
   .bullet-lg {
-    @apply w-9 h-9 text-[22px] rounded-[7px];
+    @apply w-6 h-6 text-[13px] rounded-[6px];
   }
 
-  /* Section heading inside the map world */
   .heading {
-    @apply font-sign font-bold text-[28px] md:text-[34px] leading-none tracking-[-0.01em];
+    @apply font-semibold text-[22px] md:text-[26px] leading-tight tracking-[-0.03em];
   }
 
-  .meta {
-    @apply text-sm text-muted;
+  .label {
+    @apply font-mono text-[12px] text-muted;
+  }
+
+  /* The map sits on a faint dot grid, like a plotted diagram */
+  .map-ground {
+    background-image: radial-gradient(color-mix(in srgb, var(--fg) 9%, transparent) 1px, transparent 1px);
+    background-size: 22px 22px;
+    background-position: -11px -11px;
+  }
+
+  /* A quiet bordered surface for lists and the map */
+  .panel {
+    @apply rounded-[12px] border border-line bg-panel;
   }
 }
 
 /* Code */
 pre {
-  @apply rounded-[3px] p-4 overflow-x-auto text-[13px] leading-relaxed;
+  @apply rounded-[10px] border border-line p-4 overflow-x-auto text-[13px] leading-relaxed;
   background-color: var(--code-bg) !important;
 }
 
@@ -201,7 +189,8 @@ code {
 
 /* Blog post content */
 .prose {
-  @apply max-w-none text-[17.5px] leading-[1.7];
+  @apply max-w-none text-[16.5px] leading-[1.75];
+  color: color-mix(in srgb, var(--fg) 86%, var(--muted));
 }
 
 .prose h2,
@@ -211,7 +200,7 @@ code {
 }
 
 .prose h2 {
-  @apply font-sign font-bold text-[30px] leading-[1.05] mt-16 mb-4;
+  @apply font-semibold text-[24px] tracking-[-0.03em] leading-[1.2] mt-14 mb-4;
 }
 
 .prose h3 {
@@ -224,7 +213,7 @@ code {
 
 .prose a {
   overflow-wrap: anywhere;
-  @apply text-accent underline decoration-1 underline-offset-[3px] hover:decoration-2;
+  @apply text-fg underline decoration-line-strong underline-offset-[3px] hover:decoration-accent transition-colors;
 }
 
 .prose strong {
@@ -253,11 +242,11 @@ code {
 }
 
 .prose img {
-  @apply rounded-[6px] my-8 border border-line;
+  @apply rounded-[10px] my-8 border border-line;
 }
 
 .prose blockquote {
-  @apply bg-panel px-5 py-1 rounded-[6px] text-fg;
+  @apply bg-panel border border-line px-5 py-1 rounded-[10px] text-fg;
 }
 
 .prose hr {
@@ -273,7 +262,7 @@ code {
 }
 
 .prose th {
-  @apply text-left font-semibold px-3 py-2 border-b-2 border-fg;
+  @apply text-left font-mono text-[12px] font-normal text-muted px-3 py-2 border-b border-line-strong;
 }
 
 .prose td {
@@ -286,7 +275,7 @@ code {
 }
 
 .copy-code {
-  @apply absolute top-2.5 right-2.5 px-2.5 py-1 rounded-[4px] text-[12px] font-semibold text-white bg-white/10 opacity-0 transition-opacity hover:bg-white/20 focus:opacity-100;
+  @apply absolute top-2.5 right-2.5 px-2.5 py-1 rounded-[6px] font-mono text-[11px] text-zinc-300 bg-white/10 opacity-0 transition-opacity hover:bg-white/20 focus:opacity-100;
 }
 
 .code-block:hover .copy-code {
@@ -301,7 +290,7 @@ code {
 
 /* Heading link icons */
 .heading-anchor {
-  @apply ml-2 font-sans font-normal no-underline! text-muted opacity-0 transition-opacity hover:text-accent!;
+  @apply ml-2 font-mono font-normal no-underline! text-muted opacity-0 transition-opacity hover:text-accent!;
 }
 
 .prose h2:hover .heading-anchor,

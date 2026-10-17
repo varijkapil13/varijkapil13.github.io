@@ -27,11 +27,11 @@ const navLinks = [
 ];
 ---
 
-<header class="sticky top-0 z-50 bg-bg border-b border-line">
+<header class="sticky top-0 z-50 border-b border-line bg-bg/80 backdrop-blur-md">
   <nav class="container-custom" aria-label="Main">
-    <div class="flex items-center justify-between h-[60px]">
-      <a href={getLocalizedPath("/", lang)} class="flex items-center gap-2.5 font-sign font-bold text-[21px] leading-none">
-        <span class="w-7 h-7 rounded-[5px] bg-sign text-sign-fg text-[15px] flex items-center justify-center" aria-hidden="true">VK</span>
+    <div class="flex items-center justify-between h-14">
+      <a href={getLocalizedPath("/", lang)} class="flex items-center gap-2.5 font-semibold tracking-[-0.02em] text-[15px] leading-none">
+        <span class="w-6 h-6 rounded-[6px] bg-fg text-bg text-[10.5px] font-semibold flex items-center justify-center" aria-hidden="true">VK</span>
         Varij Kapil
       </a>
 
@@ -90,7 +90,7 @@ const navLinks = [
           <a
             href={link.href}
             class:list={[
-              "py-3 font-sign font-semibold text-[20px] border-b border-line",
+              "py-3 font-medium text-[16px] border-b border-line",
               isActive(link.href) ? "text-fg" : "text-muted hover:text-fg",
             ]}
             aria-current={isActive(link.href) ? "page" : undefined}
@@ -110,7 +110,7 @@ const navLinks = [
   @reference "../styles/global.css";
 
   .nav-link {
-    @apply relative flex items-center px-3 font-sign font-semibold text-[18px] transition-colors;
+    @apply relative flex items-center px-3 text-[14px] transition-colors;
   }
 
   /* The current page is marked like a platform indicator: a bar under its name */
@@ -120,13 +120,13 @@ const navLinks = [
     left: 12px;
     right: 12px;
     bottom: -1px;
-    height: 4px;
+    height: 1px;
     background: var(--fg);
   }
 </style>
 
 <script>
-  // Light is the default; a visitor's choice is remembered
+  // Dark is the default; a visitor's choice is remembered
   const themeToggle = document.getElementById("theme-toggle");
 
   themeToggle?.addEventListener("click", () => {
