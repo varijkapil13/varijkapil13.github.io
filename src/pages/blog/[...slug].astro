@@ -45,10 +45,11 @@ const relatedPosts = allPosts
   publishedDate={post.data.date.toISOString()}
   tags={post.data.tags || []}
 >
+  <div class="read-progress" style={at ? `--post-line: var(--line-${at.line.id})` : undefined} aria-hidden="true"></div>
   <header class="masthead">
     <div class="container-custom pt-12 pb-12 md:pt-20 md:pb-14">
       <a href="/blog" class="text-sm text-muted hover:text-fg transition-colors"><Arrow dir="left" /> Writing</a>
-      <h1 class="page-title text-[2rem] sm:text-[2.5rem] md:text-[3rem] max-w-[24ch] mt-7">
+      <h1 class="page-title text-[2rem] sm:text-[2.5rem] md:text-[3rem] max-w-[24ch] mt-7" style={`view-transition-name: post-${post.id}`}>
         {post.data.title}
       </h1>
       {post.data.description && <p class="text-muted text-[17px] leading-relaxed max-w-[62ch] mt-5">{post.data.description}</p>}

@@ -41,13 +41,16 @@ const labels = { date: "Date", line: "Line", post: "Post", read: "Read", minutes
   @reference "../../styles/global.css";
 
   .line-filter {
-    @apply inline-flex items-center gap-2 h-8 pl-2 pr-3 rounded-full border border-line text-[13px] text-muted transition-colors;
+    @apply inline-flex items-center gap-2 h-8 pl-2 pr-3 rounded-full border border-line text-[13px] text-muted transition-[color,border-color,background-color,transform] duration-150;
   }
   .line-filter[data-line="all"] {
     @apply pl-3;
   }
   .line-filter:hover {
     @apply text-fg border-line-strong;
+  }
+  .line-filter:active {
+    transform: scale(0.97);
   }
   .line-filter[aria-pressed="true"] {
     @apply text-fg border-fg bg-panel;
@@ -61,10 +64,16 @@ const labels = { date: "Date", line: "Line", post: "Post", read: "Read", minutes
   buttons.forEach((button) => {
     button.addEventListener("click", () => {
       const line = button.dataset.line;
-      buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
-      rows.forEach((row) => {
-        row.hidden = line !== "all" && row.dataset.line !== line;
-      });
+      const apply = () => {
+        buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+        rows.forEach((row) => {
+          row.hidden = line !== "all" && row.dataset.line !== line;
+        });
+      };
+      // Rows slide to their new places where the browser can animate it
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (document.startViewTransition && !reduce) document.startViewTransition(apply);
+      else apply();
     });
   });
 </script>

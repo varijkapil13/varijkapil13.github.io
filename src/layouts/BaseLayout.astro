@@ -155,6 +155,8 @@ const articleSchema = article ? {
     <script is:inline>
       // Dark unless the visitor picked light
       document.documentElement.classList.toggle("dark", localStorage.theme !== "light");
+      // Motion that starts hidden only runs when this script did
+      document.documentElement.classList.add("js");
     </script>
   </head>
   <body class="min-h-screen flex flex-col">

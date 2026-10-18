@@ -148,7 +148,7 @@ Density is calm and editorial: generous section spacing, a 1120px container, one
 - Six categorical line colours as the only saturation on a page
 - Thin 3px rails, 9px station dots, a hairline interchange pill
 - Geist for everything readable; Geist Mono only for code and data labels
-- One authored motion: the hovered line comes forward and the rest dim
+- One authored moment: the map draws itself once on first view (rails run station by station into the interchange, then the dashed future follows); hovering a line brings it forward and dims the rest
 
 ## Colors
 
@@ -259,6 +259,8 @@ A thin vertical track in the post's line colour (45% mix) with small open dots; 
 
 ### The Network Map (signature)
 Six rows on the dot-grid panel converging on the interchange pill, labelled "Today" with the hub name in muted. Hovering or focusing any part of a line brings it forward and dims the others to 18% opacity over 220ms (cubic-bezier(0.16, 1, 0.3, 1)); reduced motion removes the transition. Content is always visible by default.
+
+**Motion.** The map's draw-in is the site's one authored sequence: lines start 70ms apart, each rail advances 85ms per station with dots scaling in on cubic-bezier(0.16, 1, 0.3, 1), the interchange wipes open (520ms) once every rail has arrived, and dashed future sections come last; it runs once, only when JavaScript set `html.js`, and never under reduced motion. Supporting motion explains state only: cross-document view transitions (160ms out, 260ms in) with the header held in place and a post's title travelling from the list into its heading; the line filter slides rows into place via `startViewTransition`; list rows rise once in order (40ms apart, capped at the ninth); rows show a sliding arrow and a 3.5% ink wash on hover; button arrows nudge 2px; the TOC marker eases between sections; posts carry a 2px scroll-driven reading-progress bar in the post's line colour where `animation-timeline` is supported.
 
 ### Generated Art
 Cover images (`scripts/generate-covers.mjs`, 1200×630) and diagrams (`scripts/diagrams/`) use the same world: ground #08090a, the masthead glow, a 24px dot grid, Geist and Geist Mono embedded, bullets, a 4px strip map ending at an ink-outlined interchange.

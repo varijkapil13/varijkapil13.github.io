@@ -27,7 +27,7 @@ const navLinks = [
 ];
 ---
 
-<header class="sticky top-0 z-50 border-b border-line bg-bg/80 backdrop-blur-md">
+<header id="site-header" class="sticky top-0 z-50 border-b border-transparent bg-bg/80 backdrop-blur-md transition-colors duration-200 [view-transition-name:site-header]">
   <nav class="container-custom" aria-label="Main">
     <div class="flex items-center justify-between h-14">
       <a href={getLocalizedPath("/", lang)} class="flex items-center gap-2.5 font-semibold tracking-[-0.02em] text-[15px] leading-none">
@@ -133,6 +133,15 @@ const navLinks = [
     const isDark = document.documentElement.classList.toggle("dark");
     localStorage.theme = isDark ? "dark" : "light";
   });
+
+  // The header's bottom edge appears once the page has scrolled under it
+  const header = document.getElementById("site-header");
+  const onScroll = () => {
+    header?.classList.toggle("border-line", window.scrollY > 4);
+    header?.classList.toggle("border-transparent", window.scrollY <= 4);
+  };
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
 
   const mobileMenuButton = document.getElementById("mobile-menu-button");
   const mobileMenu = document.getElementById("mobile-menu");
