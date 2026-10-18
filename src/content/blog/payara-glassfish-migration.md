@@ -18,8 +18,8 @@ Payara is a fork of GlassFish: its developers took the GlassFish code and kept d
 
 We started by writing down what was running on GlassFish:
 
-- 5 WAR applications
-- 15 EJB modules
+- WAR applications
+- EJB modules
 - Custom JDBC connection pools
 - JMS queues and topics
 - JAAS security realms

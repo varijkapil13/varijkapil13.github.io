@@ -6,7 +6,7 @@ image: "/images/blog/oauth-oidc-enterprise-java.jpg"
 tags: ["java", "security", "oauth", "enterprise"]
 ---
 
-I recently implemented OAuth 2.0 and OpenID Connect (OIDC) for a large-scale platform in the automotive industry. The platform has a React single-page application in front and a Jakarta EE backend behind it, and users work across several applications. These are the decisions we made and the ones I would make the same way again. If you have only worked with a login form and a server session, I'll explain each OAuth piece as it comes up, because the decisions only make sense once you know what the pieces are for.
+I recently implemented OAuth 2.0 and OpenID Connect (OIDC) for a large-scale platform in the automotive industry. The platform had a React single-page application in front and a Jakarta EE backend behind it, and users worked across several applications. These are the decisions we made and the ones I would make the same way again. If you have only worked with a login form and a server session, I'll explain each OAuth piece as it comes up, because the decisions only make sense once you know what the pieces are for.
 
 ## Why we moved away from sessions
 
@@ -16,7 +16,7 @@ OAuth 2.0 is a standard framework for authorization: it defines how an applicati
 
 ## The three parties involved
 
-Our setup has three tiers:
+The setup had three tiers:
 
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
@@ -25,13 +25,13 @@ Our setup has three tiers:
 └─────────────────┘     └─────────────────┘     └─────────────────┘
 ```
 
-The arrows follow the life of a user session more than the path of a single request. The frontend is the React application running in the browser. It never sees the user's password; it sends the user to the authorization server to log in. That server authenticates the user, issues the tokens (an access token for calling APIs, a refresh token for getting new access tokens, and the ID token that OIDC adds) and can also validate and introspect tokens, meaning it can answer the question "is this token still valid, and what is it allowed to do?". The resource server is our Jakarta EE backend, the thing that holds the data. Once the frontend has a token, it calls the resource server directly and attaches the token to each request.
+The arrows follow the life of a user session more than the path of a single request. The frontend is the React application running in the browser. It never sees the user's password; it sends the user to the authorization server to log in. That server authenticates the user, issues the tokens (an access token for calling APIs, a refresh token for getting new access tokens, and the ID token that OIDC adds) and can also validate and introspect tokens, meaning it can answer the question "is this token still valid, and what is it allowed to do?". The resource server was our Jakarta EE backend, the thing that holds the data. Once the frontend has a token, it calls the resource server directly and attaches the token to each request.
 
 How the frontend gets its tokens is decided by the OAuth flow you pick, and we used the Authorization Code Flow with PKCE. In the authorization code flow the browser is redirected to the authorization server's login page, and after a successful login it comes back to the application with a short-lived one-time code, which is then exchanged for tokens. A single-page application can't keep a client secret, because anything shipped to the browser can be read by anyone. PKCE (Proof Key for Code Exchange) solves that: before the redirect, the client generates a random secret called the code verifier and sends only a hash of it along with the login request. When it later exchanges the code for tokens, it sends the original verifier, and the authorization server checks that it matches. Someone who intercepts the code can't use it without the verifier.
 
 ## Where the tokens live in the browser
 
-Once the tokens arrive, the frontend has to keep them somewhere. Anything stored in `localStorage` or `sessionStorage` can be read by any JavaScript running on the page, so a single cross-site scripting (XSS) bug would let an attacker copy a token and use it from their own machine. We treated the two kinds of token differently. Access tokens are kept only in memory, in a JavaScript variable, and refresh tokens are stored in HTTP-only cookies. An HTTP-only cookie is one the browser sends with matching requests but never exposes to JavaScript, so page scripts can't read it at all. Here is a simplified version of the token service:
+Once the tokens arrive, the frontend has to keep them somewhere. Anything stored in `localStorage` or `sessionStorage` can be read by any JavaScript running on the page, so a single cross-site scripting (XSS) bug would let an attacker copy a token and use it from their own machine. We treated the two kinds of token differently. We kept access tokens only in memory, in a JavaScript variable, and stored refresh tokens in HTTP-only cookies. An HTTP-only cookie is one the browser sends with matching requests but never exposes to JavaScript, so page scripts can't read it at all. Here is a simplified version of the token service:
 
 ```typescript
 // Token service - simplified example
@@ -114,7 +114,7 @@ Splitting read and write for reports means a token that only needs to view repor
 
 ## Refreshing before the token expires
 
-One of the hardest parts of the whole project was handling token expiration in the frontend without interrupting the user. If the frontend only notices an expired token when an API call fails, the user sees an error, or the code has to catch the failure, refresh and retry. We refresh proactively instead, checking before each API call:
+One of the hardest parts of the whole project was handling token expiration in the frontend without interrupting the user. If the frontend only notices an expired token when an API call fails, the user sees an error, or the code has to catch the failure, refresh and retry. We refreshed proactively instead, checking before each API call:
 
 ```javascript
 // Check token expiration before each API call

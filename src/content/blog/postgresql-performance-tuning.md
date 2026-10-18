@@ -67,7 +67,7 @@ ON orders (customer_id, created_at DESC)
 WHERE created_at > '2023-03-01';
 ```
 
-The planner can only use a partial index when it can prove that the query's own `WHERE` clause falls inside the index condition, so the queries have to filter on the same thing. The second example needs a caveat. PostgreSQL only accepts immutable expressions in an index predicate, so a condition like `created_at > NOW() - INTERVAL '90 days'` is rejected, because `NOW()` changes over time. The predicate has to be a constant, which is why the example uses a fixed date. To keep the index covering only recent data, we recreate it periodically with a newer date, and the queries that should use it have to filter on a date at or after that constant.
+The planner can only use a partial index when it can prove that the query's own `WHERE` clause falls inside the index condition, so the queries have to filter on the same thing. The second example needs a caveat. PostgreSQL only accepts immutable expressions in an index predicate, so a condition like `created_at > NOW() - INTERVAL '90 days'` is rejected, because `NOW()` changes over time. The predicate has to be a constant, which is why the example uses a fixed date. To keep the index covering only recent data, we recreated it periodically with a newer date, and the queries that should use it had to filter on a date at or after that constant.
 
 ### Covering indexes
 
@@ -220,7 +220,7 @@ The trade-off is that you can no longer jump to an arbitrary page number, only t
 
 ## Watching it over time
 
-The first round of fixes is not the end, because data and queries change. To find slow queries, we use the `pg_stat_statements` extension. It records statistics for every distinct query the server runs: how many times it was called, the total time spent on it, and the average. Sorting by total time is more useful than sorting by the slowest single execution, because a fast query that runs constantly can cost far more in total than a slow report that runs once a day.
+The first round of fixes is not the end, because data and queries change. To find slow queries, we used the `pg_stat_statements` extension. It records statistics for every distinct query the server runs: how many times it was called, the total time spent on it, and the average. Sorting by total time is more useful than sorting by the slowest single execution, because a fast query that runs constantly can cost far more in total than a slow report that runs once a day.
 
 ```sql
 -- Top 10 slowest queries by total time
@@ -234,7 +234,7 @@ ORDER BY total_exec_time DESC
 LIMIT 10;
 ```
 
-To find missing indexes, we look at the opposite side of the statistics: tables that are read with sequential scans, meaning PostgreSQL reads every row from start to finish. On a small table that is fine. On a large table scanned this way again and again, it usually means a query has no index to use.
+To find missing indexes, we looked at the opposite side of the statistics: tables that are read with sequential scans, meaning PostgreSQL reads every row from start to finish. On a small table that is fine. On a large table scanned this way again and again, it usually means a query has no index to use.
 
 ```sql
 -- Tables with high sequential scans (potential missing indexes)

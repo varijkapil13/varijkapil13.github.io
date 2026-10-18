@@ -6,10 +6,9 @@ import LineBullet from "./LineBullet.astro";
 interface Props {
   lang: Lang;
   todayLabel: string;
-  buildingLabel: string;
 }
 
-const { lang, todayLabel, buildingLabel } = Astro.props;
+const { lang, todayLabel } = Astro.props;
 const posts = await getCollection("blog", ({ data }) => !data.draft);
 const titles = new Map(posts.map((p) => [p.id, p.data.title]));
 ---
@@ -34,12 +33,7 @@ const titles = new Map(posts.map((p) => [p.id, p.data.title]));
           </li>
         ))}
       </ol>
-      <span class:list={["nm-through", line.future.length === 0 && "is-terminus"]} aria-hidden="true"></span>
-      {line.future.length > 0 && (
-        <ol class="nm-future" aria-label={buildingLabel}>
-          {line.future.map((station) => <li class="nm-station" style={`--si: ${mapColumns + 4}`}><span>{text(station.label, lang)}</span></li>)}
-        </ol>
-      )}
+      <span class="nm-through" aria-hidden="true"></span>
     </div>
   ))}
 </div>
@@ -60,9 +54,6 @@ const titles = new Map(posts.map((p) => [p.id, p.data.title]));
           </li>
         ))}
         <li class="strip-hub" style={`--si: ${line.stations.length}`}><span><strong>{todayLabel}</strong></span></li>
-        {line.future.map((station) => (
-          <li class="strip-future" style={`--si: ${line.stations.length + 1}`}><span class="text-muted">{text(station.label, lang)}</span></li>
-        ))}
       </ol>
     </div>
   ))}
@@ -71,11 +62,11 @@ const titles = new Map(posts.map((p) => [p.id, p.data.title]));
 <style>
   @reference "../styles/global.css";
 
-  /* Shared column template: line name, the station columns, the interchange, stations still being built */
+  /* Shared column template: line name, the station columns, the interchange, its label */
   .netmap {
     --name: 128px;
     --hub: 40px;
-    --future: 168px;
+    --tail: 168px;
     --row: 62px;
     --rail: 3px;
     --dot: 9px;
@@ -87,7 +78,7 @@ const titles = new Map(posts.map((p) => [p.id, p.data.title]));
   .nm-row,
   .nm-hub-layer {
     display: grid;
-    grid-template-columns: var(--name) repeat(var(--cols), minmax(0, 1fr)) var(--hub) var(--future);
+    grid-template-columns: var(--name) repeat(var(--cols), minmax(0, 1fr)) var(--hub) var(--tail);
   }
 
   .nm-row {
@@ -113,8 +104,7 @@ const titles = new Map(posts.map((p) => [p.id, p.data.title]));
     margin-top: calc(var(--rail-y) - 10px);
   }
 
-  .nm-track,
-  .nm-future {
+  .nm-track {
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: minmax(0, 1fr);
@@ -122,9 +112,6 @@ const titles = new Map(posts.map((p) => [p.id, p.data.title]));
     height: var(--row);
   }
 
-  .nm-future {
-    grid-column: calc(var(--cols) + 3);
-  }
 
   .nm-station {
     position: relative;
@@ -182,7 +169,7 @@ const titles = new Map(posts.map((p) => [p.id, p.data.title]));
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 25%, transparent);
   }
 
-  /* Rail continuing into the interchange */
+  /* Rail running into the interchange, where every line ends */
   .nm-through {
     grid-column: calc(var(--cols) + 2);
     grid-row: 1;
@@ -193,26 +180,14 @@ const titles = new Map(posts.map((p) => [p.id, p.data.title]));
     content: "";
     position: absolute;
     left: 0;
-    right: 0;
+    right: 50%;
     top: calc(var(--rail-y) - var(--rail) / 2);
     height: var(--rail);
     background: var(--c);
   }
 
-  .nm-through.is-terminus::before {
-    right: 50%;
-  }
 
-  /* Stations still being built: dashed rail, open dot */
-  .nm-future .nm-station::before {
-    right: 50%;
-    background: repeating-linear-gradient(90deg, var(--c) 0 6px, transparent 6px 11px);
-    opacity: 0.8;
-  }
 
-  .nm-future .nm-station::after {
-    background: var(--panel);
-  }
 
   /* The interchange every line runs into */
   .nm-hub-layer {
@@ -298,29 +273,15 @@ const titles = new Map(posts.map((p) => [p.id, p.data.title]));
     background: var(--panel);
   }
 
-  .strip li.strip-hub:last-child::before {
+  .strip li.strip-hub::before {
     bottom: auto;
     height: 8px;
   }
 
-  .strip li.strip-future::before {
-    background: repeating-linear-gradient(180deg, var(--c) 0 5px, transparent 5px 9px);
-    bottom: auto;
-    height: 12px;
-  }
-
-  .strip li.strip-future::after {
-    top: 12px;
-  }
-
-  .strip li.strip-future {
-    padding-top: 8px;
-  }
 
   /* Focal moment: the network draws itself once, the first time it scrolls into view.
      Lines start one after another; each rail runs station by station toward the
-     interchange, dots and names arriving as it passes. Then the interchange closes
-     and the dashed future sections follow. Only with JS (html.js) and full motion;
+     interchange, dots and names arriving as it passes. Then the interchange closes. Only with JS (html.js) and full motion;
      otherwise the map is simply there. */
   @media (prefers-reduced-motion: no-preference) {
     .netmap {

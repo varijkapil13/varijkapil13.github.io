@@ -12,7 +12,7 @@ Database migrations have a reputation for being risky, and for good reason. If d
 
 ## Why we moved at all
 
-The main driver was money: Oracle licensing was a significant expense. Other reasons lined up behind the cost. PostgreSQL gave us better options for cloud deployment, since the major cloud providers offer it as a managed service. It has open source tooling and an active community behind it, and it performs very well for our workload.
+The main driver was money: Oracle licensing was a significant expense. Other reasons lined up behind the cost. PostgreSQL gave us better options for cloud deployment, since the major cloud providers offer it as a managed service. It has open source tooling and an active community behind it, and it performed very well for our workload.
 
 None of that makes the migration itself any easier, though. Oracle and PostgreSQL both speak SQL, but an application that has lived on Oracle for years picks up Oracle habits everywhere: in the schema, in stored procedures, in the queries the application sends, and in assumptions about how NULL values or dates behave. The work is finding all of those habits before your users do.
 

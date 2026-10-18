@@ -346,11 +346,6 @@
         "name": "map-ground",
         "value": "radial-gradient(color-mix(in srgb, var(--fg) 9%, transparent) 1px, transparent 1px) / 22px 22px",
         "purpose": "Dot grid under the network map."
-      },
-      {
-        "name": "dashed-rail",
-        "value": "repeating-linear-gradient(90deg, var(--c) 0 6px, transparent 6px 11px)",
-        "purpose": "Track still being built, at 80% opacity."
       }
     ],
     "motion": [
@@ -436,9 +431,9 @@
       "name": "Network Map Line",
       "kind": "custom",
       "refersTo": "line-bullet",
-      "description": "One line of the map: 3px rail, filled dots for posted stations, open for unposted, into the ink interchange, dashed past it.",
-      "html": "<div class=\"ds-map\" style=\"--c:var(--line-data,#34c48b)\"><span class=\"ds-st\">Oracle</span><a class=\"ds-st is-post\" href=\"#\">Pooling</a><a class=\"ds-st is-post\" href=\"#\">PostgreSQL</a><span class=\"ds-hub\" aria-hidden=\"true\"></span><span class=\"ds-st is-future\">One DB per service</span></div>",
-      "css": ".ds-map{display:flex;align-items:flex-end;gap:0;padding:12px 16px 20px;background-color:var(--panel,#0f1011);background-image:radial-gradient(color-mix(in srgb,var(--fg,#f4f5f6) 9%,transparent) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line,#1d1e21);border-radius:12px;font:400 12.5px/1.15 'Geist Variable',system-ui,sans-serif;} .ds-st{position:relative;flex:1;text-align:center;padding-bottom:22px;color:var(--muted,#8b8f98);text-decoration:none;} .ds-st.is-post{color:var(--fg,#f4f5f6);transition:color 150ms;} .ds-st.is-post:hover{color:var(--accent,#8ab4ff);} .ds-st::before{content:'';position:absolute;left:0;right:0;bottom:6.5px;height:3px;background:var(--c);} .ds-st:first-child::before{left:50%;} .ds-st::after{content:'';position:absolute;left:calc(50% - 4.5px);bottom:3.5px;width:9px;height:9px;box-sizing:border-box;border-radius:50%;background:var(--panel,#0f1011);border:2px solid var(--c);} .ds-st.is-post::after{background:var(--c);} .ds-st.is-post:hover::after,.ds-st.is-post:focus-visible::after{box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 25%,transparent);} .ds-st.is-future::before{right:50%;background:repeating-linear-gradient(90deg,var(--c) 0 6px,transparent 6px 11px);opacity:.8;} .ds-hub{flex:0 0 16px;height:30px;margin-bottom:0;box-sizing:border-box;border:2px solid var(--fg,#f4f5f6);border-radius:8px;background:var(--panel,#0f1011);position:relative;z-index:1;}"
+      "description": "One line of the map: 3px rail, filled dots for posted stations, open for unposted, ending in the ink interchange.",
+      "html": "<div class=\"ds-map\" style=\"--c:var(--line-data,#34c48b)\"><span class=\"ds-st\">Oracle</span><a class=\"ds-st is-post\" href=\"#\">Pooling</a><a class=\"ds-st is-post\" href=\"#\">PostgreSQL</a><span class=\"ds-hub\" aria-hidden=\"true\"></span></div>",
+      "css": ".ds-map{display:flex;align-items:flex-end;gap:0;padding:12px 16px 20px;background-color:var(--panel,#0f1011);background-image:radial-gradient(color-mix(in srgb,var(--fg,#f4f5f6) 9%,transparent) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line,#1d1e21);border-radius:12px;font:400 12.5px/1.15 'Geist Variable',system-ui,sans-serif;} .ds-st{position:relative;flex:1;text-align:center;padding-bottom:22px;color:var(--muted,#8b8f98);text-decoration:none;} .ds-st.is-post{color:var(--fg,#f4f5f6);transition:color 150ms;} .ds-st.is-post:hover{color:var(--accent,#8ab4ff);} .ds-st::before{content:'';position:absolute;left:0;right:0;bottom:6.5px;height:3px;background:var(--c);} .ds-st:first-child::before{left:50%;} .ds-st::after{content:'';position:absolute;left:calc(50% - 4.5px);bottom:3.5px;width:9px;height:9px;box-sizing:border-box;border-radius:50%;background:var(--panel,#0f1011);border:2px solid var(--c);} .ds-st.is-post::after{background:var(--c);} .ds-st.is-post:hover::after,.ds-st.is-post:focus-visible::after{box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 25%,transparent);} .ds-hub{flex:0 0 16px;height:30px;margin-bottom:0;box-sizing:border-box;border:2px solid var(--fg,#f4f5f6);border-radius:8px;background:var(--panel,#0f1011);position:relative;z-index:1;}"
     },
     {
       "name": "Header Navigation",
@@ -459,7 +454,7 @@
   ],
   "narrative": {
     "northStar": "The Network Map",
-    "overview": "The site draws one platform's modernization as a transit network. Every migration is a station on one of six coloured lines (Runtime, Data, Platform, Operations, Security, Team), and every line runs into a single interchange: today's multi-tenant SaaS platform. Lines still being built continue past it as dashed track. The map is the memorable thing; everything else exists to get a reader into a post and through it.\n\nThe network is now rendered quietly, in the register of Linear and Vercel. The first rendition (navy sign bands, a yellow departure board, condensed signage type) read as dated, so the world keeps its map and drops its paint. Dark is the default theme: a near-black ground, hairline borders, quiet bordered panels, Geist set tight, and a faint light falling from above each page masthead. The map sits in a panel on a plotted dot grid. The six line colours are the only saturated colour anywhere, and they always mean a line.\n\nDensity is calm and editorial: generous section spacing, a 1120px container, one column of reading text at about 700px. The world rejects heavy colour fields, shadows as decoration, neon accents and the hero-plus-card-grid template.",
+    "overview": "The site draws one platform's modernization as a transit network. Every migration is a station on one of six coloured lines (Runtime, Data, Platform, Operations, Security, Team), and every line runs into a single interchange: today's multi-tenant SaaS platform. The map is the memorable thing; everything else exists to get a reader into a post and through it.\n\nThe network is now rendered quietly, in the register of Linear and Vercel. The first rendition (navy sign bands, a yellow departure board, condensed signage type) read as dated, so the world keeps its map and drops its paint. Dark is the default theme: a near-black ground, hairline borders, quiet bordered panels, Geist set tight, and a faint light falling from above each page masthead. The map sits in a panel on a plotted dot grid. The six line colours are the only saturated colour anywhere, and they always mean a line.\n\nDensity is calm and editorial: generous section spacing, a 1120px container, one column of reading text at about 700px. The world rejects heavy colour fields, shadows as decoration, neon accents and the hero-plus-card-grid template.",
     "keyCharacteristics": [
       "Dark-first near-black ground with a light theme that swaps tokens, not structure",
       "Hairlines (1px) and 12px bordered panels instead of colour bands or shadows",
@@ -496,12 +491,12 @@
       },
       {
         "name": "The Interchange Is Today Rule",
-        "body": "Every line runs into one interchange, and it means the present: today's multi-tenant SaaS platform. It is drawn in ink, never in a line colour, and nothing sits beyond it except work still being built.",
+        "body": "Every line runs into one interchange, and it means the present: today's multi-tenant SaaS platform. It is drawn in ink, never in a line colour, and every line ends there; nothing sits beyond it.",
         "section": "shapes"
       },
       {
-        "name": "The Dashed Track Rule",
-        "body": "Dashed rail and open dots past the interchange mean \"still being built\". Never dash a line for decoration, and never draw finished work dashed.",
+        "name": "The Done Work Rule",
+        "body": "The map shows only finished work. No dashed track, no planned stations, nothing about what comes next.",
         "section": "shapes"
       },
       {
@@ -513,7 +508,7 @@
     "dos": [
       "Do treat each line colour as data: use it only where its line is meant (rails, dots, bullets, a post's own markers and TOC).",
       "Do fill a station dot only when that station links to a post; leave it open otherwise.",
-      "Do run every line into the single \"Today\" interchange, drawn in ink, and dash only work still being built.",
+      "Do run every line into the single \"Today\" interchange, drawn in ink, and end it there; the map shows what was done, never what is planned.",
       "Do build structure from 1px hairlines and 12px bordered panels on the near-black ground.",
       "Do use the one SVG arrow (`Arrow.astro`, square-ended, stroke 3) for every directional cue, flipped for \"back\".",
       "Do keep the primary button for LinkedIn; everything else is secondary or a plain muted link.",

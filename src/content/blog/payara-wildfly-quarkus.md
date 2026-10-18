@@ -1,16 +1,16 @@
 ---
 title: "From Payara to WildFly to Quarkus: How We Took a Java EE Monolith Apart"
-description: "Why we first moved our Java EE monolith to WildFly for stability, then spent a long, planned migration turning it into Quarkus microservices, and what EJB timers, Hibernate and a shared database taught us on the way."
+description: "Why we first moved our Java EE monolith to WildFly for stability, then spent a long, planned migration turning it into Quarkus microservices, and what EJB timers and Hibernate taught us on the way."
 date: 2025-06-12
 image: "/images/blog/payara-wildfly-quarkus.jpg"
 tags: ["quarkus", "wildfly", "java", "migration"]
 ---
 
-When people hear that we migrated the same Java EE application twice in a few years, first from Payara to WildFly and then from WildFly to Quarkus, the first question is usually why we didn't just go to Quarkus directly and save ourselves one migration. It's a fair question. The two moves were about different things. The first one was about getting back onto stable ground quickly. The second one was about changing what the application is: taking a large monolith and turning it into a set of services that can be built, deployed and eventually scaled on their own. The second move was much bigger, much slower and much more carefully planned, and most of this post is about it.
+When people hear that we migrated the same Java EE application twice in a few years, first from Payara to WildFly and then from WildFly to Quarkus, the first question is usually why we didn't just go to Quarkus directly and save ourselves one migration. It's a fair question. The two moves were about different things. The first one was about getting back onto stable ground quickly. The second one was about changing what the application is: taking a large monolith and turning it into a set of services that can be built and deployed on their own. The second move was much bigger, much slower and much more carefully planned, and most of this post is about it.
 
 I'll try to explain the background as I go, because a lot of migration write-ups assume you already know why things like EJB or JNDI are painful. If you have never moved an application off a Java EE server, some of the problems below won't be obvious, and they weren't obvious to us either when we started.
 
-![Our path: a monolith on an aging Payara server, then the same monolith as a WildFly bootable JAR, then separate Quarkus services that still share one database](/images/blog/payara-wildfly-quarkus/journey.png)
+![Our path: a monolith on an aging Payara server, then the same monolith as a WildFly bootable JAR, then separate Quarkus services](/images/blog/payara-wildfly-quarkus/journey.png)
 
 ## Where we started
 
@@ -56,7 +56,7 @@ The move to Quarkus had a different goal. Quarkus is a Java framework built for 
 
 That decision is what made this migration so much longer and more planned than the first one. Moving a monolith from one server to another is mostly a matter of configuration. Turning a monolith into services means deciding where the boundaries are, what code is shared, how services talk to each other, and what happens to the data. We were explicit with the team that this was a migration and not a rewrite. The plan was to change the shape of the application without rewriting its business logic.
 
-![How a module of the monolith became a Quarkus service: its own repository and build, its own copy of only the entities it uses, shared code moved into small libraries, and all database changes kept in one central project because the database is still shared](/images/blog/payara-wildfly-quarkus/services.png)
+![How a module of the monolith became a Quarkus service: its own repository and build, its own copy of only the entities it uses, shared code moved into small libraries, and all database changes kept in one central project](/images/blog/payara-wildfly-quarkus/services.png)
 
 Before migrating a single module, we built a sample Quarkus project and a shared Maven BOM, so that every new service would start from the same baseline: the same versions, Docker packaging, logging, metrics, tracing and OpenAPI documentation already set up. Then we went through the monolith module by module. As a first step, every existing module became its own service. That is not a perfect microservice split, and we knew it, but it is one you can carry out step by step.
 
@@ -76,14 +76,14 @@ private Long customerId;
 We also moved configuration that used to live in a database table into normal Quarkus properties, read through `@ConfigMapping` interfaces. Only development and test values are committed to the repository, so production configuration always has to be provided explicitly and can't silently fall back to a developer default.
 
 ```java
-@ConfigMapping(prefix = "app.reporting")
-public interface ReportingConfig {
+@ConfigMapping(prefix = "app.myservice")
+public interface MyServiceConfig {
     Duration exportTimeout();
     int pageSize();
 }
 ```
 
-The part that makes us "microservices in progress" rather than finished is the database. All the new services still talk to one shared database. Splitting code is hard enough; splitting a database that has grown together over many years, with foreign keys between tables that now belong to different services, is a project of its own. Because the schema is still shared, we moved every database change (all the Liquibase changesets from all modules) into a single central project. If each service owned its own migrations against a shared schema, two services could easily change the same table in conflicting ways. With one project, every schema change goes through one place and one history. Separating the database into per-service databases is what we are working on now, and it is the step that will turn these services into real microservices.
+The database needed its own plan. Splitting code is hard enough, and a data model that has grown together over many years, with foreign keys running between tables that end up belonging to different services, deserves careful thought of its own. One decision from that part of the work held up well: we moved every database change (all the Liquibase changesets from all modules) into a single central project, so that every schema change went through one place and one history.
 
 ## JNDI: the problem we expected and didn't have
 
@@ -135,14 +135,12 @@ The default Quarkus Scheduler keeps everything in memory, though. It knows nothi
 
 ```properties
 quarkus.quartz.store-type=jdbc-cmt
-quarkus.quartz.table-prefix=reports_qrtz_
+quarkus.quartz.table-prefix=myservice_qrtz_
 ```
 
 ![Three generations of scheduling: EJB timers managed by the application server, the Quarkus Scheduler keeping its state in memory, and Quartz keeping jobs, triggers and last and next run times in database tables](/images/blog/payara-wildfly-quarkus/schedulers.png)
 
-Two clean-ups came later. At first several services shared one set of Quartz tables, and we moved each service to its own table prefix so that no two services share scheduler state, which also fits the direction of giving each service its own data. We also removed the Quartz extension from services that had no scheduled methods at all.
-
-Today each service runs as a single instance, so we don't have to deal with several copies of a service competing for the same job. That question did come up early in the planning, though, and having the scheduler's state in the database means we are not starting from zero if we ever need it.
+Two clean-ups came later. At first several services shared one set of Quartz tables, and we moved each service to its own table prefix so that no two services share scheduler state. We also removed the Quartz extension from services that had no scheduled methods at all.
 
 ## The smaller things that bit us
 
@@ -156,4 +154,4 @@ For messaging between services we first tried to talk to a managed cloud message
 
 Going to WildFly first looked like a detour at the time, but I think it was the right call. It gave us a stable, supported platform while we planned the Quarkus migration properly, instead of rushing a big architectural change because the old server had become a risk.
 
-The Quarkus migration took a long time because we were taking a monolith apart while moving it, and that meant decisions about boundaries, shared code and data that no tool makes for you. The services are separate now, and the database is the last big piece. Once each service owns its own data, I'll write about how that went.
+The Quarkus migration took a long time because we were taking a monolith apart while moving it, and that meant decisions about boundaries, shared code and data that no tool makes for you.

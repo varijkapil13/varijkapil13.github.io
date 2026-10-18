@@ -63,8 +63,6 @@
       <p class="sub">One service per former module, each built and deployed on its own.</p>
       <p class="goal">Goal: services, planned step by step</p>
       <div class="shape"><span class="svc">service</span><span class="svc">service</span><span class="svc">…</span></div>
-      <div class="xfer"><span class="rail"></span><span class="b" style="background: var(--data)">D</span><span class="t">Still one shared database</span></div>
-      <p class="sub">Next, still being built: one database per service.</p>
     </div>
   </div>
 </figure>
@@ -76,8 +74,7 @@
     <li><p class="name">Its own repository and build</p><p class="sub">The module leaves the monolith and is released on its own schedule.</p></li>
     <li><p class="name">Only the entities it uses</p><p class="sub">The service keeps its own copy of the entities it needs, not the whole model.</p></li>
     <li><p class="name">Shared code in small libraries</p><p class="sub">What several services need moves into small, versioned libraries.</p></li>
-    <li class="ix"><p class="name">Database changes in one central project</p><p class="sub">The database is still shared, so every schema change goes through one project.</p>
-      <div class="xfer"><span class="rail"></span><span class="b" style="background: var(--data)">D</span><span class="t">Change to the Data line: one shared database</span></div></li>
+    <li class="ix"><p class="name">Database changes in one central project</p><p class="sub">Every schema change goes through one project, with one history.</p></li>
   </ol>
 </figure>
 

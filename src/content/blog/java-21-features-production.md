@@ -45,7 +45,7 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 }
 ```
 
-What I like about this is how little the code changes. It is still an `ExecutorService` and still `Future`s, so the programming model stays the plain, blocking style that everyone on the team can read and debug. Notice also the try-with-resources block: closing the executor waits for all submitted tasks to finish, so nothing leaks out of that block. I'd heard plenty of hype about virtual threads before we tried them, and in our case they lived up to it. In our API gateway they let us handle 10x more concurrent connections on the same hardware.
+What I like about this is how little the code changes. It is still an `ExecutorService` and still `Future`s, so the programming model stays the plain, blocking style that everyone on the team can read and debug. Notice also the try-with-resources block: closing the executor waits for all submitted tasks to finish, so nothing leaks out of that block. I'd heard plenty of hype about virtual threads before we tried them, and in our case they lived up to it, letting us handle 10x more concurrent connections on the same hardware.
 
 ## Structured concurrency, still in preview
 

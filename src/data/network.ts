@@ -1,7 +1,6 @@
 // The site's map: the platform's modernization drawn as transit lines.
 // Each line is one part of the platform; each station is a step on it,
 // usually a post. All lines run into one interchange, today's platform.
-// Stations in `future` are still being built (drawn dashed).
 import network from "./network.json";
 
 export type Lang = "en" | "de" | "hi";
@@ -17,7 +16,6 @@ export interface Line {
   code: string;
   name: Record<Lang, string>;
   stations: Station[];
-  future: Station[];
 }
 
 export const lines = network.lines as Line[];

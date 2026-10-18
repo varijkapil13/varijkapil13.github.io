@@ -75,7 +75,7 @@ I started with the metrics. The p99 latency was spiking while p50 stayed normal.
 
 The next step was a thread dump. It showed 40 threads stuck in `SocketInputStream.read()`, all talking to our cache server. `read()` on a socket blocks until data arrives, so these threads had sent a request and were waiting for an answer that was taking far too long.
 
-The obvious suspect was the cache itself, but Redis was healthy. The network metrics, though, showed packet loss to that subnet. When packets are lost, TCP has to retransmit them, which explains why some requests waited a long time while others went through normally. The root cause was a flapping network switch, which the infra team fixed.
+The obvious suspect was the cache itself, but the cache server was healthy. The network metrics, though, showed packet loss to that subnet. When packets are lost, TCP has to retransmit them, which explains why some requests waited a long time while others went through normally. The root cause was a flapping network switch, which was then fixed.
 
 The whole thing took 15 minutes. Without the thread dump, I would have spent hours looking at application code, because nothing about the symptom pointed outside the application.
 
@@ -94,7 +94,7 @@ The first point matters more than it looks, since slim container images often in
 
 I'd rather not need any of this, so I've learned to build services that fail in more predictable ways. I add circuit breakers around external calls: when a dependency keeps failing, the breaker stops sending it requests for a while and fails fast, so threads don't pile up waiting on something that isn't going to answer. I set sensible timeouts everywhere and never use infinite timeouts, because without a timeout a thread waiting on a slow socket can wait forever, much like the threads in that incident. I monitor queue depths and thread pool saturation, which show trouble building up before requests start failing. And I alert on error rate increases, not just errors, since a service that handles a lot of traffic always has a few errors and the useful signal is a change in the rate.
 
-Our monitoring now catches most issues before users notice. When something does slip through, I fall back on the tools above.
+With those in place, monitoring tends to catch most issues before users notice. When something does slip through, I fall back on the tools above.
 
 ## Write it down
 
