@@ -1,8 +1,12 @@
 ---
+import Arrow from "../../../components/Arrow.astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
 import { series, type SeriesId } from "../../../data/series";
-import { getSeriesPosts } from "../../../utils/series";
+import { lines, text } from "../../../data/network";
 import { readingTime } from "../../../utils/readingTime";
+import NetworkMap from "../../../components/NetworkMap.astro";
+import LineBullet from "../../../components/LineBullet.astro";
 
 export function getStaticPaths() {
   return Object.keys(series).map((id) => ({ params: { id } }));
@@ -10,39 +14,49 @@ export function getStaticPaths() {
 
 const id = Astro.params.id as SeriesId;
 const { title, description } = series[id];
-const posts = await getSeriesPosts(id);
+const posts = new Map((await getCollection("blog", ({ data }) => !data.draft)).map((p) => [p.id, p]));
 ---
 
 <BaseLayout title={title} description={description}>
-  <section class="border-b border-line">
-    <div class="container-custom py-14 md:py-20">
-      <a href="/blog" class="eyebrow hover:text-fg transition-colors">← Writing</a>
-      <p class="eyebrow mt-8 mb-4"><span class="dot mr-2 align-middle"></span>Series · {posts.length} parts · {posts[0]?.data.date.getFullYear()}–{posts.at(-1)?.data.date.getFullYear()}</p>
-      <h1 class="text-4xl md:text-5xl font-semibold tracking-[-0.035em] leading-[1.08] mb-5 max-w-3xl text-balance">{title}</h1>
-      <p class="text-lg text-muted max-w-2xl">{description}</p>
+  <section class="masthead">
+    <div class="container-custom pt-16 pb-12 md:pt-24 md:pb-16">
+      <a href="/blog" class="text-sm text-muted hover:text-fg transition-colors"><Arrow dir="left" /> Writing</a>
+      <h1 class="page-title text-[2.25rem] md:text-[3.25rem] max-w-[20ch] mt-6">{title}</h1>
+      <p class="text-muted text-[17px] leading-relaxed max-w-[62ch] mt-5">{description}</p>
     </div>
   </section>
 
-  <section class="container-custom py-12">
-    <ol class="relative max-w-3xl">
-      {posts.map((post, i) => (
-        <li class="relative pl-14 pb-10 last:pb-0 group">
-          {i < posts.length - 1 && <span class="absolute left-[15px] top-9 bottom-0 w-px bg-line" aria-hidden="true"></span>}
-          <span class="absolute left-0 top-0 w-8 h-8 rounded-md border border-line bg-panel font-mono text-xs text-accent flex items-center justify-center">
-            {String(i + 1).padStart(2, "0")}
-          </span>
-          <a href={`/blog/${post.id}`} class="block">
-            <p class="eyebrow mb-1.5">
-              <time datetime={post.data.date.toISOString()}>
-                {post.data.date.toLocaleDateString("en-US", { year: "numeric", month: "long" })}
-              </time>{" "}
-              · {readingTime(post.body)} min{post.data.seriesLabel && <> · {post.data.seriesLabel}</>}
-            </p>
-            <h2 class="text-lg font-medium leading-snug group-hover:text-accent transition-colors">{post.data.title}</h2>
-            {post.data.description && <p class="text-sm text-muted mt-1.5">{post.data.description}</p>}
-          </a>
-        </li>
-      ))}
-    </ol>
+  <section class="container-custom py-12 md:py-16">
+    <NetworkMap lang="en" todayLabel="Today" buildingLabel="Still being built" />
+  </section>
+
+  <section class="container-custom pb-8 grid gap-12 md:grid-cols-2">
+    {lines.map((line) => (
+      <div style={`--c: var(--line-${line.id})`}>
+        <h2 class="flex items-center gap-2.5 font-semibold tracking-tight text-[18px] pb-3 border-b-2" style="border-color: var(--c)">
+          <LineBullet line={line} size="lg" /> {line.name.en} line
+        </h2>
+        <ol>
+          {line.stations.map((station) => {
+            const post = station.post ? posts.get(station.post) : undefined;
+            return (
+              <li class="border-b border-line py-3.5">
+                {post ? (
+                  <a href={`/blog/${post.id}`} class="block group">
+                    <span class="font-medium text-[13px] text-muted">{text(station.label)} · {post.data.date.getFullYear()} · {readingTime(post.body)} min</span>
+                    <span class="block font-medium text-[15.5px] leading-snug mt-0.5 group-hover:underline underline-offset-2">{post.data.title}</span>
+                  </a>
+                ) : (
+                  <span class="font-medium text-[13px] text-muted">{text(station.label)}</span>
+                )}
+              </li>
+            );
+          })}
+          {line.future.map((station) => (
+            <li class="border-b border-dashed border-line py-3.5 font-medium text-[13px] text-muted">{text(station.label)} · still being built</li>
+          ))}
+        </ol>
+      </div>
+    ))}
   </section>
 </BaseLayout>

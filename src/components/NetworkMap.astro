@@ -1,0 +1,443 @@
+---
+import { getCollection } from "astro:content";
+import { lines, hubName, mapColumns, text, type Lang } from "../data/network";
+import LineBullet from "./LineBullet.astro";
+
+interface Props {
+  lang: Lang;
+  todayLabel: string;
+  buildingLabel: string;
+}
+
+const { lang, todayLabel, buildingLabel } = Astro.props;
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+const titles = new Map(posts.map((p) => [p.id, p.data.title]));
+---
+
+<!-- Wide screens: one row per line, stations right-aligned so every line runs into the interchange -->
+<div class="netmap hidden md:block" style={`--cols: ${mapColumns}; --rows: ${lines.length}`}>
+  <div class="nm-hub-layer" aria-hidden="true">
+    <span class="nm-hub"></span>
+    <span class="nm-hub-label"><strong>{todayLabel}</strong> {hubName[lang]}</span>
+  </div>
+  {lines.map((line, li) => (
+    <div class="nm-row" style={`--c: var(--line-${line.id}); --li: ${li}; --n: ${line.stations.length}`}>
+      <p class="nm-name"><LineBullet line={line} /> {line.name[lang]}</p>
+      <ol class="nm-track" style={`grid-column: ${mapColumns - line.stations.length + 2} / span ${line.stations.length}`}>
+        {line.stations.map((station, si) => (
+          <li class="nm-station" style={`--si: ${si}`}>
+            {station.post ? (
+              <a href={`/blog/${station.post}`} title={titles.get(station.post)}>{text(station.label, lang)}</a>
+            ) : (
+              <span>{text(station.label, lang)}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+      <span class:list={["nm-through", line.future.length === 0 && "is-terminus"]} aria-hidden="true"></span>
+      {line.future.length > 0 && (
+        <ol class="nm-future" aria-label={buildingLabel}>
+          {line.future.map((station) => <li class="nm-station" style={`--si: ${mapColumns + 4}`}><span>{text(station.label, lang)}</span></li>)}
+        </ol>
+      )}
+    </div>
+  ))}
+</div>
+
+<!-- Phones and small tablets: each line as a strip map, like the ones above train doors -->
+<div class="grid grid-cols-2 gap-x-4 gap-y-7 md:hidden">
+  {lines.map((line) => (
+    <div class="strip-wrap" style={`--c: var(--line-${line.id})`}>
+      <p class="nm-name mb-3"><LineBullet line={line} /> {line.name[lang]}</p>
+      <ol class="strip">
+        {line.stations.map((station, si) => (
+          <li style={`--si: ${si}`}>
+            {station.post ? (
+              <a href={`/blog/${station.post}`} title={titles.get(station.post)}>{text(station.label, lang)}</a>
+            ) : (
+              <span class="text-muted">{text(station.label, lang)}</span>
+            )}
+          </li>
+        ))}
+        <li class="strip-hub" style={`--si: ${line.stations.length}`}><span><strong>{todayLabel}</strong></span></li>
+        {line.future.map((station) => (
+          <li class="strip-future" style={`--si: ${line.stations.length + 1}`}><span class="text-muted">{text(station.label, lang)}</span></li>
+        ))}
+      </ol>
+    </div>
+  ))}
+</div>
+
+<style>
+  @reference "../styles/global.css";
+
+  /* Shared column template: line name, the station columns, the interchange, stations still being built */
+  .netmap {
+    --name: 128px;
+    --hub: 40px;
+    --future: 168px;
+    --row: 62px;
+    --rail: 3px;
+    --dot: 9px;
+    /* distance from a row's top to the centre of its rail */
+    --rail-y: calc(var(--row) - 16px);
+    position: relative;
+  }
+
+  .nm-row,
+  .nm-hub-layer {
+    display: grid;
+    grid-template-columns: var(--name) repeat(var(--cols), minmax(0, 1fr)) var(--hub) var(--future);
+  }
+
+  .nm-row {
+    height: var(--row);
+    position: relative;
+    transition: opacity 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Signature interaction: pointing at a line brings it forward */
+  .netmap:has(.nm-row:hover, .nm-row:focus-within) .nm-row:not(:hover, :focus-within) {
+    opacity: 0.18;
+  }
+
+  .nm-name {
+    @apply flex items-center gap-2 font-medium text-[13px] leading-none text-fg;
+  }
+
+  .netmap .nm-name {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+    height: 20px;
+    margin-top: calc(var(--rail-y) - 10px);
+  }
+
+  .nm-track,
+  .nm-future {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-row: 1;
+    height: var(--row);
+  }
+
+  .nm-future {
+    grid-column: calc(var(--cols) + 3);
+  }
+
+  .nm-station {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0 4px calc(var(--row) - var(--rail-y) + 10px);
+    text-align: center;
+    @apply text-[12.5px] leading-[1.15];
+  }
+
+  .nm-station a {
+    @apply text-fg hover:text-accent transition-colors;
+  }
+
+  .nm-station span {
+    @apply text-muted;
+  }
+
+  /* The rail: each station draws the half on either side of its dot */
+  .nm-station::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--rail-y) - var(--rail) / 2);
+    height: var(--rail);
+    background: var(--c);
+  }
+
+  .nm-track .nm-station:first-child::before {
+    left: 50%;
+    border-radius: 2px 0 0 2px;
+  }
+
+  /* Station dot */
+  .nm-station::after {
+    content: "";
+    position: absolute;
+    left: calc(50% - var(--dot) / 2);
+    top: calc(var(--rail-y) - var(--dot) / 2);
+    width: var(--dot);
+    height: var(--dot);
+    border-radius: 50%;
+    background: var(--panel);
+    border: 2px solid var(--c);
+  }
+
+  .nm-station:has(a)::after {
+    background: var(--c);
+  }
+
+  .nm-station:has(a:hover)::after,
+  .nm-station:has(a:focus-visible)::after {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 25%, transparent);
+  }
+
+  /* Rail continuing into the interchange */
+  .nm-through {
+    grid-column: calc(var(--cols) + 2);
+    grid-row: 1;
+    position: relative;
+  }
+
+  .nm-through::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--rail-y) - var(--rail) / 2);
+    height: var(--rail);
+    background: var(--c);
+  }
+
+  .nm-through.is-terminus::before {
+    right: 50%;
+  }
+
+  /* Stations still being built: dashed rail, open dot */
+  .nm-future .nm-station::before {
+    right: 50%;
+    background: repeating-linear-gradient(90deg, var(--c) 0 6px, transparent 6px 11px);
+    opacity: 0.8;
+  }
+
+  .nm-future .nm-station::after {
+    background: var(--panel);
+  }
+
+  /* The interchange every line runs into */
+  .nm-hub-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .nm-hub {
+    grid-column: calc(var(--cols) + 2);
+    grid-row: 1;
+    justify-self: center;
+    width: 16px;
+    margin-top: calc(var(--rail-y) - 8px);
+    height: calc((var(--rows) - 1) * var(--row) + 16px);
+    border-radius: 8px;
+    background: var(--panel);
+    border: 2px solid var(--fg);
+  }
+
+  .nm-hub-label {
+    grid-column: calc(var(--cols) + 3);
+    grid-row: 1;
+    align-self: start;
+    margin-top: calc(var(--rail-y) - 18px);
+    padding-left: 8px;
+    @apply text-[12.5px] leading-[1.2] text-muted;
+  }
+
+  .nm-hub-label strong {
+    @apply block font-semibold text-[14px] text-fg;
+  }
+
+  /* Strip maps (phones) */
+  .strip li {
+    position: relative;
+    padding: 0 0 0 22px;
+    min-height: 30px;
+    @apply text-[14px] leading-[1.2];
+  }
+
+  .strip li a {
+    @apply text-fg;
+  }
+
+  .strip li::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--c);
+  }
+
+  .strip li:first-child::before {
+    top: 7px;
+  }
+
+  .strip li::after {
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 4px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--panel);
+    border: 2px solid var(--c);
+  }
+
+  .strip li:has(a)::after {
+    background: var(--c);
+  }
+
+  .strip li.strip-hub::after {
+    left: 0;
+    top: 1px;
+    width: 15px;
+    height: 15px;
+    border: 2px solid var(--fg);
+    background: var(--panel);
+  }
+
+  .strip li.strip-hub:last-child::before {
+    bottom: auto;
+    height: 8px;
+  }
+
+  .strip li.strip-future::before {
+    background: repeating-linear-gradient(180deg, var(--c) 0 5px, transparent 5px 9px);
+    bottom: auto;
+    height: 12px;
+  }
+
+  .strip li.strip-future::after {
+    top: 12px;
+  }
+
+  .strip li.strip-future {
+    padding-top: 8px;
+  }
+
+  /* Focal moment: the network draws itself once, the first time it scrolls into view.
+     Lines start one after another; each rail runs station by station toward the
+     interchange, dots and names arriving as it passes. Then the interchange closes
+     and the dashed future sections follow. Only with JS (html.js) and full motion;
+     otherwise the map is simply there. */
+  @media (prefers-reduced-motion: no-preference) {
+    .netmap {
+      --step: 85ms;
+      --line-gap: 70ms;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    :global(.js) .netmap:not(.is-drawn) .nm-station::before,
+    :global(.js) .netmap:not(.is-drawn) .nm-through::before {
+      transform: scaleX(0);
+    }
+
+    :global(.js) .netmap:not(.is-drawn) .nm-station::after {
+      transform: scale(0);
+      opacity: 0;
+    }
+
+    :global(.js) .netmap:not(.is-drawn) .nm-station > *,
+    :global(.js) .netmap:not(.is-drawn) .nm-name,
+    :global(.js) .netmap:not(.is-drawn) .nm-hub-label {
+      opacity: 0;
+      transform: translateY(3px);
+    }
+
+    :global(.js) .netmap:not(.is-drawn) .nm-hub {
+      clip-path: inset(0 0 100% 0 round 8px);
+    }
+
+    .nm-station::before,
+    .nm-through::before {
+      transform-origin: left center;
+    }
+
+    .netmap.is-drawn .nm-station::before {
+      transition: transform 180ms linear calc(var(--li) * var(--line-gap) + var(--si) * var(--step));
+    }
+
+    .netmap.is-drawn .nm-track .nm-station:first-child::before {
+      transform-origin: left center;
+    }
+
+    .netmap.is-drawn .nm-station::after {
+      transition:
+        transform 420ms var(--ease) calc(var(--li) * var(--line-gap) + var(--si) * var(--step) + 60ms),
+        opacity 200ms ease-out calc(var(--li) * var(--line-gap) + var(--si) * var(--step) + 60ms),
+        box-shadow 200ms ease-out;
+    }
+
+    .netmap.is-drawn .nm-station > *,
+    .netmap.is-drawn .nm-name {
+      transition:
+        opacity 400ms ease-out calc(var(--li) * var(--line-gap) + var(--si, 0) * var(--step) + 80ms),
+        transform 500ms var(--ease) calc(var(--li) * var(--line-gap) + var(--si, 0) * var(--step) + 80ms),
+        color 150ms;
+    }
+
+    .netmap.is-drawn .nm-through::before {
+      transition: transform 160ms linear calc(var(--li) * var(--line-gap) + var(--n) * var(--step));
+    }
+
+    .netmap.is-drawn .nm-hub {
+      clip-path: inset(0 0 0 0 round 8px);
+      transition: clip-path 520ms var(--ease) calc(var(--cols) * var(--step) + 2 * var(--line-gap));
+    }
+
+    .netmap.is-drawn .nm-hub-label {
+      transition: opacity 400ms ease-out calc(var(--cols) * var(--step) + 5 * var(--line-gap)), transform 500ms var(--ease) calc(var(--cols) * var(--step) + 5 * var(--line-gap));
+    }
+
+    /* Strip maps on phones draw downward, one strip at a time as each scrolls in */
+    :global(.js) .strip-wrap:not(.is-drawn) .strip li::before {
+      transform: scaleY(0);
+    }
+
+    :global(.js) .strip-wrap:not(.is-drawn) .strip li::after {
+      transform: scale(0);
+    }
+
+    :global(.js) .strip-wrap:not(.is-drawn) .strip li > * {
+      opacity: 0;
+    }
+
+    .strip li::before {
+      transform-origin: center top;
+    }
+
+    .strip-wrap.is-drawn .strip li::before {
+      transition: transform 140ms linear calc(var(--si) * 70ms);
+    }
+
+    .strip-wrap.is-drawn .strip li::after {
+      transition: transform 380ms var(--ease, cubic-bezier(0.16, 1, 0.3, 1)) calc(var(--si) * 70ms + 50ms);
+    }
+
+    .strip-wrap.is-drawn .strip li > * {
+      transition: opacity 320ms ease-out calc(var(--si) * 70ms + 60ms);
+    }
+  }
+</style>
+
+<script>
+  // Draw each map (and each phone strip) the first time it is mostly in view
+  const targets = document.querySelectorAll<HTMLElement>(".netmap, .strip-wrap");
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add("is-drawn");
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.35 }
+    );
+    targets.forEach((t) => observer.observe(t));
+  } else {
+    targets.forEach((t) => t.classList.add("is-drawn"));
+  }
+</script>

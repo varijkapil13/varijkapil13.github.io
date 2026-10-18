@@ -1,0 +1,136 @@
+---
+import Arrow from "./Arrow.astro";
+import { getCollection } from "astro:content";
+import { text, type Line } from "../data/network";
+import LineBullet from "./LineBullet.astro";
+
+interface Props {
+  line: Line;
+  index: number;
+}
+
+const { line, index } = Astro.props;
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+const titles = new Map(posts.map((p) => [p.id, p.data.title]));
+
+// Nearest stations on either side that have a post
+const prev = line.stations.slice(0, index).reverse().find((s) => s.post && titles.has(s.post));
+const next = line.stations.slice(index + 1).find((s) => s.post && titles.has(s.post));
+---
+
+<nav aria-label={`${line.name.en} line`} class="mt-16 pt-8 border-t border-line" style={`--c: var(--line-${line.id})`}>
+  <p class="flex items-center gap-2.5 font-semibold tracking-tight text-[17px]">
+    <LineBullet line={line} size="lg" /> {line.name.en} line
+  </p>
+
+  <ol class="line-strip mt-5">
+    {line.stations.map((station, i) => (
+      <li class:list={[i === index && "is-here", i < index && "is-past"]}>
+        {i === index ? (
+          <span aria-current="page">{text(station.label)}</span>
+        ) : station.post ? (
+          <a href={`/blog/${station.post}`} title={titles.get(station.post)}>{text(station.label)}</a>
+        ) : (
+          <span class="text-muted">{text(station.label)}</span>
+        )}
+      </li>
+    ))}
+    <li class="is-hub"><span>Today</span></li>
+  </ol>
+
+  <div class="grid sm:grid-cols-2 gap-4 mt-8">
+    {prev ? (
+      <a href={`/blog/${prev.post}`} class="stop-link">
+        <span class="text-muted text-sm"><Arrow dir="left" /> Previous station · {text(prev.label)}</span>
+        <span class="block mt-1 font-semibold leading-snug">{titles.get(prev.post!)}</span>
+      </a>
+    ) : <span class="hidden sm:block"></span>}
+    {next ? (
+      <a href={`/blog/${next.post}`} class="stop-link sm:text-right">
+        <span class="text-muted text-sm">Next station · {text(next.label)} <Arrow /></span>
+        <span class="block mt-1 font-semibold leading-snug">{titles.get(next.post!)}</span>
+      </a>
+    ) : (
+      <a href="/blog/series/monolith-to-saas" class="stop-link sm:text-right">
+        <span class="text-muted text-sm">End of the line <Arrow /></span>
+        <span class="block mt-1 font-semibold leading-snug">See the whole network</span>
+      </a>
+    )}
+  </div>
+</nav>
+
+<style>
+  @reference "../styles/global.css";
+
+  .line-strip {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 16px;
+  }
+
+  .line-strip li {
+    position: relative;
+    padding: 16px 14px 0 0;
+    @apply text-[13px] leading-tight text-muted;
+  }
+
+  .line-strip li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 4px;
+    height: 3px;
+    background: var(--c);
+  }
+
+  .line-strip li::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--c);
+  }
+
+  .line-strip a {
+    @apply text-fg hover:text-accent transition-colors;
+  }
+
+  .line-strip li:has(a)::after {
+    background: var(--c);
+  }
+
+  .line-strip li.is-here {
+    @apply text-fg font-medium;
+  }
+
+  .line-strip li.is-here::after {
+    left: -2px;
+    top: -1px;
+    width: 13px;
+    height: 13px;
+    background: var(--c);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 25%, transparent);
+  }
+
+  .line-strip li.is-hub::after {
+    left: -2px;
+    top: -1px;
+    width: 13px;
+    height: 13px;
+    border-color: var(--fg);
+  }
+
+  .line-strip li.is-hub::before {
+    right: auto;
+    width: 6px;
+  }
+
+  .stop-link {
+    @apply block rounded-[12px] border border-line bg-panel p-4 hover:border-line-strong transition-colors;
+  }
+</style>

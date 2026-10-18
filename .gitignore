@@ -39,3 +39,6 @@ pnpm-debug.log*
 # lock files (optional - uncomment if you want to commit them)
 # yarn.lock
 # package-lock.json
+
+# impeccable review captures
+.impeccable/review/

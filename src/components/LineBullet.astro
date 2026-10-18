@@ -1,0 +1,12 @@
+---
+import type { Line } from "../data/network";
+
+interface Props {
+  line: Line;
+  size?: "md" | "lg";
+}
+
+const { line, size = "md" } = Astro.props;
+---
+
+<span class:list={["bullet", size === "lg" && "bullet-lg"]} data-line={line.id} style={`--c: var(--line-${line.id})`} aria-hidden="true">{line.code}</span>

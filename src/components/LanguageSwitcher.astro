@@ -15,7 +15,7 @@ const targetPath = (lang: string) => {
 <div class="lang-switcher relative">
   <button
     type="button"
-    class="lang-toggle flex items-center gap-1.5 px-2.5 py-1.5 rounded-md font-mono text-xs text-muted hover:text-fg hover:bg-panel transition-colors"
+    class="lang-toggle flex items-center gap-1.5 px-2.5 py-1.5 rounded-[4px] font-medium text-[13px] text-muted hover:text-fg hover:bg-panel transition-colors"
     aria-label="Select language"
     aria-expanded="false"
   >
@@ -29,13 +29,13 @@ const targetPath = (lang: string) => {
   </button>
 
   <div
-    class="lang-dropdown hidden absolute right-0 mt-2 w-36 rounded-lg bg-bg border border-line shadow-xl py-1 z-50"
+    class="lang-dropdown hidden absolute right-0 mt-2 w-40 rounded-[4px] bg-bg border-2 border-fg py-1 z-50"
   >
     {Object.entries(languages).map(([lang, label]) => (
       <a
         href={targetPath(lang)}
         class:list={[
-          "block px-3 py-2 text-sm hover:bg-panel transition-colors",
+          "block px-3 py-2 hover:bg-panel transition-colors",
           lang === currentLang
             ? "text-fg font-medium"
             : "text-muted"
