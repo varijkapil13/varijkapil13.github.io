@@ -10,8 +10,8 @@ export const aboutData = {
         location: "Cologne Bonn Region, Germany · Remote",
         description: "I lead about 15 engineers across backend development and operations, moving Digital Automotive from a legacy monolith to a multi-tenant SaaS platform.",
         highlights: [
-          "Platform modernization: Architected and led migration from JavaEE modular monolith to ~15 microservices using domain-driven design. Applied strangler fig pattern for incremental migration. Migrated core modules to Quarkus and transitioned from VM-per-customer to shared Kubernetes infrastructure with namespace-per-tenant isolation.",
-          "Global, secure architecture: Designing geo-replicated infrastructure for global availability. Introduced HashiCorp Vault for secrets management with automated credential rotation. Driving compliance with GDPR, TISAX, and ISO 27001.",
+          "Platform modernization: Architected and led migration from a Java EE modular monolith to microservices using domain-driven design. Applied strangler fig pattern for incremental migration. Migrated core modules to Quarkus and transitioned from VM-per-customer to shared Kubernetes infrastructure with namespace-per-tenant isolation.",
+          "Security: Introduced HashiCorp Vault for secrets management and led the platform's security and data-protection work.",
           "Operations: Replaced fragile, manually triggered pipelines with GitOps using Pulumi and Helm. Added distributed tracing and metrics across all services.",
           "Engineering practices: Brought Claude into developer workflows. Reworked code review around AI-assisted analysis, Qodana, and SonarQube. Introduced ADRs for architectural decision-making. Documented platform architecture using arc42.",
           "Team and org development: Scaled the team through direct hiring and introduced offshore hiring practices. Restructured organization using Team Topologies, transitioning from managing individual contributors to leading team leads.",
@@ -155,8 +155,8 @@ export const aboutData = {
         location: "Region Köln/Bonn, Deutschland · Remote",
         description: "Leitung eines Teams von ~15 Ingenieuren in Backend-Entwicklung und Operations, Steuerung der Transformation von Digital Automotive von einem Legacy-Monolithen zu einer modernen, mandantenfähigen SaaS-Plattform.",
         highlights: [
-          "Plattform-Modernisierung: Architektur und Leitung der Migration von JavaEE-Monolith zu ~15 Microservices mit Domain-Driven Design. Anwendung des Strangler-Fig-Patterns für inkrementelle Migration. Migration von Kernmodulen zu Quarkus und Übergang von VM-pro-Kunde zu geteilter Kubernetes-Infrastruktur mit Namespace-pro-Mandant-Isolation.",
-          "Globale & sichere Architektur: Design geo-replizierter Infrastruktur für globale Verfügbarkeit. Einführung von HashiCorp Vault für Secrets-Management mit automatisierter Credential-Rotation. Einhaltung von GDPR, TISAX und ISO 27001.",
+          "Plattform-Modernisierung: Architektur und Leitung der Migration von einem JavaEE-Monolithen zu Microservices mit Domain-Driven Design. Anwendung des Strangler-Fig-Patterns für inkrementelle Migration. Migration von Kernmodulen zu Quarkus und Übergang von VM-pro-Kunde zu geteilter Kubernetes-Infrastruktur mit Namespace-pro-Mandant-Isolation.",
+          "Sicherheit: Einführung von HashiCorp Vault für Secrets-Management und Leitung der Sicherheits- und Datenschutzarbeit der Plattform.",
           "Operations-Transformation: Ersetzung fragiler, manuell getriggerter Pipelines durch GitOps-Praktiken mit Pulumi und Helm. Implementierung umfassender Observability mit verteiltem Tracing und Metriken über alle Services.",
           "Engineering Excellence: Integration von KI in Entwickler-Workflows mit Claude. Transformation von Code-Review-Prozessen mit KI-gesteuerter Analyse, Qodana und SonarQube. Einführung von ADRs für Architekturentscheidungen. Plattform-Dokumentation mit arc42.",
           "Team- & Org-Entwicklung: Skalierung des Teams durch direkte Einstellungen und Einführung von Offshore-Hiring-Praktiken. Umstrukturierung der Organisation mit Team Topologies, Übergang von der Führung einzelner Mitarbeiter zur Führung von Teamleitern.",
@@ -300,8 +300,8 @@ export const aboutData = {
         location: "कोलोन बॉन क्षेत्र, जर्मनी · रिमोट",
         description: "~15 इंजीनियरों की टीम का नेतृत्व बैकएंड डेवलपमेंट और ऑपरेशंस में, Digital Automotive के लीगेसी मोनोलिथ से आधुनिक, मल्टी-टेनेंट SaaS प्लेटफॉर्म में ट्रांसफॉर्मेशन का नेतृत्व।",
         highlights: [
-          "प्लेटफॉर्म आधुनिकीकरण: JavaEE मॉड्यूलर मोनोलिथ से ~15 माइक्रोसर्विसेज में माइग्रेशन का आर्किटेक्चर और नेतृत्व डोमेन-ड्रिवन डिज़ाइन के साथ। इंक्रीमेंटल माइग्रेशन के लिए स्ट्रैंगलर फिग पैटर्न। कोर मॉड्यूल्स का Quarkus में माइग्रेशन और VM-प्रति-ग्राहक से शेयर्ड Kubernetes इन्फ्रास्ट्रक्चर में ट्रांजिशन।",
-          "ग्लोबल और सुरक्षित आर्किटेक्चर: वैश्विक उपलब्धता के लिए जियो-रेप्लिकेटेड इन्फ्रास्ट्रक्चर डिज़ाइन। ऑटोमेटेड क्रेडेंशियल रोटेशन के साथ सीक्रेट्स मैनेजमेंट के लिए HashiCorp Vault। GDPR, TISAX, और ISO 27001 अनुपालन।",
+          "प्लेटफॉर्म आधुनिकीकरण: JavaEE मॉड्यूलर मोनोलिथ से माइक्रोसर्विसेज में माइग्रेशन का आर्किटेक्चर और नेतृत्व डोमेन-ड्रिवन डिज़ाइन के साथ। इंक्रीमेंटल माइग्रेशन के लिए स्ट्रैंगलर फिग पैटर्न। कोर मॉड्यूल्स का Quarkus में माइग्रेशन और VM-प्रति-ग्राहक से शेयर्ड Kubernetes इन्फ्रास्ट्रक्चर में ट्रांजिशन।",
+          "सुरक्षा: सीक्रेट्स मैनेजमेंट के लिए HashiCorp Vault की शुरुआत, और प्लेटफॉर्म के सुरक्षा व डेटा-सुरक्षा कार्य का नेतृत्व।",
           "ऑपरेशंस ट्रांसफॉर्मेशन: फ्रैजाइल, मैन्युअली-ट्रिगर्ड पाइपलाइन्स को Pulumi और Helm के साथ GitOps प्रैक्टिसेज से बदलना। सभी सर्विसेज में डिस्ट्रिब्यूटेड ट्रेसिंग और मेट्रिक्स के साथ कॉम्प्रिहेंसिव observability।",
           "इंजीनियरिंग एक्सीलेंस: Claude के साथ डेवलपर वर्कफ्लोज़ में AI। AI-ड्रिवन एनालिसिस, Qodana, और SonarQube के साथ कोड रिव्यू प्रोसेस ट्रांसफॉर्म। आर्किटेक्चर निर्णयों के लिए ADRs। arc42 से प्लेटफॉर्म डॉक्यूमेंटेशन।",
           "टीम और Org डेवलपमेंट: डायरेक्ट हायरिंग और ऑफशोर हायरिंग प्रैक्टिसेज से टीम स्केलिंग। Team Topologies से संगठन पुनर्गठन, इंडिविजुअल कंट्रीब्यूटर्स से टीम लीड्स के नेतृत्व में ट्रांजिशन।",

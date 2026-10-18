@@ -69,7 +69,7 @@ Pulumi handles infrastructure. Helm handles applications. A Kubernetes applicati
 - Our own services (internal chart repository)
 - Third-party software (official Helm repos)
 
-A typical values file for one of our services sets the number of replicas, the image to run, the resources it requests and its configuration:
+A values file for a service like this sets the number of replicas, the image to run, the resources it requests and its configuration:
 
 ```yaml
 replicaCount: 3
@@ -102,7 +102,7 @@ resources:
     memory: 512Mi
 ```
 
-Helm merges the files in order, so in production a service runs with five replicas and larger requests, while everything not mentioned in the production file, like the image and the configuration, comes from the defaults.
+Helm merges the files in order, so in this example production runs the service with five replicas and larger requests, while everything not mentioned in the production file, like the image and the configuration, comes from the defaults.
 
 ## The pipeline
 
@@ -146,7 +146,7 @@ The `only: changes` rules keep the jobs apart: a change to the infrastructure co
 
 ## Handling secrets
 
-Secrets were the one thing the "everything in Git" rule could not cover. Database passwords and API keys shouldn't be readable by everyone who can read the repository, and our rule is that secrets don't belong in Git, even encrypted. We use two things instead: Pulumi Config secrets for infrastructure secrets, and the External Secrets Operator, which syncs secrets from Vault to Kubernetes, for application secrets.
+Secrets were the one thing the "everything in Git" rule could not cover. Database passwords and API keys shouldn't be readable by everyone who can read the repository, and we decided that secrets don't belong in Git, even encrypted. We settled on two things instead: Pulumi Config secrets for infrastructure secrets, and the External Secrets Operator, which syncs secrets from Vault to Kubernetes, for application secrets.
 
 On the infrastructure side, Pulumi treats a value marked as secret differently from normal configuration. It is encrypted, and Pulumi keeps it out of its output, so it can be passed into resources like a Kubernetes Secret without showing up in logs:
 
@@ -163,7 +163,7 @@ new k8s.core.v1.Secret("db-credentials", {
 });
 ```
 
-Application secrets live in Vault, a dedicated store for secrets. The External Secrets Operator runs inside the cluster and watches Kubernetes for ExternalSecret resources like the one below. Each one says which value to fetch from Vault and which Kubernetes Secret to put it in, and the operator pulls the value from Vault and keeps the Secret up to date:
+For application secrets we went with Vault, a dedicated store for secrets. The External Secrets Operator runs inside the cluster and watches Kubernetes for ExternalSecret resources like the one below. Each one says which value to fetch from Vault and which Kubernetes Secret to put it in, and the operator pulls the value from Vault and keeps the Secret up to date:
 
 ```yaml
 apiVersion: external-secrets.io/v1beta1
@@ -187,13 +187,13 @@ The useful property of this split is that the ExternalSecret resource contains n
 
 ## What went wrong
 
-The setup didn't work smoothly from the start. Three problems in particular shaped how it looks today.
+The setup didn't work smoothly from the start. Three problems in particular shaped how it ended up.
 
-The first was drift. Drift is what happens when the real state of a system moves away from what the code describes, and the usual cause is a manual change. We had no drift detection at first. Someone made a manual change in production, and from then on Git said one thing while the cluster said another. Drift often doesn't break anything right away, which is what makes it dangerous: the next deployment either silently undoes the manual change or runs into it. Now we run `pulumi preview` periodically to detect drift.
+The first was drift. Drift is what happens when the real state of a system moves away from what the code describes, and the usual cause is a manual change. We had no drift detection at first. Someone made a manual change in production, and from then on Git said one thing while the cluster said another. Drift often doesn't break anything right away, which is what makes it dangerous: the next deployment either silently undoes the manual change or runs into it. After that we started running `pulumi preview` periodically to detect drift.
 
-The second was chart versioning, which confused us. Every Helm chart has a version number, and Helm uses it to tell different releases of a chart apart. We updated a chart without changing its version, and Helm didn't pick up the change. Now CI enforces version bumps, so a chart change without a new version fails the pipeline.
+The second was chart versioning, which confused us. Every Helm chart has a version number, and Helm uses it to tell different releases of a chart apart. We updated a chart without changing its version, and Helm didn't pick up the change. We then made CI enforce version bumps, so a chart change without a new version fails the pipeline.
 
-The third was that we simply had too many environments: dev, staging, QA, pre-prod and production. Each one needed its own set of values files, and every change had to be made five times. Managing that was tedious, so we consolidated to staging and production.
+The third was that we simply had too many environments: dev, staging, QA, pre-prod and production. Each one needed its own set of values files, and every change had to be made five times. Managing that was tedious, so we cut the list down to the environments we actually needed.
 
 ## Tips that helped
 

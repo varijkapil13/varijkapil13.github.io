@@ -27,7 +27,7 @@ const posts = new Map((await getCollection("blog", ({ data }) => !data.draft)).m
   </section>
 
   <section class="container-custom py-12 md:py-16">
-    <NetworkMap lang="en" todayLabel="Today" buildingLabel="Still being built" />
+    <NetworkMap lang="en" todayLabel="Today" />
   </section>
 
   <section class="container-custom pb-8 grid gap-12 md:grid-cols-2">
@@ -52,9 +52,6 @@ const posts = new Map((await getCollection("blog", ({ data }) => !data.draft)).m
               </li>
             );
           })}
-          {line.future.map((station) => (
-            <li class="border-b border-dashed border-line py-3.5 font-medium text-[13px] text-muted">{text(station.label)} · still being built</li>
-          ))}
         </ol>
       </div>
     ))}

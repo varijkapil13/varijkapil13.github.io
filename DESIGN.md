@@ -136,7 +136,7 @@ components:
 
 **Creative North Star: "The Network Map"**
 
-The site draws one platform's modernization as a transit network. Every migration is a station on one of six coloured lines (Runtime, Data, Platform, Operations, Security, Team), and every line runs into a single interchange: today's multi-tenant SaaS platform. Lines still being built continue past it as dashed track. The map is the memorable thing; everything else exists to get a reader into a post and through it.
+The site draws one platform's modernization as a transit network. Every migration is a station on one of six coloured lines (Runtime, Data, Platform, Operations, Security, Team), and every line runs into a single interchange: today's multi-tenant SaaS platform. The map is the memorable thing; everything else exists to get a reader into a post and through it.
 
 The network is now rendered quietly, in the register of Linear and Vercel. The first rendition (navy sign bands, a yellow departure board, condensed signage type) read as dated, so the world keeps its map and drops its paint. Dark is the default theme: a near-black ground, hairline borders, quiet bordered panels, Geist set tight, and a faint light falling from above each page masthead. The map sits in a panel on a plotted dot grid. The six line colours are the only saturated colour anywhere, and they always mean a line.
 
@@ -148,7 +148,7 @@ Density is calm and editorial: generous section spacing, a 1120px container, one
 - Six categorical line colours as the only saturation on a page
 - Thin 3px rails, 9px station dots, a hairline interchange pill
 - Geist for everything readable; Geist Mono only for code and data labels
-- One authored moment: the map draws itself once on first view (rails run station by station into the interchange, then the dashed future follows); hovering a line brings it forward and dims the rest
+- One authored moment: the map draws itself once on first view (rails run station by station into the interchange, which then closes); hovering a line brings it forward and dims the rest
 
 ## Colors
 
@@ -201,7 +201,7 @@ The frontmatter holds the dark (default) values. The light theme is the same set
 
 A centred 1120px container with a 20px gutter (32px from 640px). Pages open with a masthead (title, muted lead, actions) closed by a hairline, then sections spaced 64px apart (80px from 768px). Posts use a two-column grid from 1024px: a 700px reading column and a sticky table of contents; below that the TOC collapses into a panel disclosure.
 
-The network map is a CSS grid: a 128px line-name column, one equal column per station position, a 40px interchange column and a 168px column for stations still being built. Each line is a 62px row; stations are right-aligned so every line runs into the interchange. Below 768px the map becomes a two-column grid of vertical strip maps, one per line, ending at "Today". Nothing scrolls horizontally at 320px; long words hyphenate and code blocks scroll inside themselves.
+The network map is a CSS grid: a 128px line-name column, one equal column per station position, a 40px interchange column and a 168px column for the interchange's label. Each line is a 62px row; stations are right-aligned so every line runs into the interchange. Below 768px the map becomes a two-column grid of vertical strip maps, one per line, ending at "Today". Nothing scrolls horizontally at 320px; long words hyphenate and code blocks scroll inside themselves.
 
 ## Elevation & Depth
 
@@ -215,14 +215,14 @@ Flat. Depth comes from tonal steps (ground → panel) and hairlines, plus two am
 
 ## Shapes
 
-Gently rounded rectangles on a strict small scale: inline code 4px, line bullets 5px (6px large), buttons 8px, code blocks and images 10px, panels and stop links 12px. Map geometry is round and thin: 3px rails with a 2px rounded start, 9px circular dots with a 2px line-coloured border, and the interchange as a 16px-wide pill with an 8px radius and a 2px ink outline spanning all six rows. Dashed track is a repeating gradient (6px dash, 5px gap horizontally; 5px/4px vertically).
+Gently rounded rectangles on a strict small scale: inline code 4px, line bullets 5px (6px large), buttons 8px, code blocks and images 10px, panels and stop links 12px. Map geometry is round and thin: 3px rails with a 2px rounded start, 9px circular dots with a 2px line-coloured border, and the interchange as a 16px-wide pill with an 8px radius and a 2px ink outline spanning all six rows.
 
 ### Named Rules
 **The Filled Station Rule.** A filled dot is a station with a post and is a link; an open dot (panel-coloured centre) is a station without one. Never fill a dot that does not lead to a post.
 
-**The Interchange Is Today Rule.** Every line runs into one interchange, and it means the present: today's multi-tenant SaaS platform. It is drawn in ink, never in a line colour, and nothing sits beyond it except work still being built.
+**The Interchange Is Today Rule.** Every line runs into one interchange, and it means the present: today's multi-tenant SaaS platform. It is drawn in ink, never in a line colour, and every line ends there; nothing sits beyond it.
 
-**The Dashed Track Rule.** Dashed rail and open dots past the interchange mean "still being built". Never dash a line for decoration, and never draw finished work dashed.
+**The Done Work Rule.** The map shows only finished work. No dashed track, no planned stations, nothing about what comes next.
 
 **The One Arrow Rule.** Every directional cue is the same inline SVG arrow (`Arrow.astro`: square caps, miter joins, stroke 3, 1em), rotated for "back". No text-glyph arrows, chevrons or second icon set for direction.
 
@@ -260,7 +260,7 @@ A thin vertical track in the post's line colour (45% mix) with small open dots; 
 ### The Network Map (signature)
 Six rows on the dot-grid panel converging on the interchange pill, labelled "Today" with the hub name in muted. Hovering or focusing any part of a line brings it forward and dims the others to 18% opacity over 220ms (cubic-bezier(0.16, 1, 0.3, 1)); reduced motion removes the transition. Content is always visible by default.
 
-**Motion.** The map's draw-in is the site's one authored sequence: lines start 70ms apart, each rail advances 85ms per station with dots scaling in on cubic-bezier(0.16, 1, 0.3, 1), the interchange wipes open (520ms) once every rail has arrived, and dashed future sections come last; it runs once, only when JavaScript set `html.js`, and never under reduced motion. Supporting motion explains state only: cross-document view transitions (160ms out, 260ms in) with the header held in place and a post's title travelling from the list into its heading; the line filter slides rows into place via `startViewTransition`; list rows rise once in order (40ms apart, capped at the ninth); rows show a sliding arrow and a 3.5% ink wash on hover; button arrows nudge 2px; the TOC marker eases between sections; posts carry a 2px scroll-driven reading-progress bar in the post's line colour where `animation-timeline` is supported.
+**Motion.** The map's draw-in is the site's one authored sequence: lines start 70ms apart, each rail advances 85ms per station with dots scaling in on cubic-bezier(0.16, 1, 0.3, 1), and the interchange wipes open (520ms) once every rail has arrived; it runs once, only when JavaScript set `html.js`, and never under reduced motion. Supporting motion explains state only: cross-document view transitions (160ms out, 260ms in) with the header held in place and a post's title travelling from the list into its heading; the line filter slides rows into place via `startViewTransition`; list rows rise once in order (40ms apart, capped at the ninth); rows show a sliding arrow and a 3.5% ink wash on hover; button arrows nudge 2px; the TOC marker eases between sections; posts carry a 2px scroll-driven reading-progress bar in the post's line colour where `animation-timeline` is supported.
 
 ### Generated Art
 Cover images (`scripts/generate-covers.mjs`, 1200×630) and diagrams (`scripts/diagrams/`) use the same world: ground #08090a, the masthead glow, a 24px dot grid, Geist and Geist Mono embedded, bullets, a 4px strip map ending at an ink-outlined interchange.
@@ -270,7 +270,7 @@ Cover images (`scripts/generate-covers.mjs`, 1200×630) and diagrams (`scripts/d
 ### Do:
 - **Do** treat each line colour as data: use it only where its line is meant (rails, dots, bullets, a post's own markers and TOC).
 - **Do** fill a station dot only when that station links to a post; leave it open otherwise.
-- **Do** run every line into the single "Today" interchange, drawn in ink, and dash only work still being built.
+- **Do** run every line into the single "Today" interchange, drawn in ink, and end it there; the map shows what was done, never what is planned.
 - **Do** build structure from 1px hairlines and 12px bordered panels on the near-black ground.
 - **Do** use the one SVG arrow (`Arrow.astro`, square-ended, stroke 3) for every directional cue, flipped for "back".
 - **Do** keep the primary button for LinkedIn; everything else is secondary or a plain muted link.

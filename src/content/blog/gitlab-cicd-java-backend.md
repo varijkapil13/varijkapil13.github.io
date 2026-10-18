@@ -6,7 +6,7 @@ image: "/images/blog/gitlab-cicd-java-backend.jpg"
 tags: ["devops", "gitlab", "cicd", "java", "enterprise"]
 ---
 
-Our enterprise Java applications run on Jakarta EE, and for a long time we deployed them once a week. When you deploy weekly, every release carries a week's worth of changes, and the bigger and less frequent releases are, the more changes each one carries and the harder it is to tell which of them broke something. We wanted to deploy small changes often, and the only way to do that without lowering our quality bar was to let a machine do the building, testing and deploying every single time, in the same way, without anyone having to remember the steps.
+Our enterprise Java applications were built on Jakarta EE, and for a long time we deployed them once a week. When you deploy weekly, every release carries a week's worth of changes, and the bigger and less frequent releases are, the more changes each one carries and the harder it is to tell which of them broke something. We wanted to deploy small changes often, and the only way to do that without lowering our quality bar was to let a machine do the building, testing and deploying every single time, in the same way, without anyone having to remember the steps.
 
 That machine is a CI/CD pipeline. CI, continuous integration, means that every change pushed to the repository is built and tested automatically, so problems show up minutes after they are introduced instead of days later. CD, continuous delivery or deployment, extends that all the way to getting the tested build onto servers. We use GitLab, where the whole pipeline is described in a file called `.gitlab-ci.yml` that lives in the repository next to the code. In this post I'll first walk through the complete file and then go back to the parts that made the biggest difference for us.
 
@@ -27,7 +27,7 @@ The order follows one idea: each stage has one job to do, and the early ones are
 
 ## The complete pipeline
 
-This is our `.gitlab-ci.yml`. It is long, but most of it is the same pattern repeated: a job names its stage, the Docker image it runs in, the commands to run and what it leaves behind for later jobs.
+This is the kind of `.gitlab-ci.yml` we ended up with. It is long, but most of it is the same pattern repeated: a job names its stage, the Docker image it runs in, the commands to run and what it leaves behind for later jobs.
 
 ```yaml
 variables:
@@ -189,7 +189,7 @@ deploy-production:
 
 Two GitLab concepts appear all over this file and are worth explaining before going further. Every job runs in a fresh container, so nothing a job produces survives it unless you say so. Artifacts are how a job says so: files listed under `artifacts` are uploaded when the job ends and made available to later jobs and in the GitLab interface, including test reports, which GitLab then shows on the merge request. The `only` lists decide which branches a job runs on. Building and testing happen for every push, while SonarQube analysis and Docker images are limited to `main` and `develop`, and each deployment is tied to one branch: `develop` goes to staging automatically, and `main` can go to production.
 
-Production is the one place where we kept a human in the loop. The `deploy-production` job has `when: manual`, so the pipeline prepares everything and then waits for someone to press the button. The deployment itself is deliberately simple: the job connects to the server over SSH, pulls the new image from GitLab's container registry and restarts the application with Docker Compose.
+Production is the one place where we kept a human in the loop. The `deploy-production` job has `when: manual`, so the pipeline prepares everything and then waits for someone to press the button. The deployment itself was deliberately simple: the job connects to the server over SSH, pulls the new image from GitLab's container registry and restarts the application with Docker Compose.
 
 ## The parts that made the biggest difference
 
@@ -265,7 +265,7 @@ It tells GitLab that this job deploys to an environment called production. GitLa
 
 ## The image we deploy
 
-The `build-docker` job builds the image that gets deployed. Our applications run on Payara, a Jakarta EE application server, so the image starts from the official Payara image and adds our application to it:
+The `build-docker` job builds the image that gets deployed. Our applications ran on Payara, a Jakarta EE application server, so the image starts from the official Payara image and adds our application to it:
 
 ```dockerfile
 FROM payara/server-full:5.2022.2-jdk11
@@ -324,7 +324,7 @@ SAST (static application security testing) reads the source code looking for pat
 
 ## Building multi-module projects
 
-Some of our larger applications are split into several Maven modules, and building those one after another wastes time when most of them don't depend on each other. For larger multi-module projects we build in parallel and test each module separately:
+Some of our larger applications were split into several Maven modules, and building those one after another wastes time when most of them don't depend on each other. For those we built in parallel and tested each module separately:
 
 ```yaml
 build:
@@ -343,7 +343,7 @@ test:
 
 ## Watching the pipeline itself
 
-A pipeline that is slow or unreliable gets worked around, so we keep an eye on it like on any other system. The numbers we track:
+A pipeline that is slow or unreliable gets worked around, so we kept an eye on it like on any other system. These are the numbers we tracked:
 
 | Metric | Value |
 |---|---|
@@ -353,7 +353,7 @@ A pipeline that is slow or unreliable gets worked around, so we keep an eye on i
 
 The time to first feedback is the number I care most about, because it decides whether a developer waits for the result or switches to something else and comes back much later. Two minutes, covering the compile and the unit tests, is short enough to wait.
 
-Keeping those numbers down is an ongoing job, and a few techniques do most of the work:
+Keeping those numbers down took steady attention, and a few techniques did most of the work:
 
 1. Use the `needs` keyword so jobs run when their dependencies finish instead of waiting for the whole stage
 2. Parallelize test suites with Maven Surefire's parallel execution
@@ -374,7 +374,7 @@ build:
 
 ## Database migrations
 
-Deploying a new version of the application often means changing the database schema as well, and those changes have to happen in a controlled order. Flyway handles this by keeping versioned SQL migration scripts in the repository and recording in the database which of them have already been applied, so running it brings any database up to the latest version. We run Flyway migrations as a manual job on `main`:
+Deploying a new version of the application often means changing the database schema as well, and those changes have to happen in a controlled order. Flyway handles this by keeping versioned SQL migration scripts in the repository and recording in the database which of them have already been applied, so running it brings any database up to the latest version. We ran Flyway migrations as a manual job on `main`:
 
 ```yaml
 migrate-database:
@@ -387,7 +387,7 @@ migrate-database:
   when: manual
 ```
 
-Making it manual was a conscious choice. A schema change is much harder to undo than an application deployment, so we want a person to decide when it runs against production.
+Making it manual was a conscious choice. A schema change is much harder to undo than an application deployment, so we wanted a person to decide when it runs against production.
 
 ## Was it worth it?
 

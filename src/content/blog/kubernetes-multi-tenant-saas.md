@@ -12,7 +12,7 @@ Last year we started migrating our platform from a setup where every customer ha
 
 ## One VM per customer
 
-Our original architecture gave each customer their own VM. That was simple and isolated, since a VM is a hard boundary between customers. It was also expensive, and the cost grew with every customer. When you have 50 customers, you have 50 VMs to maintain. Scaling meant provisioning more VMs, which took hours, and our ops team was drowning in maintenance work. We wanted to keep the tenant isolation without that overhead.
+Our original architecture gave each customer their own VM. That was simple and isolated, since a VM is a hard boundary between customers. It was also expensive, and the cost grew with every customer. Every new customer meant one more VM to maintain. Scaling meant provisioning more VMs, which took hours, and our ops team was drowning in maintenance work. We wanted to keep the tenant isolation without that overhead.
 
 ## Why a namespace per tenant
 
@@ -20,7 +20,7 @@ Kubernetes runs containers across a pool of machines and decides where each one 
 
 A cluster per tenant has the same problem as VMs, just with clusters: every tenant is one more thing to upgrade and maintain. At the other end, you can run everyone in shared namespaces and tell tenants apart only by labels, the tags Kubernetes puts on resources. That makes it too easy to accidentally leak data between tenants, because nothing stops a pod with one tenant's label from talking to a pod with another's, and one wrong label in a manifest is enough. Virtual clusters, which give each tenant what looks like its own Kubernetes control plane on shared machines, were promising, but they added complexity we weren't ready for.
 
-A namespace divides one cluster into named sections. Pods, services, secrets and service accounts each belong to exactly one namespace, and many rules can be applied per namespace, so namespaces gave us good isolation without going overboard. Each tenant gets their own namespace with resource quotas, network policies and RBAC rules (role-based access control, which decides which identities may do what to which resources).
+A namespace divides one cluster into named sections. Pods, services, secrets and service accounts each belong to exactly one namespace, and many rules can be applied per namespace, so namespaces gave us good isolation without going overboard. Each tenant got their own namespace with resource quotas, network policies and RBAC rules (role-based access control, which decides which identities may do what to which resources).
 
 ## Namespaces are not a security boundary
 
@@ -87,19 +87,19 @@ Creating a new tenant manually was error-prone, and the errors were quiet ones: 
 6. Initialize database schema
 7. Deploy the application
 
-We use Pulumi for this, which describes infrastructure in a general-purpose language, because our team already knew TypeScript. Terraform would work just as well.
+We used Pulumi for this, which describes infrastructure in a general-purpose language, because our team already knew TypeScript. Terraform would work just as well.
 
 ## Secrets management was harder than expected
 
 With VMs, secrets lived in environment files on each machine. Not great, but manageable, since each machine belonged to one customer. On shared infrastructure we needed a way to give each tenant's pods that tenant's secrets and nothing else.
 
-HashiCorp Vault solved this. Each tenant gets a path in Vault, and their pods authenticate using Kubernetes service accounts. A service account is the identity a pod runs as, and Kubernetes gives the pod a signed token to prove it. Vault checks that token with the cluster and maps the service account to a policy, so a tenant's pods can only read that tenant's path.
+HashiCorp Vault solved this. We gave each tenant a path in Vault, and their pods authenticated using Kubernetes service accounts. A service account is the identity a pod runs as, and Kubernetes gives the pod a signed token to prove it. Vault checks that token with the cluster and maps the service account to a policy, so a tenant's pods can only read that tenant's path.
 
 The part that made it work was the Vault Agent Injector. Vault tokens are short-lived on purpose, so an application has to log in, fetch its secrets and keep renewing its token while it runs. The injector adds a Vault Agent container to each pod that does this and writes the secrets to a file for the application. It handles token renewal automatically, which we definitely would have gotten wrong ourselves.
 
 ## What we got wrong
 
-The biggest mistake was underestimating database isolation. We initially tried a shared database with row-level security, a PostgreSQL feature where the database filters which rows a session may see based on policies, such as "only rows for the current tenant". That keeps tenants apart only if every table has the right policy and the current tenant is set correctly every time, and a bug in one query could expose another tenant's data. Don't do this unless you really know what you're doing. We switched to database-per-tenant running in the same PostgreSQL cluster. A connection to one PostgreSQL database can't query tables in another.
+The biggest mistake was underestimating database isolation. We initially tried a shared database with row-level security, a PostgreSQL feature where the database filters which rows a session may see based on policies, such as "only rows for the current tenant". That keeps tenants apart only if every table has the right policy and the current tenant is set correctly every time, and a bug in one query could expose another tenant's data. Don't do this unless you really know what you're doing. We switched to a separate database per tenant. A connection to one PostgreSQL database can't query tables in another.
 
 We also ignored egress traffic, the traffic leaving a pod, as opposed to ingress coming in. Our network policies blocked ingress but allowed all egress, so one compromised pod could have called out to anywhere. That's why the policy above lists `Egress` as well and spells out where pods may connect. Lock down egress to only what's needed.
 
@@ -115,7 +115,7 @@ Counter.builder("api_requests_total")
     .register(meterRegistry);
 ```
 
-This lets us track usage per tenant for billing and identify who's causing issues. Grafana dashboards with tenant dropdowns made debugging much easier, since one selection narrows every panel to that tenant.
+This let us track usage per tenant for billing and identify who's causing issues. Grafana dashboards with tenant dropdowns made debugging much easier, since one selection narrows every panel to that tenant.
 
 ## Was it worth it?
 
