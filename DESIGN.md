@@ -1,140 +1,133 @@
 ---
 name: varij.dev
-description: Personal site and engineering writing of Varij Kapil, drawn as a transit network map
+description: Personal site and engineering writing of Varij Kapil, drawn as a transit network map in a quiet, dark-first register
 colors:
-  map-ground: "#ffffff"
-  map-panel: "#f3f4f6"
-  map-line: "#d8dbe0"
-  map-line-strong: "#9aa1ab"
-  ink: "#101318"
-  ink-muted: "#565d68"
-  link-blue: "#0060a8"
-  code-ground: "#12161d"
-  sign-navy: "#0b2b5e"
-  sign-white: "#ffffff"
-  sign-muted: "#bccbe3"
-  board-yellow: "#ffd400"
-  board-ink: "#111111"
-  board-muted: "#4a3f00"
-  board-rule: "#1111112e"
-  line-runtime: "#0067b1"
-  line-data: "#007a4d"
-  line-platform: "#ef7d00"
-  line-operations: "#8a3d99"
-  line-security: "#d3131c"
-  line-team: "#8c6239"
+  ground: "#08090a"
+  panel: "#0f1011"
+  hairline: "#1d1e21"
+  hairline-strong: "#2e3035"
+  ink: "#f4f5f6"
+  ink-muted: "#8b8f98"
+  accent: "#8ab4ff"
+  code-ground: "#0d0e10"
+  glow: "rgb(110 140 255 / 0.10)"
+  line-runtime: "#5b8cff"
+  line-data: "#34c48b"
+  line-platform: "#f5a524"
+  line-operations: "#a78bfa"
+  line-security: "#f2555a"
+  line-team: "#c99a66"
 typography:
   display:
-    fontFamily: "Barlow Condensed, Noto Sans Devanagari, Barlow, system-ui, sans-serif"
-    fontSize: "6rem"
-    fontWeight: 700
-    lineHeight: 0.98
-    letterSpacing: "-0.01em"
+    fontFamily: "Geist Variable, Noto Sans Devanagari, system-ui, sans-serif"
+    fontSize: "4.5rem"
+    fontWeight: 600
+    lineHeight: 1.02
+    letterSpacing: "-0.04em"
+    fontFeature: "\"ss01\" 1"
   headline:
-    fontFamily: "Barlow Condensed, Noto Sans Devanagari, Barlow, system-ui, sans-serif"
-    fontSize: "34px"
-    fontWeight: 700
-    lineHeight: 1
-    letterSpacing: "-0.01em"
+    fontFamily: "Geist Variable, Noto Sans Devanagari, system-ui, sans-serif"
+    fontSize: "26px"
+    fontWeight: 600
+    lineHeight: 1.25
+    letterSpacing: "-0.03em"
   title:
-    fontFamily: "Barlow Condensed, Noto Sans Devanagari, Barlow, system-ui, sans-serif"
-    fontSize: "22px"
-    fontWeight: 700
-    lineHeight: 1.1
-  station:
-    fontFamily: "Barlow Condensed, Noto Sans Devanagari, Barlow, system-ui, sans-serif"
-    fontSize: "15px"
+    fontFamily: "Geist Variable, Noto Sans Devanagari, system-ui, sans-serif"
+    fontSize: "18px"
     fontWeight: 600
-    lineHeight: 1.05
-  body:
-    fontFamily: "Barlow, Noto Sans Devanagari, system-ui, sans-serif"
-    fontSize: "17.5px"
+    lineHeight: 1.25
+    letterSpacing: "-0.025em"
+  lead:
+    fontFamily: "Geist Variable, Noto Sans Devanagari, system-ui, sans-serif"
+    fontSize: "17px"
     fontWeight: 400
-    lineHeight: 1.7
-    fontFeature: "\"tnum\""
+    lineHeight: 1.625
+  body:
+    fontFamily: "Geist Variable, Noto Sans Devanagari, system-ui, sans-serif"
+    fontSize: "16.5px"
+    fontWeight: 400
+    lineHeight: 1.75
+  station:
+    fontFamily: "Geist Variable, Noto Sans Devanagari, system-ui, sans-serif"
+    fontSize: "12.5px"
+    fontWeight: 400
+    lineHeight: 1.15
   label:
-    fontFamily: "Barlow, Noto Sans Devanagari, system-ui, sans-serif"
-    fontSize: "15px"
-    fontWeight: 600
-    lineHeight: 1
+    fontFamily: "Geist Mono Variable, ui-monospace, monospace"
+    fontSize: "12px"
+    fontWeight: 400
+    lineHeight: 1.33
   code:
     fontFamily: "Geist Mono Variable, ui-monospace, monospace"
     fontSize: "13px"
     fontWeight: 400
     lineHeight: 1.625
 rounded:
-  code: "3px"
-  plate: "4px"
+  code-inline: "4px"
   bullet: "5px"
-  figure: "6px"
-  bullet-lg: "7px"
-  interchange: "14px"
+  bullet-lg: "6px"
+  control: "8px"
+  figure: "10px"
+  panel: "12px"
+  interchange: "8px"
 spacing:
-  gutter: "16px"
+  gutter: "20px"
   gutter-wide: "32px"
-  container: "1200px"
-  rail: "6px"
-  map-row: "74px"
-  section: "56px"
+  container: "1120px"
+  rail: "3px"
+  dot: "9px"
+  map-row: "62px"
+  control-height: "40px"
+  section: "64px"
   section-wide: "80px"
 components:
   button-primary:
-    backgroundColor: "{colors.sign-navy}"
-    textColor: "{colors.sign-white}"
-    typography: "{typography.label}"
-    rounded: "{rounded.plate}"
-    padding: "12px 20px"
-  button-primary-hover:
     backgroundColor: "{colors.ink}"
-    textColor: "{colors.sign-white}"
-  button-plate:
-    backgroundColor: "{colors.sign-white}"
-    textColor: "{colors.sign-navy}"
+    textColor: "{colors.ground}"
     typography: "{typography.label}"
-    rounded: "{rounded.plate}"
-    padding: "12px 20px"
-  button-plate-hover:
-    backgroundColor: "{colors.board-yellow}"
-    textColor: "{colors.board-ink}"
+    rounded: "{rounded.control}"
+    padding: "0 16px"
+    height: "{spacing.control-height}"
   button-secondary:
-    backgroundColor: "{colors.map-ground}"
+    backgroundColor: "{colors.ground}"
     textColor: "{colors.ink}"
-    typography: "{typography.label}"
-    rounded: "{rounded.plate}"
-    padding: "12px 20px"
+    rounded: "{rounded.control}"
+    padding: "0 16px"
+    height: "{spacing.control-height}"
   button-secondary-hover:
-    backgroundColor: "{colors.ink}"
-    textColor: "{colors.map-ground}"
+    backgroundColor: "{colors.panel}"
+    textColor: "{colors.ink}"
+  panel:
+    backgroundColor: "{colors.panel}"
+    rounded: "{rounded.panel}"
+    padding: "20px 24px"
   line-bullet:
     backgroundColor: "{colors.line-runtime}"
-    textColor: "{colors.sign-white}"
+    textColor: "{colors.ground}"
     rounded: "{rounded.bullet}"
-    size: "24px"
+    size: "18px"
   line-bullet-lg:
     backgroundColor: "{colors.line-runtime}"
-    textColor: "{colors.sign-white}"
+    textColor: "{colors.ground}"
     rounded: "{rounded.bullet-lg}"
-    size: "36px"
-  station-sign:
-    backgroundColor: "{colors.sign-navy}"
-    textColor: "{colors.sign-white}"
-    typography: "{typography.display}"
-  departure-board:
-    backgroundColor: "{colors.board-yellow}"
-    textColor: "{colors.board-ink}"
-  line-filter:
-    backgroundColor: "{colors.board-yellow}"
-    textColor: "{colors.board-ink}"
-    rounded: "{rounded.plate}"
-    height: "40px"
-  line-filter-active:
-    backgroundColor: "{colors.board-ink}"
-    textColor: "{colors.board-yellow}"
-  code-inline:
-    backgroundColor: "{colors.map-panel}"
+    size: "24px"
+  code-block:
+    backgroundColor: "{colors.code-ground}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.plate}"
+    typography: "{typography.code}"
+    rounded: "{rounded.figure}"
+    padding: "16px"
+  code-inline:
+    backgroundColor: "{colors.panel}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.code-inline}"
     padding: "2px 6px"
+  nav-link:
+    textColor: "{colors.ink-muted}"
+    padding: "0 12px"
+    height: "56px"
+  nav-link-active:
+    textColor: "{colors.ink}"
 ---
 
 # Design System: varij.dev
@@ -143,150 +136,148 @@ components:
 
 **Creative North Star: "The Network Map"**
 
-The platform's modernization, from a Java EE monolith to a multi-tenant SaaS platform, is drawn as a transit network. Six coloured lines (Runtime, Data, Platform, Operations, Security, Team) carry stations, each station a migration step and usually a post, and every line runs into one tall interchange marked "Today". The site borrows the whole vocabulary of a U-Bahn or DB network diagram: navy station signs name every page, line bullets mark which line a thing belongs to, station ticks and strip maps show sequence, and a yellow departure board lists the writing. Lines still being built are dashed and end in an open circle.
+The site draws one platform's modernization as a transit network. Every migration is a station on one of six coloured lines (Runtime, Data, Platform, Operations, Security, Team), and every line runs into a single interchange: today's multi-tenant SaaS platform. Lines still being built continue past it as dashed track. The map is the memorable thing; everything else exists to get a reader into a post and through it.
 
-The ground is a white map with ink black type. Colour is spent almost entirely on data: the six line colours appear only where they identify a line, and the navy and yellow fields are structural bands, not accents. Density is that of a real wayfinding system: compact condensed signage over readable Barlow body text, flat planes, hard edges with small plate radii, and no ornament that does not mean something on the map. Motion is a single authored moment: pointing at a line on the map brings it forward and dims the others (opacity to 0.22, 200ms, cubic-bezier(0.16, 1, 0.3, 1)); everything is visible by default and reduced motion turns transitions off.
+The network is now rendered quietly, in the register of Linear and Vercel. The first rendition (navy sign bands, a yellow departure board, condensed signage type) read as dated, so the world keeps its map and drops its paint. Dark is the default theme: a near-black ground, hairline borders, quiet bordered panels, Geist set tight, and a faint light falling from above each page masthead. The map sits in a panel on a plotted dot grid. The six line colours are the only saturated colour anywhere, and they always mean a line.
 
-The world explicitly refuses the developer-blog default it replaced: a near-black console with a neon accent, a hero and a card grid.
+Density is calm and editorial: generous section spacing, a 1120px container, one column of reading text at about 700px. The world rejects heavy colour fields, shadows as decoration, neon accents and the hero-plus-card-grid template.
 
 **Key Characteristics:**
-- Navy station-sign band (white Barlow Condensed) opens every page and closes it as the footer.
-- Six saturated line colours, one per line, used as categorical data only.
-- Line bullets: rounded squares in the line's colour carrying its letter (R, D, P, O, S, T).
-- Rails 6px thick with square station ticks; the interchange is a white pill with a heavy ink outline.
-- Dashed rails and open circles mean "still being built"; the interchange means "today".
-- Yellow departure-board field is the one place lists of posts appear.
-- Flat: no shadows, no gradients, no glass.
+- Dark-first near-black ground with a light theme that swaps tokens, not structure
+- Hairlines (1px) and 12px bordered panels instead of colour bands or shadows
+- Six categorical line colours as the only saturation on a page
+- Thin 3px rails, 9px station dots, a hairline interchange pill
+- Geist for everything readable; Geist Mono only for code and data labels
+- One authored motion: the hovered line comes forward and the rest dim
 
 ## Colors
 
-A white map with ink type, two structural fields (navy signs, yellow board) and six categorical line colours. The `.dark` theme redraws the same map at night: ground #0a111c, panel #111b2b, ink #e9eef6, muted #9aa7bb, link #6cb4ff, sign #13366f, and the board becomes a black split-flap field (#050709) with amber type (#ffbf2e); line colours lift to brighter variants (runtime #3b93e0, data #1fb877, platform #ff9a2e, operations #b06cc2, security #f0484f, team #b98a5c) and bullets switch to dark letters.
+A graphite-neutral system with one cool link accent and six categorical line colours; the neutrals do the work and the lines carry the meaning.
+
+The frontmatter holds the dark (default) values. The light theme is the same set of roles on `:root`: white ground (#ffffff), panel (#fafafa), hairline (#ebebeb), strong hairline (#d4d4d4), ink (#0a0a0a), muted ink (#666670), accent (#2563eb), glow rgb(37 99 235 / 0.07), code ground (#0b0c0e, code stays dark in both themes), and deeper line colours: runtime #2563eb, data #0e8a5f, platform #d97706, operations #7c3aed, security #dc2626, team #a16207.
 
 ### Primary
-- **Station-Sign Navy** (sign-navy): the sign band behind every page masthead, the footer, the "VK" monogram plate and the primary button. It names places; it is never a tint or a card fill.
-- **Sign White** (sign-white) and **Sign Haze** (sign-muted): type on the navy band. White for names and titles, haze for supporting lines, facts and secondary links.
-
-### Secondary
-- **Departure Yellow** (board-yellow): the departure-board field on Home and the full list on /blog, plus text selection. **Board Ink** (board-ink), **Board Umber** (board-muted) and the translucent **Board Rule** (board-rule) carry its type and row dividers. Hover on a white sign plate also turns it yellow, as if the plate were lit.
-
-### Tertiary: the six lines
-- **Runtime Blue** (line-runtime), **Data Green** (line-data), **Platform Orange** (line-platform), **Operations Violet** (line-operations), **Security Red** (line-security), **Team Brown** (line-team). Each colours its line's rails, ticks, bullet, strip maps, the post's list markers and table-of-contents strip, and its cover image. Platform Orange carries a dark letter (#1b1200) on its bullet for contrast; the others carry white.
+- **Signal Blue** (accent): link hover, focus ring (2px outline, 2px offset), text selection at 35%, the hover state of a station label. Never a fill, never a background.
 
 ### Neutral
-- **Map White** (map-ground): page ground and the interior of interchange and future-station circles.
-- **Platform Grey** (map-panel): inline code, blockquotes, quiet hover fills.
-- **Hairline** (map-line) and **Side-Line Grey** (map-line-strong): row dividers, image borders, and the neutral rail of the side-projects branch line.
-- **Ink** (ink) and **Ink Muted** (ink-muted): text, the interchange outline, the active-nav bar, the 2px rules over lists; muted for unvisited stations and metadata.
-- **Link Blue** (link-blue): prose links and the 3px focus ring. Not a line colour; it never appears on the map.
-- **Tunnel** (code-ground): code block ground in both themes.
+- **Near-Black Ground** (ground): page background, header at 80% with backdrop blur, the inner colour of the interchange.
+- **Raised Graphite** (panel): bordered panels, inline code, open station dots, secondary-button hover.
+- **Hairline** (hairline): every divider, panel border, table row and section rule.
+- **Strong Hairline** (hairline-strong): secondary-button border, table header rule, quiet tracks (career and projects side lines), fact separators.
+- **Paper Ink** (ink): headings, body emphasis, primary-button fill, the interchange outline.
+- **Graphite Muted** (ink-muted): leads, metadata, unposted station labels, mono labels.
+- **Code Night** (code-ground): fenced code blocks.
+- **Masthead Glow** (glow): the radial light above each masthead, nothing else.
+
+### Tertiary: the six lines
+- **Runtime Blue** (line-runtime), **Data Green** (line-data), **Platform Amber** (line-platform), **Operations Violet** (line-operations), **Security Red** (line-security), **Team Bronze** (line-team). Used on rails, station dots, line bullets, the post page's list markers and table-of-contents track (`--post-line`), and generated cover art.
 
 ### Named Rules
-**The Line Colour Is Data Rule.** Each of the six line colours belongs to exactly one line and appears only where it identifies that line: rails, ticks, bullets, list markers, a post's strip map. Never use a line colour for decoration, emphasis, buttons or backgrounds, and never introduce a seventh hue on the map.
+**The Line Colours Are Data Rule.** The six line colours are categorical: each one means its line and nothing else. They are the only saturated colour on any page. Never use one as a decorative accent, a button fill or a section background, and never introduce a seventh saturated hue.
 
-**The Sign Names the Page Rule.** Every page opens with a full-width navy sign band carrying its title in white Barlow Condensed; the footer closes on the same band. Navy is for naming, not for panels or cards inside content.
-
-**The Departure Board Rule.** Lists of posts appear on the yellow (night: black and amber) departure board and nowhere else. Board rows read date, line bullet, title, minutes; filtering happens with line-bullet chips on the board itself.
+**The Hairline Rule.** Structure comes from 1px hairlines and quiet bordered panels, not from colour fields. No full-bleed colour bands, no tinted section backgrounds; the masthead glow is the only gradient and it stays below 10% opacity.
 
 ## Typography
 
-**Display Font:** Barlow Condensed 600/700 (with Noto Sans Devanagari, Barlow, system-ui)
-**Body Font:** Barlow 400/500/600/700, italic 400 (with Noto Sans Devanagari, system-ui)
-**Mono Font:** Geist Mono Variable (code only)
+**Display Font:** Geist Variable (with Noto Sans Devanagari, system-ui)
+**Body Font:** Geist Variable (with Noto Sans Devanagari, system-ui)
+**Label/Mono Font:** Geist Mono Variable (with ui-monospace)
 
-**Character:** Barlow Condensed is the signage voice, tall and narrow like station names on enamel plates; Barlow is its humanist body sibling, so signs and running text read as one system. Numerals are tabular site-wide. Hindi falls back to Noto Sans Devanagari in both roles.
+**Character:** One neutral grotesque set tight at large sizes and relaxed in reading text, with stylistic set ss01 on throughout; the mono is a data voice, not a decoration. Devanagari falls back to Noto Sans Devanagari at 400/600 for the Hindi pages.
 
 ### Hierarchy
-- **Display** (Barlow Condensed 700, 3.5rem / 5rem / 6rem by breakpoint, line-height 0.98, -0.01em): the name or page title on a sign band. Inner pages use 3.25rem to 5rem; post titles 2.4rem to 3.75rem, max 22ch.
-- **Headline** (Barlow Condensed 700, 28px mobile / 34px desktop, line-height 1): section headings in the map world ("The modernization, as a network", "Latest departures"). Prose h2 uses the same face at 30px.
-- **Title** (Barlow Condensed 700, 20 to 24px): line names, career roles, project names, skill groups.
-- **Station** (Barlow Condensed 600, 15px on the map, 16px on strip maps, line-height 1.05): station labels, board dates and minutes, nav links (18px), footer links.
-- **Body** (Barlow 400, 17.5px, line-height 1.7 in posts; 16 to 18px elsewhere): post text capped by a 700px column; leads and descriptions held to 60 to 70ch.
-- **Label** (Barlow 600, 15px): button text.
-- **Code** (Geist Mono, 13px in blocks, 0.84em inline).
+- **Display** (600, 2.75rem → 4.5rem on Home, 2.5–3.5rem on About/Projects, 2–3rem on posts; line-height 1.02; -0.04em): the page title in each masthead, balanced wrap, hyphenated.
+- **Headline** (600, 22px → 26px, line-height 1.25, -0.03em): section headings ("The modernization, as a network", "Latest writing"). Post h2 is 24px / 1.2.
+- **Title** (600, 18px, tight tracking): career roles, project names, education entries, prev/next station titles.
+- **Lead** (400, 17px, 1.625, muted): the line under a title or heading, 58–65ch.
+- **Body** (400, 16.5px, 1.75, ink at 86% toward muted): post prose in a ~700px column.
+- **Station** (400, 12.5px, 1.15): map station labels; ink when the station has a post, muted when not.
+- **Label** (Geist Mono 400, 12px, muted, sentence case): table-of-contents heading, departure-board column heads, dates and read times, table headers.
 
 ### Named Rules
-**The Signage Face Rule.** Anything that names a place (a page, a line, a station, a section, a nav destination) is set in Barlow Condensed. Running text, descriptions and button labels are Barlow.
-
-**The Mono Is Code Rule.** Geist Mono appears only in code. Dates, counts and metadata use condensed signage with tabular figures, never mono.
+**The Mono Is Data Rule.** Geist Mono appears only for code and for data labels: dates, read times, column heads, table headers. Never for headings, buttons, navigation or prose, and never uppercase-tracked as an eyebrow.
 
 ## Layout
 
-A single 1200px container with a 16px gutter on phones and 32px from 640px up. Pages stack full-bleed bands: navy sign, white map content, yellow board, white close, navy footer. Section rhythm is 56px vertical on phones and 64 to 80px on desktop. The sticky header is 60px, white, with a hairline bottom border.
+A centred 1120px container with a 20px gutter (32px from 640px). Pages open with a masthead (title, muted lead, actions) closed by a hairline, then sections spaced 64px apart (80px from 768px). Posts use a two-column grid from 1024px: a 700px reading column and a sticky table of contents; below that the TOC collapses into a panel disclosure.
 
-The network map is a CSS grid: a 132px line-name column, one equal column per station position, a 44px interchange column and a 170px column for stations still being built. Rows are 74px; every line's stations are right-aligned so all six rails run into the interchange. Below 768px the map becomes a two-column grid of vertical strip maps, one per line, like the maps above train doors. Posts use a 700px reading column with a sticky table-of-contents strip map in the right column from 1024px; below that the contents collapse into a disclosure above the post. Nothing scrolls horizontally at 320px; long German compounds hyphenate and break.
+The network map is a CSS grid: a 128px line-name column, one equal column per station position, a 40px interchange column and a 168px column for stations still being built. Each line is a 62px row; stations are right-aligned so every line runs into the interchange. Below 768px the map becomes a two-column grid of vertical strip maps, one per line, ending at "Today". Nothing scrolls horizontally at 320px; long words hyphenate and code blocks scroll inside themselves.
 
 ## Elevation & Depth
 
-Completely flat. There are no shadows anywhere. Depth comes from the order of planes: the navy sign and yellow board are full-width fields, and the interchange pill sits on a layer above the rails, its white fill cutting through them. Focus is a 3px Link Blue outline at 2px offset.
+Flat. Depth comes from tonal steps (ground → panel) and hairlines, plus two ambient lights: the masthead's radial glow from above and the map's dot grid (1px dots at 9% ink, 22px pitch). The header is translucent (ground at 80%, backdrop blur) over a hairline.
+
+### Shadow Vocabulary
+- **Station ring** (`box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 25%, transparent)`): a soft halo in the line's own colour on a hovered or focused station dot, and on the current station in a post's line strip. The TOC uses the same ring at 3px for the current section; the About career track uses it in ink at 15% on the current role, a neutral stop on a strong-hairline track.
 
 ### Named Rules
-**The Printed Map Rule.** Surfaces are printed, not lifted. No box-shadow, no glow, no blur, no gradients. The only gradient-built mark is the dashed rail of a station still being built (a repeating hard-stop gradient, 10px dash, 6px gap on the map; 8px/5px vertical on strip maps).
+**The No-Shadow Rule.** Nothing casts a shadow. The only box-shadow in the system is the station ring, and it appears only as a response to hover, focus or "you are here".
 
 ## Shapes
 
-Hard geometry with small, consistent plate radii. Rails are 6px straight bars (5px on the table of contents) with square ends; station ticks are 6 by 9px square stubs on the map and short horizontal stubs on strip maps. The terminal end of a rail is lightly rounded (3px). Buttons, chips and stop links are 4px plates; line bullets are 5px (24px square) or 7px (36px square) rounded squares; code is 3px; figures and blockquotes 6px.
-
-Circles carry meaning: a white circle with a 4px ink ring marks the interchange ("Today") and the "you are here" station; a white circle with a 3px line-coloured ring marks a station still being built. The desktop interchange is a 28px-wide pill (14px radius) spanning all six rows. The site's one arrow (square line caps, mitred joins, 3px stroke) is the only directional mark.
+Gently rounded rectangles on a strict small scale: inline code 4px, line bullets 5px (6px large), buttons 8px, code blocks and images 10px, panels and stop links 12px. Map geometry is round and thin: 3px rails with a 2px rounded start, 9px circular dots with a 2px line-coloured border, and the interchange as a 16px-wide pill with an 8px radius and a 2px ink outline spanning all six rows. Dashed track is a repeating gradient (6px dash, 5px gap horizontally; 5px/4px vertically).
 
 ### Named Rules
-**The Interchange Is Today Rule.** The ink-ringed white circle or pill means the present: the multi-tenant SaaS platform, or the reader's current station. Use it for nothing else.
+**The Filled Station Rule.** A filled dot is a station with a post and is a link; an open dot (panel-coloured centre) is a station without one. Never fill a dot that does not lead to a post.
 
-**The Dashed Is Unbuilt Rule.** A dashed rail ending in an open circle means a station still under construction. Solid rails are built history. Never dash a line for style.
+**The Interchange Is Today Rule.** Every line runs into one interchange, and it means the present: today's multi-tenant SaaS platform. It is drawn in ink, never in a line colour, and nothing sits beyond it except work still being built.
+
+**The Dashed Track Rule.** Dashed rail and open dots past the interchange mean "still being built". Never dash a line for decoration, and never draw finished work dashed.
+
+**The One Arrow Rule.** Every directional cue is the same inline SVG arrow (`Arrow.astro`: square caps, miter joins, stroke 3, 1em), rotated for "back". No text-glyph arrows, chevrons or second icon set for direction.
 
 ## Components
 
 ### Buttons
-Sign plates: flat, square-ish, condensed in spirit but set in Barlow 600.
-- **Shape:** 4px plate radius, 12px by 20px padding, 10px gap to the arrow.
-- **Primary:** navy plate with white label on white ground; hover turns it ink. In dark mode it inverts to a white plate that lights yellow on hover.
-- **Plate:** white plate with navy label, used on navy signs (the LinkedIn call to action, footer); hover lights it yellow with board ink.
-- **Secondary:** 2px ink outline, ink label; hover fills ink with white label. On a navy sign the outline variant uses a 2px white border at 60% that goes solid on hover.
-- **Arrow:** calls to action that leave or advance carry the one SVG arrow, never a text glyph.
+Quiet and precise.
+- **Shape:** gently rounded (8px), 40px tall, 16px side padding, Geist 500 at 14px.
+- **Primary:** ink fill with ground text (a white button on the dark theme, a black one on light). Reserved for LinkedIn, the only contact. Hover drops to 85% opacity.
+- **Secondary:** transparent with a strong-hairline border; hover fills with panel and lifts the border to muted.
+- **Arrow:** buttons and onward links carry the one SVG arrow inline at 1em.
 
-### Chips (line filters)
-- **Style:** on the yellow board, 40px tall 4px plates with a 2px board-ink border at 25%, a line bullet and the line name in Barlow Condensed 700 17px.
-- **State:** hover makes the border solid; pressed fills board ink with yellow type. "All lines" carries no bullet.
+### Line Bullet
+A small rounded square (18px, 5px radius; 24px/6px large) in the line's colour carrying its letter (R, D, P, O, S, T) in Geist 600. Letters are near-black on the dark theme; on light they are white except Platform, which stays dark for contrast. It labels a line wherever a line is named: map, board rows, post meta, line navigation, covers.
 
-### Cards / Containers
-There are no cards. Lists are ruled: a 2px ink rule on top, 1px hairlines between rows. The only bordered boxes are the previous/next stop links at the foot of a post (2px hairline border, 4px radius, 16px padding, border turns ink on hover).
+### Cards / Containers (Panel)
+- **Corner Style:** 12px.
+- **Background:** panel.
+- **Shadow Strategy:** none (see Elevation).
+- **Border:** 1px hairline.
+- **Internal Padding:** 20–32px; the map panel adds the dot grid.
+
+### Departure Board (post list)
+A hairline table inside a panel: mono column heads (Date, Line, Post, Read), then rows of mono date, line bullet, title in Geist 500 at 15.5px, and mono read time. Rows divide with hairlines; hover turns the title accent. On phones the bullet leads and date/read time drop under the title. The name survives from the first rendition; the yellow board does not.
 
 ### Navigation
-- **Header:** white, sticky, 60px. A navy "VK" bullet plate and the name in Barlow Condensed 700 21px on the left; links in Barlow Condensed 600 18px, muted until hover. The current page is marked like a platform indicator: a 4px ink bar under its name.
-- **Mobile:** a hamburger with square caps opens a stacked list of 20px condensed links with hairline dividers and the language switcher.
-- **Footer:** the navy sign band again, name at 34px, haze links, white LinkedIn plate.
+Sticky 56px header: "VK" monogram tile (24px, 6px radius, ink fill) and name on the left; 14px links in muted that go ink on hover; the current page in ink with a 1px ink bar on the header's bottom hairline. Language switcher and theme toggle (18px stroke icons) follow. On phones a menu button opens a stacked list with hairline separators. The footer repeats the links in muted 14px with a secondary LinkedIn button.
 
-### Line Bullet (signature)
-A rounded square in the line's colour carrying its letter in Barlow Condensed 700 (15px in the 24px bullet, 22px in the 36px bullet). It is the line's identity wherever the line is referenced: the map, the board, post signs, filters, the About lines list, cover images.
+### Line Navigation (post footer)
+At the end of a post: the line's large bullet and name, a horizontal strip of its stations on a 3px rail (current station enlarged with the station ring, past and posted stations filled, the interchange as an ink-outlined dot), then two bordered stop links for the previous and next station.
 
-### Network Map (signature)
-Six horizontal rails converge on a tall white interchange pill labelled "Today / Multi-tenant SaaS". Stations with a post are ink links; stations without one are muted. Hovering or focusing any part of a line dims the other five to 0.22 opacity over 200ms.
+### Table of Contents
+A thin vertical track in the post's line colour (45% mix) with small open dots; the current section's dot fills and takes the ring. Labelled "On this page" in the mono label style.
 
-### Strip Map (signature)
-A vertical rail with ticks: used for the phone map, the post's line navigation ("Previous station / Next station", ending at the interchange), the table of contents (current section marked with the ink ring), and the side-projects branch line in neutral grey.
+### The Network Map (signature)
+Six rows on the dot-grid panel converging on the interchange pill, labelled "Today" with the hub name in muted. Hovering or focusing any part of a line brings it forward and dims the others to 18% opacity over 220ms (cubic-bezier(0.16, 1, 0.3, 1)); reduced motion removes the transition. Content is always visible by default.
 
-### Departure Board (signature)
-The yellow field with a 3px board-ink rule under its column heads (date, line, post, read) and translucent rules between rows. Desktop columns are 7.5rem date, 3rem bullet, flexible title (Barlow 600 18px), 5.5rem minutes; on phones the bullet leads and date and minutes sit under the title.
-
-### Post Sign and Covers
-A post opens on a navy sign: a back link to Writing with the arrow, the post's line bullet with its line and station name, the title at display scale, the description in haze, and date and reading time. Cover images (1200 by 630) and diagrams are drawn in the same world: title on navy with the post's line drawn underneath and its station marked, in Barlow and Barlow Condensed.
+### Generated Art
+Cover images (`scripts/generate-covers.mjs`, 1200×630) and diagrams (`scripts/diagrams/`) use the same world: ground #08090a, the masthead glow, a 24px dot grid, Geist and Geist Mono embedded, bullets, a 4px strip map ending at an ink-outlined interchange.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** open every page with the navy sign band and its title in white Barlow Condensed 700.
-- **Do** give each line exactly one colour and use it for that line's rails, ticks, bullet, markers and cover, nothing else.
-- **Do** list posts only on the departure board, with date, line bullet, title and minutes.
-- **Do** mark the present with the ink-ringed white interchange and unbuilt work with a dashed rail ending in an open circle.
-- **Do** use the one SVG arrow for direction and calls to action.
-- **Do** keep rails 6px, plates 4px and bullets 5px or 7px.
-- **Do** keep content visible by default; the only motion is the 200ms line highlight, off under reduced motion.
+- **Do** treat each line colour as data: use it only where its line is meant (rails, dots, bullets, a post's own markers and TOC).
+- **Do** fill a station dot only when that station links to a post; leave it open otherwise.
+- **Do** run every line into the single "Today" interchange, drawn in ink, and dash only work still being built.
+- **Do** build structure from 1px hairlines and 12px bordered panels on the near-black ground.
+- **Do** use the one SVG arrow (`Arrow.astro`, square-ended, stroke 3) for every directional cue, flipped for "back".
+- **Do** keep the primary button for LinkedIn; everything else is secondary or a plain muted link.
+- **Do** keep dark as the default and change themes by swapping tokens only.
 
 ### Don't:
-- **Don't** use shadows, glows or gradients; the only gradient is the dashed under-construction rail.
-- **Don't** use a line colour as decoration, an accent, a button fill or a section background.
-- **Don't** put eyebrow or kicker labels above headings.
-- **Don't** put coloured side borders on cards or panels, and don't build card grids.
-- **Don't** use text arrow glyphs; use the SVG arrow.
-- **Don't** set anything but code in mono.
-- **Don't** dash a rail or draw an interchange circle for style; both carry meaning.
-- **Don't** return to the near-black console with a neon accent, or a hero plus card grid.
+- **Don't** add colour bands, tinted sections, sign-style navy headers or a yellow board; that was the first rendition and it read as dated.
+- **Don't** introduce a saturated colour outside the six lines, or use a line colour as decoration.
+- **Don't** use Geist Mono for headings, buttons, navigation or uppercase eyebrows.
+- **Don't** add shadows to panels, buttons or cards; the station ring is the only one.
+- **Don't** use text-glyph arrows (→, ›) or a second icon style for direction.
+- **Don't** let anything scroll horizontally at 320px.

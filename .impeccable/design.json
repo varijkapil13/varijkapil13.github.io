@@ -1,617 +1,531 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-17T22:04:05+00:00",
+  "generatedAt": "2026-10-17T22:17:21+00:00",
   "title": "Design System: varij.dev",
   "extensions": {
+    "themes": {
+      "default": "dark",
+      "darkSelector": ".dark",
+      "lightSelector": ":root",
+      "note": "Frontmatter carries dark values; each colorMeta entry carries its light value. Dark is set on <html> and a visitor's choice is stored in localStorage.theme."
+    },
     "colorMeta": {
-      "map-ground": {
+      "ground": {
         "role": "neutral",
-        "displayName": "Map White",
-        "canonical": "#ffffff",
+        "displayName": "Near-Black Ground",
+        "canonical": "#08090a",
         "cssVar": "--bg",
-        "dark": "#0a111c",
-        "oklch": "oklch(100.0% 0.000 89.9)",
+        "light": "#ffffff",
+        "oklch": "oklch(13.9% 0.003 246.3)",
+        "usage": "Page background; header at 80% with blur; interchange centre.",
         "tonalRamp": [
-          "oklch(15% 0.000 89.9)",
-          "oklch(26% 0.000 89.9)",
-          "oklch(37% 0.000 89.9)",
-          "oklch(48% 0.000 89.9)",
-          "oklch(59% 0.000 89.9)",
-          "oklch(70% 0.000 89.9)",
-          "oklch(82% 0.000 89.9)",
-          "oklch(95% 0.000 89.9)"
+          "oklch(15% 0.003 246.3)",
+          "oklch(26% 0.003 246.3)",
+          "oklch(37% 0.003 246.3)",
+          "oklch(48% 0.003 246.3)",
+          "oklch(59% 0.003 246.3)",
+          "oklch(70% 0.003 246.3)",
+          "oklch(82% 0.003 246.3)",
+          "oklch(95% 0.003 246.3)"
         ]
       },
-      "map-panel": {
+      "panel": {
         "role": "neutral",
-        "displayName": "Platform Grey",
-        "canonical": "#f3f4f6",
+        "displayName": "Raised Graphite",
+        "canonical": "#0f1011",
         "cssVar": "--panel",
-        "dark": "#111b2b",
-        "oklch": "oklch(96.7% 0.003 264.5)",
+        "light": "#fafafa",
+        "oklch": "oklch(17.2% 0.003 248.0)",
+        "usage": "Bordered panels, inline code, open station dots, secondary hover.",
         "tonalRamp": [
-          "oklch(15% 0.003 264.5)",
-          "oklch(26% 0.003 264.5)",
-          "oklch(37% 0.003 264.5)",
-          "oklch(48% 0.003 264.5)",
-          "oklch(59% 0.003 264.5)",
-          "oklch(70% 0.003 264.5)",
-          "oklch(82% 0.003 264.5)",
-          "oklch(95% 0.003 264.5)"
+          "oklch(15% 0.003 248.0)",
+          "oklch(26% 0.003 248.0)",
+          "oklch(37% 0.003 248.0)",
+          "oklch(48% 0.003 248.0)",
+          "oklch(59% 0.003 248.0)",
+          "oklch(70% 0.003 248.0)",
+          "oklch(82% 0.003 248.0)",
+          "oklch(95% 0.003 248.0)"
         ]
       },
-      "map-line": {
+      "hairline": {
         "role": "neutral",
         "displayName": "Hairline",
-        "canonical": "#d8dbe0",
+        "canonical": "#1d1e21",
         "cssVar": "--line",
-        "dark": "#233148",
-        "oklch": "oklch(89.1% 0.008 260.7)",
+        "light": "#ebebeb",
+        "oklch": "oklch(23.5% 0.006 271.2)",
+        "usage": "Every divider, panel border and table row.",
         "tonalRamp": [
-          "oklch(15% 0.008 260.7)",
-          "oklch(26% 0.008 260.7)",
-          "oklch(37% 0.008 260.7)",
-          "oklch(48% 0.008 260.7)",
-          "oklch(59% 0.008 260.7)",
-          "oklch(70% 0.008 260.7)",
-          "oklch(82% 0.008 260.7)",
-          "oklch(95% 0.008 260.7)"
+          "oklch(15% 0.006 271.2)",
+          "oklch(26% 0.006 271.2)",
+          "oklch(37% 0.006 271.2)",
+          "oklch(48% 0.006 271.2)",
+          "oklch(59% 0.006 271.2)",
+          "oklch(70% 0.006 271.2)",
+          "oklch(82% 0.006 271.2)",
+          "oklch(95% 0.006 271.2)"
         ]
       },
-      "map-line-strong": {
+      "hairline-strong": {
         "role": "neutral",
-        "displayName": "Side-Line Grey",
-        "canonical": "#9aa1ab",
+        "displayName": "Strong Hairline",
+        "canonical": "#2e3035",
         "cssVar": "--line-strong",
-        "dark": "#4a5b77",
-        "oklch": "oklch(70.7% 0.017 257.2)",
+        "light": "#d4d4d4",
+        "oklch": "oklch(30.9% 0.009 268.4)",
+        "usage": "Secondary-button border, table header rule, quiet side tracks.",
         "tonalRamp": [
-          "oklch(15% 0.017 257.2)",
-          "oklch(26% 0.017 257.2)",
-          "oklch(37% 0.017 257.2)",
-          "oklch(48% 0.017 257.2)",
-          "oklch(59% 0.017 257.2)",
-          "oklch(70% 0.017 257.2)",
-          "oklch(82% 0.017 257.2)",
-          "oklch(95% 0.017 257.2)"
+          "oklch(15% 0.009 268.4)",
+          "oklch(26% 0.009 268.4)",
+          "oklch(37% 0.009 268.4)",
+          "oklch(48% 0.009 268.4)",
+          "oklch(59% 0.009 268.4)",
+          "oklch(70% 0.009 268.4)",
+          "oklch(82% 0.009 268.4)",
+          "oklch(95% 0.009 268.4)"
         ]
       },
       "ink": {
         "role": "neutral",
-        "displayName": "Ink",
-        "canonical": "#101318",
+        "displayName": "Paper Ink",
+        "canonical": "#f4f5f6",
         "cssVar": "--fg",
-        "dark": "#e9eef6",
-        "oklch": "oklch(18.6% 0.011 260.6)",
+        "light": "#0a0a0a",
+        "oklch": "oklch(97.0% 0.002 247.8)",
+        "usage": "Headings, emphasis, primary-button fill, interchange outline.",
         "tonalRamp": [
-          "oklch(15% 0.011 260.6)",
-          "oklch(26% 0.011 260.6)",
-          "oklch(37% 0.011 260.6)",
-          "oklch(48% 0.011 260.6)",
-          "oklch(59% 0.011 260.6)",
-          "oklch(70% 0.011 260.6)",
-          "oklch(82% 0.011 260.6)",
-          "oklch(95% 0.011 260.6)"
+          "oklch(15% 0.002 247.8)",
+          "oklch(26% 0.002 247.8)",
+          "oklch(37% 0.002 247.8)",
+          "oklch(48% 0.002 247.8)",
+          "oklch(59% 0.002 247.8)",
+          "oklch(70% 0.002 247.8)",
+          "oklch(82% 0.002 247.8)",
+          "oklch(95% 0.002 247.8)"
         ]
       },
       "ink-muted": {
         "role": "neutral",
-        "displayName": "Ink Muted",
-        "canonical": "#565d68",
+        "displayName": "Graphite Muted",
+        "canonical": "#8b8f98",
         "cssVar": "--muted",
-        "dark": "#9aa7bb",
-        "oklch": "oklch(47.6% 0.020 259.4)",
+        "light": "#666670",
+        "oklch": "oklch(65.0% 0.014 266.6)",
+        "usage": "Leads, metadata, unposted stations, mono labels.",
         "tonalRamp": [
-          "oklch(15% 0.020 259.4)",
-          "oklch(26% 0.020 259.4)",
-          "oklch(37% 0.020 259.4)",
-          "oklch(48% 0.020 259.4)",
-          "oklch(59% 0.020 259.4)",
-          "oklch(70% 0.020 259.4)",
-          "oklch(82% 0.020 259.4)",
-          "oklch(95% 0.020 259.4)"
+          "oklch(15% 0.014 266.6)",
+          "oklch(26% 0.014 266.6)",
+          "oklch(37% 0.014 266.6)",
+          "oklch(48% 0.014 266.6)",
+          "oklch(59% 0.014 266.6)",
+          "oklch(70% 0.014 266.6)",
+          "oklch(82% 0.014 266.6)",
+          "oklch(95% 0.014 266.6)"
         ]
       },
-      "link-blue": {
-        "role": "neutral",
-        "displayName": "Link Blue",
-        "canonical": "#0060a8",
+      "accent": {
+        "role": "primary",
+        "displayName": "Signal Blue",
+        "canonical": "#8ab4ff",
         "cssVar": "--accent",
-        "dark": "#6cb4ff",
-        "oklch": "oklch(48.2% 0.138 250.3)",
+        "light": "#2563eb",
+        "oklch": "oklch(76.9% 0.117 261.6)",
+        "usage": "Link hover, focus ring, selection. Never a fill.",
         "tonalRamp": [
-          "oklch(15% 0.138 250.3)",
-          "oklch(26% 0.138 250.3)",
-          "oklch(37% 0.138 250.3)",
-          "oklch(48% 0.138 250.3)",
-          "oklch(59% 0.138 250.3)",
-          "oklch(70% 0.138 250.3)",
-          "oklch(82% 0.138 250.3)",
-          "oklch(95% 0.138 250.3)"
+          "oklch(15% 0.117 261.6)",
+          "oklch(26% 0.117 261.6)",
+          "oklch(37% 0.117 261.6)",
+          "oklch(48% 0.117 261.6)",
+          "oklch(59% 0.117 261.6)",
+          "oklch(70% 0.117 261.6)",
+          "oklch(82% 0.117 261.6)",
+          "oklch(95% 0.117 261.6)"
         ]
       },
       "code-ground": {
         "role": "neutral",
-        "displayName": "Tunnel",
-        "canonical": "#12161d",
+        "displayName": "Code Night",
+        "canonical": "#0d0e10",
         "cssVar": "--code-bg",
-        "dark": "#070c14",
-        "oklch": "oklch(19.9% 0.015 261.6)",
+        "light": "#0b0c0e",
+        "oklch": "oklch(16.4% 0.005 264.4)",
+        "usage": "Fenced code blocks; dark in both themes.",
         "tonalRamp": [
-          "oklch(15% 0.015 261.6)",
-          "oklch(26% 0.015 261.6)",
-          "oklch(37% 0.015 261.6)",
-          "oklch(48% 0.015 261.6)",
-          "oklch(59% 0.015 261.6)",
-          "oklch(70% 0.015 261.6)",
-          "oklch(82% 0.015 261.6)",
-          "oklch(95% 0.015 261.6)"
-        ]
-      },
-      "sign-navy": {
-        "role": "primary",
-        "displayName": "Station-Sign Navy",
-        "canonical": "#0b2b5e",
-        "cssVar": "--sign",
-        "dark": "#13366f",
-        "oklch": "oklch(30.0% 0.099 259.7)",
-        "tonalRamp": [
-          "oklch(15% 0.099 259.7)",
-          "oklch(26% 0.099 259.7)",
-          "oklch(37% 0.099 259.7)",
-          "oklch(48% 0.099 259.7)",
-          "oklch(59% 0.099 259.7)",
-          "oklch(70% 0.099 259.7)",
-          "oklch(82% 0.099 259.7)",
-          "oklch(95% 0.099 259.7)"
-        ]
-      },
-      "sign-white": {
-        "role": "primary",
-        "displayName": "Sign White",
-        "canonical": "#ffffff",
-        "cssVar": "--sign-fg",
-        "dark": "#ffffff",
-        "oklch": "oklch(100.0% 0.000 89.9)",
-        "tonalRamp": [
-          "oklch(15% 0.000 89.9)",
-          "oklch(26% 0.000 89.9)",
-          "oklch(37% 0.000 89.9)",
-          "oklch(48% 0.000 89.9)",
-          "oklch(59% 0.000 89.9)",
-          "oklch(70% 0.000 89.9)",
-          "oklch(82% 0.000 89.9)",
-          "oklch(95% 0.000 89.9)"
-        ]
-      },
-      "sign-muted": {
-        "role": "primary",
-        "displayName": "Sign Haze",
-        "canonical": "#bccbe3",
-        "cssVar": "--sign-muted",
-        "dark": "#c3d2ea",
-        "oklch": "oklch(83.8% 0.037 259.8)",
-        "tonalRamp": [
-          "oklch(15% 0.037 259.8)",
-          "oklch(26% 0.037 259.8)",
-          "oklch(37% 0.037 259.8)",
-          "oklch(48% 0.037 259.8)",
-          "oklch(59% 0.037 259.8)",
-          "oklch(70% 0.037 259.8)",
-          "oklch(82% 0.037 259.8)",
-          "oklch(95% 0.037 259.8)"
-        ]
-      },
-      "board-yellow": {
-        "role": "secondary",
-        "displayName": "Departure Yellow",
-        "canonical": "#ffd400",
-        "cssVar": "--board",
-        "dark": "#050709",
-        "oklch": "oklch(88.1% 0.181 94.0)",
-        "tonalRamp": [
-          "oklch(15% 0.181 94.0)",
-          "oklch(26% 0.181 94.0)",
-          "oklch(37% 0.181 94.0)",
-          "oklch(48% 0.181 94.0)",
-          "oklch(59% 0.181 94.0)",
-          "oklch(70% 0.181 94.0)",
-          "oklch(82% 0.181 94.0)",
-          "oklch(95% 0.181 94.0)"
-        ]
-      },
-      "board-ink": {
-        "role": "secondary",
-        "displayName": "Board Ink",
-        "canonical": "#111111",
-        "cssVar": "--board-fg",
-        "dark": "#ffbf2e",
-        "oklch": "oklch(17.8% 0.000 89.9)",
-        "tonalRamp": [
-          "oklch(15% 0.000 89.9)",
-          "oklch(26% 0.000 89.9)",
-          "oklch(37% 0.000 89.9)",
-          "oklch(48% 0.000 89.9)",
-          "oklch(59% 0.000 89.9)",
-          "oklch(70% 0.000 89.9)",
-          "oklch(82% 0.000 89.9)",
-          "oklch(95% 0.000 89.9)"
-        ]
-      },
-      "board-muted": {
-        "role": "secondary",
-        "displayName": "Board Umber",
-        "canonical": "#4a3f00",
-        "cssVar": "--board-muted",
-        "dark": "#c99a35",
-        "oklch": "oklch(36.8% 0.076 98.0)",
-        "tonalRamp": [
-          "oklch(15% 0.076 98.0)",
-          "oklch(26% 0.076 98.0)",
-          "oklch(37% 0.076 98.0)",
-          "oklch(48% 0.076 98.0)",
-          "oklch(59% 0.076 98.0)",
-          "oklch(70% 0.076 98.0)",
-          "oklch(82% 0.076 98.0)",
-          "oklch(95% 0.076 98.0)"
-        ]
-      },
-      "board-rule": {
-        "role": "secondary",
-        "displayName": "Board Rule",
-        "canonical": "#1111112e",
-        "cssVar": "--board-line",
-        "dark": "#ffbf2e33",
-        "oklch": "oklch(17.8% 0.000 89.9)",
-        "tonalRamp": [
-          "oklch(15% 0.000 89.9)",
-          "oklch(26% 0.000 89.9)",
-          "oklch(37% 0.000 89.9)",
-          "oklch(48% 0.000 89.9)",
-          "oklch(59% 0.000 89.9)",
-          "oklch(70% 0.000 89.9)",
-          "oklch(82% 0.000 89.9)",
-          "oklch(95% 0.000 89.9)"
+          "oklch(15% 0.005 264.4)",
+          "oklch(26% 0.005 264.4)",
+          "oklch(37% 0.005 264.4)",
+          "oklch(48% 0.005 264.4)",
+          "oklch(59% 0.005 264.4)",
+          "oklch(70% 0.005 264.4)",
+          "oklch(82% 0.005 264.4)",
+          "oklch(95% 0.005 264.4)"
         ]
       },
       "line-runtime": {
         "role": "tertiary",
         "displayName": "Runtime Blue",
-        "canonical": "#0067b1",
+        "canonical": "#5b8cff",
         "cssVar": "--line-runtime",
-        "dark": "#3b93e0",
-        "oklch": "oklch(50.5% 0.141 249.6)",
+        "light": "#2563eb",
+        "oklch": "oklch(66.2% 0.179 264.6)",
+        "usage": "Runtime line only.",
         "tonalRamp": [
-          "oklch(15% 0.141 249.6)",
-          "oklch(26% 0.141 249.6)",
-          "oklch(37% 0.141 249.6)",
-          "oklch(48% 0.141 249.6)",
-          "oklch(59% 0.141 249.6)",
-          "oklch(70% 0.141 249.6)",
-          "oklch(82% 0.141 249.6)",
-          "oklch(95% 0.141 249.6)"
+          "oklch(15% 0.179 264.6)",
+          "oklch(26% 0.179 264.6)",
+          "oklch(37% 0.179 264.6)",
+          "oklch(48% 0.179 264.6)",
+          "oklch(59% 0.179 264.6)",
+          "oklch(70% 0.179 264.6)",
+          "oklch(82% 0.179 264.6)",
+          "oklch(95% 0.179 264.6)"
         ]
       },
       "line-data": {
         "role": "tertiary",
         "displayName": "Data Green",
-        "canonical": "#007a4d",
+        "canonical": "#34c48b",
         "cssVar": "--line-data",
-        "dark": "#1fb877",
-        "oklch": "oklch(51.1% 0.117 159.1)",
+        "light": "#0e8a5f",
+        "oklch": "oklch(73.2% 0.146 161.7)",
+        "usage": "Data line only.",
         "tonalRamp": [
-          "oklch(15% 0.117 159.1)",
-          "oklch(26% 0.117 159.1)",
-          "oklch(37% 0.117 159.1)",
-          "oklch(48% 0.117 159.1)",
-          "oklch(59% 0.117 159.1)",
-          "oklch(70% 0.117 159.1)",
-          "oklch(82% 0.117 159.1)",
-          "oklch(95% 0.117 159.1)"
+          "oklch(15% 0.146 161.7)",
+          "oklch(26% 0.146 161.7)",
+          "oklch(37% 0.146 161.7)",
+          "oklch(48% 0.146 161.7)",
+          "oklch(59% 0.146 161.7)",
+          "oklch(70% 0.146 161.7)",
+          "oklch(82% 0.146 161.7)",
+          "oklch(95% 0.146 161.7)"
         ]
       },
       "line-platform": {
         "role": "tertiary",
-        "displayName": "Platform Orange",
-        "canonical": "#ef7d00",
+        "displayName": "Platform Amber",
+        "canonical": "#f5a524",
         "cssVar": "--line-platform",
-        "dark": "#ff9a2e",
-        "oklch": "oklch(70.5% 0.174 55.5)",
+        "light": "#d97706",
+        "oklch": "oklch(78.2% 0.158 72.3)",
+        "usage": "Platform line only.",
         "tonalRamp": [
-          "oklch(15% 0.174 55.5)",
-          "oklch(26% 0.174 55.5)",
-          "oklch(37% 0.174 55.5)",
-          "oklch(48% 0.174 55.5)",
-          "oklch(59% 0.174 55.5)",
-          "oklch(70% 0.174 55.5)",
-          "oklch(82% 0.174 55.5)",
-          "oklch(95% 0.174 55.5)"
+          "oklch(15% 0.158 72.3)",
+          "oklch(26% 0.158 72.3)",
+          "oklch(37% 0.158 72.3)",
+          "oklch(48% 0.158 72.3)",
+          "oklch(59% 0.158 72.3)",
+          "oklch(70% 0.158 72.3)",
+          "oklch(82% 0.158 72.3)",
+          "oklch(95% 0.158 72.3)"
         ]
       },
       "line-operations": {
         "role": "tertiary",
         "displayName": "Operations Violet",
-        "canonical": "#8a3d99",
+        "canonical": "#a78bfa",
         "cssVar": "--line-operations",
-        "dark": "#b06cc2",
-        "oklch": "oklch(50.0% 0.159 320.8)",
+        "light": "#7c3aed",
+        "oklch": "oklch(70.9% 0.159 293.5)",
+        "usage": "Operations line only.",
         "tonalRamp": [
-          "oklch(15% 0.159 320.8)",
-          "oklch(26% 0.159 320.8)",
-          "oklch(37% 0.159 320.8)",
-          "oklch(48% 0.159 320.8)",
-          "oklch(59% 0.159 320.8)",
-          "oklch(70% 0.159 320.8)",
-          "oklch(82% 0.159 320.8)",
-          "oklch(95% 0.159 320.8)"
+          "oklch(15% 0.159 293.5)",
+          "oklch(26% 0.159 293.5)",
+          "oklch(37% 0.159 293.5)",
+          "oklch(48% 0.159 293.5)",
+          "oklch(59% 0.159 293.5)",
+          "oklch(70% 0.159 293.5)",
+          "oklch(82% 0.159 293.5)",
+          "oklch(95% 0.159 293.5)"
         ]
       },
       "line-security": {
         "role": "tertiary",
         "displayName": "Security Red",
-        "canonical": "#d3131c",
+        "canonical": "#f2555a",
         "cssVar": "--line-security",
-        "dark": "#f0484f",
-        "oklch": "oklch(55.1% 0.217 27.1)",
+        "light": "#dc2626",
+        "oklch": "oklch(66.3% 0.193 22.3)",
+        "usage": "Security line only.",
         "tonalRamp": [
-          "oklch(15% 0.217 27.1)",
-          "oklch(26% 0.217 27.1)",
-          "oklch(37% 0.217 27.1)",
-          "oklch(48% 0.217 27.1)",
-          "oklch(59% 0.217 27.1)",
-          "oklch(70% 0.217 27.1)",
-          "oklch(82% 0.217 27.1)",
-          "oklch(95% 0.217 27.1)"
+          "oklch(15% 0.193 22.3)",
+          "oklch(26% 0.193 22.3)",
+          "oklch(37% 0.193 22.3)",
+          "oklch(48% 0.193 22.3)",
+          "oklch(59% 0.193 22.3)",
+          "oklch(70% 0.193 22.3)",
+          "oklch(82% 0.193 22.3)",
+          "oklch(95% 0.193 22.3)"
         ]
       },
       "line-team": {
         "role": "tertiary",
-        "displayName": "Team Brown",
-        "canonical": "#8c6239",
+        "displayName": "Team Bronze",
+        "canonical": "#c99a66",
         "cssVar": "--line-team",
-        "dark": "#b98a5c",
-        "oklch": "oklch(53.1% 0.079 64.1)",
+        "light": "#a16207",
+        "oklch": "oklch(71.9% 0.089 68.5)",
+        "usage": "Team line only.",
         "tonalRamp": [
-          "oklch(15% 0.079 64.1)",
-          "oklch(26% 0.079 64.1)",
-          "oklch(37% 0.079 64.1)",
-          "oklch(48% 0.079 64.1)",
-          "oklch(59% 0.079 64.1)",
-          "oklch(70% 0.079 64.1)",
-          "oklch(82% 0.079 64.1)",
-          "oklch(95% 0.079 64.1)"
+          "oklch(15% 0.089 68.5)",
+          "oklch(26% 0.089 68.5)",
+          "oklch(37% 0.089 68.5)",
+          "oklch(48% 0.089 68.5)",
+          "oklch(59% 0.089 68.5)",
+          "oklch(70% 0.089 68.5)",
+          "oklch(82% 0.089 68.5)",
+          "oklch(95% 0.089 68.5)"
+        ]
+      },
+      "glow": {
+        "role": "neutral",
+        "displayName": "Masthead Glow",
+        "canonical": "rgb(110 140 255 / 0.10)",
+        "cssVar": "--glow",
+        "light": "rgb(37 99 235 / 0.07)",
+        "usage": "Radial light above each masthead only.",
+        "tonalRamp": [
+          "oklch(15% 0.173 270.2)",
+          "oklch(26% 0.173 270.2)",
+          "oklch(37% 0.173 270.2)",
+          "oklch(48% 0.173 270.2)",
+          "oklch(59% 0.173 270.2)",
+          "oklch(70% 0.173 270.2)",
+          "oklch(82% 0.173 270.2)",
+          "oklch(95% 0.173 270.2)"
         ]
       }
     },
     "typographyMeta": {
       "display": {
-        "displayName": "Sign Display",
-        "purpose": "Page names and post titles on the navy sign band; 3.5rem/5rem/6rem on Home, 3.25-5rem inner pages, 2.4-3.75rem post titles."
+        "displayName": "Display",
+        "purpose": "Page title in each masthead; 2.75rem to 4.5rem on Home, smaller on inner pages and posts."
       },
       "headline": {
-        "displayName": "Section Heading",
-        "purpose": "Section headings in the map world; 28px on phones, 34px from 768px. Prose h2 uses 30px."
+        "displayName": "Headline",
+        "purpose": "Section headings; 22px rising to 26px."
       },
       "title": {
-        "displayName": "Line / Item Title",
-        "purpose": "Line names, roles, projects, skill groups (20-24px)."
+        "displayName": "Title",
+        "purpose": "Career roles, project names, prev/next station titles."
       },
-      "station": {
-        "displayName": "Station Label",
-        "purpose": "Station names on the map (15px) and strip maps (16px), board dates and minutes, nav links (18px)."
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Muted line under a title or heading, 58-65ch."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Running text; 17.5px/1.7 in posts in a 700px column, 16-18px elsewhere, tabular figures site-wide."
+        "purpose": "Post prose in a ~700px column, ink mixed 86% toward muted."
+      },
+      "station": {
+        "displayName": "Station",
+        "purpose": "Map station labels; ink with a post, muted without."
       },
       "label": {
-        "displayName": "Button Label",
-        "purpose": "Button and plate text."
+        "displayName": "Data Label",
+        "purpose": "Mono data labels only: dates, read times, column heads, TOC heading."
       },
       "code": {
         "displayName": "Code",
-        "purpose": "Code blocks (13px) and inline code (0.84em) only."
+        "purpose": "Fenced code blocks."
       }
     },
-    "shadows": [],
-    "motion": [
+    "shadows": [
       {
-        "name": "line-highlight",
-        "value": "opacity 200ms cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "Hovering or focusing a line on the network map dims the other lines to 0.22 opacity. The site's one authored moment."
+        "name": "station-ring",
+        "value": "0 0 0 4px color-mix(in srgb, var(--c) 25%, transparent)",
+        "purpose": "Hover/focus halo on a station dot and the current station in line navigation; 3px on the TOC current dot; ink at 15% on the About current role. The only shadow in the system."
+      }
+    ],
+    "surfaces": [
+      {
+        "name": "masthead-glow",
+        "value": "radial-gradient(60% 120% at 50% -20%, var(--glow), transparent 70%)",
+        "purpose": "Faint light from above each page masthead."
       },
       {
-        "name": "state-colour",
-        "value": "color, background-color, border-color 150ms (Tailwind transition-colors default)",
-        "purpose": "Hover on buttons, plates, chips, links."
+        "name": "map-ground",
+        "value": "radial-gradient(color-mix(in srgb, var(--fg) 9%, transparent) 1px, transparent 1px) / 22px 22px",
+        "purpose": "Dot grid under the network map."
+      },
+      {
+        "name": "dashed-rail",
+        "value": "repeating-linear-gradient(90deg, var(--c) 0 6px, transparent 6px 11px)",
+        "purpose": "Track still being built, at 80% opacity."
+      }
+    ],
+    "motion": [
+      {
+        "name": "line-focus",
+        "value": "opacity 220ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Hovered or focused map line comes forward; others dim to 0.18."
+      },
+      {
+        "name": "control",
+        "value": "150ms",
+        "purpose": "Button background, border and opacity changes; link colour."
       },
       {
         "name": "reduced-motion",
-        "value": "transition-duration: 0s; scroll-behavior: auto",
+        "value": "transition-duration: 0s; animation: none",
         "purpose": "Applied under prefers-reduced-motion."
       }
     ],
     "breakpoints": [
       {
         "name": "sm",
-        "value": "640px",
-        "purpose": "Container gutter 16px to 32px; larger display sizes."
+        "value": "640px"
       },
       {
         "name": "md",
         "value": "768px",
-        "purpose": "Network map switches from strip maps to the full grid map; board gets column heads."
+        "purpose": "Map switches from strip maps to the full network"
       },
       {
         "name": "lg",
         "value": "1024px",
-        "purpose": "Post table of contents moves into a sticky sidebar strip map."
+        "purpose": "Post TOC becomes a sticky side column"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
       }
-    ],
-    "theme": {
-      "default": "light",
-      "toggle": ".dark class on <html>, remembered in localStorage",
-      "darkNotes": "Night map: navy-black ground, brighter line colours with dark bullet letters, departure board becomes black with amber type, primary button inverts to a white plate."
-    },
-    "rasters": {
-      "covers": "scripts/generate-covers.mjs draws 1200x630 covers: title on navy sign, the post's line drawn underneath with its station marked, Barlow/Barlow Condensed embedded.",
-      "diagrams": "scripts/diagrams/*.html draw article diagrams with the same line colours, bullets and type."
-    }
+    ]
   },
   "components": [
     {
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Navy sign plate on the white map; the closing LinkedIn call to action.",
-      "html": "<a class=\"ds-btn-primary\" href=\"#\">Message me on LinkedIn <svg width=\"1em\" height=\"1em\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"square\" stroke-linejoin=\"miter\" aria-hidden=\"true\" style=\"vertical-align:-0.12em\"><path d=\"M4 12h15M13 6l6 6-6 6\"/></svg></a>",
-      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 20px;border-radius:4px;font-family: \"Barlow\", \"Noto Sans Devanagari\", system-ui, sans-serif;font-weight:600;font-size:15px;text-decoration:none;transition:background-color .15s,color .15s,border-color .15s;cursor:pointer;border:none;background:var(--sign,#0b2b5e);color:var(--sign-fg,#fff)} .ds-btn-primary:hover{background:var(--fg,#101318)} .ds-btn-primary:focus-visible{outline:3px solid var(--accent,#0060a8);outline-offset:2px}"
-    },
-    {
-      "name": "Sign Plate Button",
-      "kind": "button",
-      "refersTo": "button-plate",
-      "description": "White plate on a navy sign; lights yellow on hover.",
-      "html": "<div style=\"background:#0b2b5e;padding:24px\"><a class=\"ds-btn-plate\" href=\"#\">Message me on LinkedIn <svg width=\"1em\" height=\"1em\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"square\" stroke-linejoin=\"miter\" aria-hidden=\"true\" style=\"vertical-align:-0.12em\"><path d=\"M4 12h15M13 6l6 6-6 6\"/></svg></a></div>",
-      "css": ".ds-btn-plate{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 20px;border-radius:4px;font-family: \"Barlow\", \"Noto Sans Devanagari\", system-ui, sans-serif;font-weight:600;font-size:15px;text-decoration:none;transition:background-color .15s,color .15s,border-color .15s;cursor:pointer;border:none;background:var(--sign-fg,#fff);color:var(--sign,#0b2b5e)} .ds-btn-plate:hover{background:var(--board,#ffd400);color:var(--board-fg,#111)} .ds-btn-plate:focus-visible{outline:3px solid var(--accent,#0060a8);outline-offset:2px}"
+      "description": "Ink-filled button reserved for LinkedIn, the only contact.",
+      "html": "<a class=\"ds-btn ds-btn-primary\" href=\"#\">Message me on LinkedIn <svg class=\"ds-arrow\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"square\" stroke-linejoin=\"miter\" aria-hidden=\"true\"><path d=\"M4 12h15M13 6l6 6-6 6\"/></svg></a>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 16px;border-radius:8px;font:500 14px/1 'Geist Variable',system-ui,sans-serif;text-decoration:none;transition:background-color 150ms,border-color 150ms,opacity 150ms;} .ds-btn-primary{background:var(--fg,#f4f5f6);color:var(--bg,#08090a);} .ds-btn-primary:hover{opacity:.85;} .ds-btn:focus-visible{outline:2px solid var(--accent,#8ab4ff);outline-offset:2px;} .ds-arrow{display:inline-block;width:1em;height:1em;flex-shrink:0;vertical-align:-0.12em;}"
     },
     {
       "name": "Secondary Button",
       "kind": "button",
       "refersTo": "button-secondary",
-      "description": "2px ink outline plate; fills ink on hover.",
-      "html": "<a class=\"ds-btn-secondary\" href=\"#\">About</a>",
-      "css": ".ds-btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 20px;border-radius:4px;font-family: \"Barlow\", \"Noto Sans Devanagari\", system-ui, sans-serif;font-weight:600;font-size:15px;text-decoration:none;transition:background-color .15s,color .15s,border-color .15s;cursor:pointer;border:none;background:transparent;color:var(--fg,#101318);border:2px solid var(--fg,#101318)} .ds-btn-secondary:hover{background:var(--fg,#101318);color:var(--bg,#fff)} .ds-btn-secondary:focus-visible{outline:3px solid var(--accent,#0060a8);outline-offset:2px}"
+      "description": "Hairline-bordered button for every non-contact action.",
+      "html": "<a class=\"ds-btn ds-btn-secondary\" href=\"#\">Read the writing</a>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 16px;border-radius:8px;font:500 14px/1 'Geist Variable',system-ui,sans-serif;text-decoration:none;transition:background-color 150ms,border-color 150ms;} .ds-btn-secondary{border:1px solid var(--line-strong,#2e3035);color:var(--fg,#f4f5f6);background:transparent;} .ds-btn-secondary:hover{background:var(--panel,#0f1011);border-color:var(--muted,#8b8f98);} .ds-btn:focus-visible{outline:2px solid var(--accent,#8ab4ff);outline-offset:2px;}"
     },
     {
-      "name": "Line Bullets",
+      "name": "Line Bullet",
       "kind": "chip",
       "refersTo": "line-bullet",
-      "description": "One rounded square per line, its colour and letter; the line's identity everywhere.",
-      "html": "<span class=\"ds-bullet\" style=\"--c:var(--line-runtime,#0067b1);margin-right:6px\">R</span><span class=\"ds-bullet\" style=\"--c:var(--line-data,#007a4d);margin-right:6px\">D</span><span class=\"ds-bullet p\" style=\"--c:var(--line-platform,#ef7d00);margin-right:6px\">P</span><span class=\"ds-bullet\" style=\"--c:var(--line-operations,#8a3d99);margin-right:6px\">O</span><span class=\"ds-bullet\" style=\"--c:var(--line-security,#d3131c);margin-right:6px\">S</span><span class=\"ds-bullet\" style=\"--c:var(--line-team,#8c6239);margin-right:6px\">T</span>",
-      "css": ".ds-bullet{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:5px;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:700;font-size:15px;line-height:1;color:#fff;background:var(--c);flex-shrink:0} .ds-bullet.p{color:#1b1200}"
+      "description": "Rounded square in a line's colour carrying its letter; labels a line wherever it is named.",
+      "html": "<span class=\"ds-bullet\" style=\"--c:var(--line-runtime,#5b8cff)\">R</span> <span class=\"ds-bullet\" style=\"--c:var(--line-data,#34c48b)\">D</span> <span class=\"ds-bullet\" style=\"--c:var(--line-platform,#f5a524)\">P</span> <span class=\"ds-bullet\" style=\"--c:var(--line-operations,#a78bfa)\">O</span> <span class=\"ds-bullet\" style=\"--c:var(--line-security,#f2555a)\">S</span> <span class=\"ds-bullet\" style=\"--c:var(--line-team,#c99a66)\">T</span>",
+      "css": ".ds-bullet{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:5px;background:var(--c);color:#08090a;font:600 11px/1 'Geist Variable',system-ui,sans-serif;}"
     },
     {
-      "name": "Line Filter Chip",
-      "kind": "chip",
-      "refersTo": "line-filter",
-      "description": "Filter chip on the yellow departure board; pressed state fills board ink.",
-      "html": "<div style=\"background:#ffd400;padding:16px;display:flex;gap:8px\"><button class=\"ds-filter\" aria-pressed=\"true\">All lines</button><button class=\"ds-filter b\" aria-pressed=\"false\"><span class=\"ds-bullet\" style=\"--c:#0067b1\">R</span> Runtime</button></div>",
-      "css": ".ds-bullet{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:5px;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:700;font-size:15px;line-height:1;color:#fff;background:var(--c);flex-shrink:0} .ds-bullet.p{color:#1b1200} .ds-filter{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px;border-radius:4px;border:2px solid #1111113f;background:transparent;color:#111;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:700;font-size:17px;cursor:pointer;transition:border-color .15s,background-color .15s} .ds-filter.b{padding-left:8px} .ds-filter:hover{border-color:#111} .ds-filter[aria-pressed=true]{background:#111;color:#ffd400;border-color:#111} .ds-filter:focus-visible{outline:3px solid #0060a8;outline-offset:2px}"
+      "name": "Panel",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Quiet bordered surface for lists, the map and the closing call.",
+      "html": "<div class=\"ds-panel\"><h3 class=\"ds-panel-h\">Working on something similar?</h3><p class=\"ds-panel-p\">If you are moving a legacy platform to SaaS, I am glad to compare notes.</p></div>",
+      "css": ".ds-panel{border:1px solid var(--line,#1d1e21);background:var(--panel,#0f1011);border-radius:12px;padding:28px 32px;color:var(--fg,#f4f5f6);font-family:'Geist Variable',system-ui,sans-serif;} .ds-panel-h{font-weight:600;font-size:26px;letter-spacing:-0.03em;line-height:1.25;margin:0;} .ds-panel-p{color:var(--muted,#8b8f98);font-size:17px;line-height:1.625;margin:8px 0 0;}"
+    },
+    {
+      "name": "Departure Board Row",
+      "kind": "custom",
+      "refersTo": "panel",
+      "description": "Hairline post list: mono date, line bullet, title, mono read time.",
+      "html": "<div class=\"ds-board\"><div class=\"ds-board-head\"><span>Date</span><span>Line</span><span>Post</span><span>Read</span></div><a class=\"ds-board-row\" href=\"#\"><span class=\"ds-mono\">2025-06-12</span><span class=\"ds-bullet\" style=\"--c:var(--line-runtime,#5b8cff)\">R</span><span class=\"ds-board-t\">From Payara to WildFly to Quarkus</span><span class=\"ds-mono ds-r\">12 min</span></a><a class=\"ds-board-row\" href=\"#\"><span class=\"ds-mono\">2024-09-15</span><span class=\"ds-bullet\" style=\"--c:var(--line-team,#c99a66)\">T</span><span class=\"ds-board-t\">Applying Team Topologies</span><span class=\"ds-mono ds-r\">8 min</span></a></div>",
+      "css": ".ds-board{border:1px solid var(--line,#1d1e21);background:var(--panel,#0f1011);border-radius:12px;padding:0 24px;font-family:'Geist Variable',system-ui,sans-serif;color:var(--fg,#f4f5f6);} .ds-board-head,.ds-board-row{display:grid;grid-template-columns:6.5rem 2rem minmax(0,1fr) 4.5rem;column-gap:.85rem;align-items:baseline;} .ds-board-head{font:400 11.5px 'Geist Mono Variable',ui-monospace,monospace;color:var(--muted,#8b8f98);padding:16px 0 12px;border-bottom:1px solid var(--line,#1d1e21);} .ds-board-head span:last-child,.ds-r{text-align:right;} .ds-board-row{padding:16px 0;color:inherit;text-decoration:none;} .ds-board-row+.ds-board-row{border-top:1px solid var(--line,#1d1e21);} .ds-board-t{font-weight:500;font-size:15.5px;transition:color 150ms;} .ds-board-row:hover .ds-board-t{color:var(--accent,#8ab4ff);} .ds-board-row:focus-visible{outline:2px solid var(--accent,#8ab4ff);outline-offset:2px;} .ds-mono{font:400 12.5px 'Geist Mono Variable',ui-monospace,monospace;color:var(--muted,#8b8f98);} .ds-bullet{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:5px;background:var(--c);color:#08090a;font:600 11px/1 'Geist Variable',system-ui,sans-serif;}"
+    },
+    {
+      "name": "Network Map Line",
+      "kind": "custom",
+      "refersTo": "line-bullet",
+      "description": "One line of the map: 3px rail, filled dots for posted stations, open for unposted, into the ink interchange, dashed past it.",
+      "html": "<div class=\"ds-map\" style=\"--c:var(--line-data,#34c48b)\"><span class=\"ds-st\">Oracle</span><a class=\"ds-st is-post\" href=\"#\">Pooling</a><a class=\"ds-st is-post\" href=\"#\">PostgreSQL</a><span class=\"ds-hub\" aria-hidden=\"true\"></span><span class=\"ds-st is-future\">One DB per service</span></div>",
+      "css": ".ds-map{display:flex;align-items:flex-end;gap:0;padding:12px 16px 20px;background-color:var(--panel,#0f1011);background-image:radial-gradient(color-mix(in srgb,var(--fg,#f4f5f6) 9%,transparent) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line,#1d1e21);border-radius:12px;font:400 12.5px/1.15 'Geist Variable',system-ui,sans-serif;} .ds-st{position:relative;flex:1;text-align:center;padding-bottom:22px;color:var(--muted,#8b8f98);text-decoration:none;} .ds-st.is-post{color:var(--fg,#f4f5f6);transition:color 150ms;} .ds-st.is-post:hover{color:var(--accent,#8ab4ff);} .ds-st::before{content:'';position:absolute;left:0;right:0;bottom:6.5px;height:3px;background:var(--c);} .ds-st:first-child::before{left:50%;} .ds-st::after{content:'';position:absolute;left:calc(50% - 4.5px);bottom:3.5px;width:9px;height:9px;box-sizing:border-box;border-radius:50%;background:var(--panel,#0f1011);border:2px solid var(--c);} .ds-st.is-post::after{background:var(--c);} .ds-st.is-post:hover::after,.ds-st.is-post:focus-visible::after{box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 25%,transparent);} .ds-st.is-future::before{right:50%;background:repeating-linear-gradient(90deg,var(--c) 0 6px,transparent 6px 11px);opacity:.8;} .ds-hub{flex:0 0 16px;height:30px;margin-bottom:0;box-sizing:border-box;border:2px solid var(--fg,#f4f5f6);border-radius:8px;background:var(--panel,#0f1011);position:relative;z-index:1;}"
     },
     {
       "name": "Header Navigation",
       "kind": "nav",
-      "refersTo": "",
-      "description": "White sticky header; current page marked by a 4px ink platform bar.",
-      "html": "<nav class=\"ds-nav\"><a class=\"ds-brand\" href=\"#\"><span class=\"ds-vk\">VK</span>Varij Kapil</a><div class=\"ds-links\"><a class=\"on\" href=\"#\">Home</a><a href=\"#\">Blog</a><a href=\"#\">About</a><a href=\"#\">Projects</a></div></nav>",
-      "css": ".ds-nav{display:flex;align-items:center;justify-content:space-between;height:60px;padding:0 16px;background:var(--bg,#fff);border-bottom:1px solid var(--line,#d8dbe0)} .ds-brand{display:flex;align-items:center;gap:10px;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:700;font-size:21px;color:var(--fg,#101318);text-decoration:none} .ds-vk{width:28px;height:28px;border-radius:5px;background:var(--sign,#0b2b5e);color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center} .ds-links{display:flex;align-self:stretch} .ds-links a{position:relative;display:flex;align-items:center;padding:0 12px;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:600;font-size:18px;color:var(--muted,#565d68);text-decoration:none;transition:color .15s} .ds-links a:hover,.ds-links a.on{color:var(--fg,#101318)} .ds-links a.on::after{content:'';position:absolute;left:12px;right:12px;bottom:-1px;height:4px;background:var(--fg,#101318)} .ds-links a:focus-visible{outline:3px solid var(--accent,#0060a8);outline-offset:2px}"
+      "refersTo": "nav-link",
+      "description": "Sticky translucent header; current page in ink with a 1px bar on the bottom hairline.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-brand\" href=\"#\"><span class=\"ds-mark\">VK</span>Varij Kapil</a><div class=\"ds-links\"><a class=\"ds-link is-active\" href=\"#\" aria-current=\"page\">Home</a><a class=\"ds-link\" href=\"#\">Blog</a><a class=\"ds-link\" href=\"#\">About</a><a class=\"ds-link\" href=\"#\">Projects</a></div></nav>",
+      "css": ".ds-nav{display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 20px;border-bottom:1px solid var(--line,#1d1e21);background:color-mix(in srgb,var(--bg,#08090a) 80%,transparent);backdrop-filter:blur(12px);font-family:'Geist Variable',system-ui,sans-serif;} .ds-brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;letter-spacing:-0.02em;color:var(--fg,#f4f5f6);text-decoration:none;} .ds-mark{width:24px;height:24px;border-radius:6px;background:var(--fg,#f4f5f6);color:var(--bg,#08090a);font-size:10.5px;font-weight:600;display:flex;align-items:center;justify-content:center;} .ds-links{display:flex;align-self:stretch;gap:4px;} .ds-link{position:relative;display:flex;align-items:center;padding:0 12px;font-size:14px;color:var(--muted,#8b8f98);text-decoration:none;transition:color 150ms;} .ds-link:hover,.ds-link.is-active{color:var(--fg,#f4f5f6);} .ds-link.is-active::after{content:'';position:absolute;left:12px;right:12px;bottom:-1px;height:1px;background:var(--fg,#f4f5f6);} .ds-link:focus-visible{outline:2px solid var(--accent,#8ab4ff);outline-offset:2px;border-radius:4px;}"
     },
     {
-      "name": "Station Sign",
+      "name": "Code",
       "kind": "custom",
-      "refersTo": "station-sign",
-      "description": "Navy band that names every page.",
-      "html": "<header class=\"ds-sign\"><h1>Varij Kapil</h1><p class=\"t\">Head of Backend Engineering &amp; Operations</p><p class=\"m\">Bonn, Germany &nbsp; 10+ years</p></header>",
-      "css": ".ds-sign{background:var(--sign,#0b2b5e);color:var(--sign-fg,#fff);padding:40px 32px 36px} .ds-sign h1{margin:0;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:700;font-size:4rem;line-height:.98;letter-spacing:-.01em} .ds-sign .t{margin:12px 0 0;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:600;font-size:26px} .ds-sign .m{margin:10px 0 0;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:600;font-size:18px;color:var(--sign-muted,#bccbe3)}"
-    },
-    {
-      "name": "Departure Board",
-      "kind": "custom",
-      "refersTo": "departure-board",
-      "description": "Yellow field listing posts: date, line bullet, title, minutes.",
-      "html": "<div class=\"ds-board\"><div class=\"h\"><span>Date</span><span>Line</span><span>Post</span><span style=\"text-align:right\">Read</span></div><a class=\"r\" href=\"#\"><span class=\"d\">2025-06-12</span><span><span class=\"ds-bullet\" style=\"--c:#0067b1\">R</span></span><span class=\"ti\">From Payara to WildFly to Quarkus</span><span class=\"m\">12 min</span></a><a class=\"r\" href=\"#\"><span class=\"d\">2025-04-02</span><span><span class=\"ds-bullet\" style=\"--c:#007a4d\">D</span></span><span class=\"ti\">Oracle to PostgreSQL migration</span><span class=\"m\">9 min</span></a></div>",
-      "css": ".ds-bullet{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:5px;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:700;font-size:15px;line-height:1;color:#fff;background:var(--c);flex-shrink:0} .ds-bullet.p{color:#1b1200} .ds-board{background:var(--board,#ffd400);color:var(--board-fg,#111);padding:24px;font-family: \"Barlow\", \"Noto Sans Devanagari\", system-ui, sans-serif;} .ds-board .h,.ds-board .r{display:grid;grid-template-columns:7.5rem 3rem minmax(0,1fr) 5.5rem;column-gap:.9rem;align-items:baseline} .ds-board .h{font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:700;font-size:15px;padding-bottom:8px;border-bottom:3px solid var(--board-fg,#111)} .ds-board .r{padding:14px 0;border-bottom:1px solid #1111112e;color:inherit;text-decoration:none} .ds-board .d,.ds-board .m{font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:600;font-size:19px} .ds-board .m{text-align:right;color:var(--board-muted,#4a3f00)} .ds-board .ti{font-weight:600;font-size:18px} .ds-board .r:hover .ti{text-decoration:underline;text-underline-offset:2px} .ds-board .r:focus-visible{outline:3px solid #0060a8;outline-offset:2px}"
-    },
-    {
-      "name": "Strip Map",
-      "kind": "custom",
-      "refersTo": "",
-      "description": "Vertical rail with ticks; the interchange ring marks Today and a dashed segment with an open circle marks a station still being built.",
-      "html": "<ol class=\"ds-strip\" style=\"--c:#007a4d\"><li><span class=\"mu\">Oracle</span></li><li><a href=\"#\">PostgreSQL</a></li><li><a href=\"#\">Tuning</a></li><li class=\"hub\"><strong>Today</strong></li><li class=\"fut\"><span class=\"mu\">One database per service</span></li></ol>",
-      "css": ".ds-strip{list-style:none;margin:0;padding:0;font-family: \"Barlow Condensed\", \"Noto Sans Devanagari\", \"Barlow\", system-ui, sans-serif;font-weight:600;font-size:16px;line-height:1.1} .ds-strip li{position:relative;padding-left:26px;min-height:34px} .ds-strip li::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:6px;background:var(--c)} .ds-strip li:first-child::before{top:6px} .ds-strip li::after{content:'';position:absolute;left:7px;top:6px;width:14px;height:5px;background:var(--c)} .ds-strip .hub::after{left:0;top:0;width:20px;height:20px;box-sizing:border-box;border-radius:50%;background:var(--bg,#fff);border:4px solid var(--fg,#101318)} .ds-strip .fut{padding-top:9px} .ds-strip .fut::before{bottom:auto;height:12px;background:repeating-linear-gradient(180deg,var(--c) 0 8px,transparent 8px 13px)} .ds-strip .fut::after{left:3px;top:10px;width:14px;height:14px;box-sizing:border-box;border-radius:50%;background:var(--bg,#fff);border:3px solid var(--c)} .ds-strip a{color:var(--fg,#101318);text-decoration:underline;text-decoration-color:var(--line-strong,#9aa1ab);text-underline-offset:2px} .ds-strip .mu{color:var(--muted,#565d68)}"
-    },
-    {
-      "name": "Inline Code",
-      "kind": "custom",
-      "refersTo": "code-inline",
-      "description": "The only place mono appears in running text.",
-      "html": "<p style=\"font-family:Barlow,sans-serif;font-size:17px\">Set <code class=\"ds-code\">quarkus.datasource.jdbc.url</code> per tenant.</p>",
-      "css": ".ds-code{font-family:\"Geist Mono Variable\",ui-monospace,monospace;font-size:.84em;padding:2px 6px;border-radius:4px;background:var(--panel,#f3f4f6);color:var(--fg,#101318)}"
+      "refersTo": "code-block",
+      "description": "Dark code block in both themes; inline code on panel.",
+      "html": "<p class=\"ds-p\">Set <code class=\"ds-ic\">quarkus.datasource.jdbc.max-size</code> per tenant.</p><pre class=\"ds-pre\"><code>@ApplicationScoped\npublic class TenantResolver {}</code></pre>",
+      "css": ".ds-p{font:400 16.5px/1.75 'Geist Variable',system-ui,sans-serif;color:var(--fg,#f4f5f6);} .ds-ic{font:400 0.84em 'Geist Mono Variable',ui-monospace,monospace;background:var(--panel,#0f1011);padding:2px 6px;border-radius:4px;} .ds-pre{background:var(--code-bg,#0d0e10);border:1px solid var(--line,#1d1e21);border-radius:10px;padding:16px;overflow-x:auto;font:400 13px/1.625 'Geist Mono Variable',ui-monospace,monospace;color:#f4f5f6;}"
     }
   ],
   "narrative": {
     "northStar": "The Network Map",
-    "overview": "The platform's modernization, from a Java EE monolith to a multi-tenant SaaS platform, is drawn as a transit network. Six coloured lines (Runtime, Data, Platform, Operations, Security, Team) carry stations, each station a migration step and usually a post, and every line runs into one tall interchange marked \"Today\". The site borrows the whole vocabulary of a U-Bahn or DB network diagram: navy station signs name every page, line bullets mark which line a thing belongs to, station ticks and strip maps show sequence, and a yellow departure board lists the writing. Lines still being built are dashed and end in an open circle.\n\nThe ground is a white map with ink black type. Colour is spent almost entirely on data: the six line colours appear only where they identify a line, and the navy and yellow fields are structural bands, not accents. Density is that of a real wayfinding system: compact condensed signage over readable Barlow body text, flat planes, hard edges with small plate radii, and no ornament that does not mean something on the map. Motion is a single authored moment: pointing at a line on the map brings it forward and dims the others (opacity to 0.22, 200ms, cubic-bezier(0.16, 1, 0.3, 1)); everything is visible by default and reduced motion turns transitions off.\n\nThe world explicitly refuses the developer-blog default it replaced: a near-black console with a neon accent, a hero and a card grid.",
+    "overview": "The site draws one platform's modernization as a transit network. Every migration is a station on one of six coloured lines (Runtime, Data, Platform, Operations, Security, Team), and every line runs into a single interchange: today's multi-tenant SaaS platform. Lines still being built continue past it as dashed track. The map is the memorable thing; everything else exists to get a reader into a post and through it.\n\nThe network is now rendered quietly, in the register of Linear and Vercel. The first rendition (navy sign bands, a yellow departure board, condensed signage type) read as dated, so the world keeps its map and drops its paint. Dark is the default theme: a near-black ground, hairline borders, quiet bordered panels, Geist set tight, and a faint light falling from above each page masthead. The map sits in a panel on a plotted dot grid. The six line colours are the only saturated colour anywhere, and they always mean a line.\n\nDensity is calm and editorial: generous section spacing, a 1120px container, one column of reading text at about 700px. The world rejects heavy colour fields, shadows as decoration, neon accents and the hero-plus-card-grid template.",
     "keyCharacteristics": [
-      "Navy station-sign band (white Barlow Condensed) opens every page and closes it as the footer.",
-      "Six saturated line colours, one per line, used as categorical data only.",
-      "Line bullets: rounded squares in the line's colour carrying its letter (R, D, P, O, S, T).",
-      "Rails 6px thick with square station ticks; the interchange is a white pill with a heavy ink outline.",
-      "Dashed rails and open circles mean \"still being built\"; the interchange means \"today\".",
-      "Yellow departure-board field is the one place lists of posts appear.",
-      "Flat: no shadows, no gradients, no glass."
+      "Dark-first near-black ground with a light theme that swaps tokens, not structure",
+      "Hairlines (1px) and 12px bordered panels instead of colour bands or shadows",
+      "Six categorical line colours as the only saturation on a page",
+      "Thin 3px rails, 9px station dots, a hairline interchange pill",
+      "Geist for everything readable; Geist Mono only for code and data labels",
+      "One authored motion: the hovered line comes forward and the rest dim"
     ],
     "rules": [
       {
-        "name": "The Line Colour Is Data Rule",
-        "body": "Each of the six line colours belongs to exactly one line and appears only where it identifies that line: rails, ticks, bullets, list markers, a post's strip map. Never use a line colour for decoration, emphasis, buttons or backgrounds, and never introduce a seventh hue on the map.",
+        "name": "The Line Colours Are Data Rule",
+        "body": "The six line colours are categorical: each one means its line and nothing else. They are the only saturated colour on any page. Never use one as a decorative accent, a button fill or a section background, and never introduce a seventh saturated hue.",
         "section": "colors"
       },
       {
-        "name": "The Sign Names the Page Rule",
-        "body": "Every page opens with a full-width navy sign band carrying its title in white Barlow Condensed; the footer closes on the same band. Navy is for naming, not for panels or cards inside content.",
+        "name": "The Hairline Rule",
+        "body": "Structure comes from 1px hairlines and quiet bordered panels, not from colour fields. No full-bleed colour bands, no tinted section backgrounds; the masthead glow is the only gradient and it stays below 10% opacity.",
         "section": "colors"
       },
       {
-        "name": "The Departure Board Rule",
-        "body": "Lists of posts appear on the yellow (night: black and amber) departure board and nowhere else. Board rows read date, line bullet, title, minutes; filtering happens with line-bullet chips on the board itself.",
-        "section": "colors"
-      },
-      {
-        "name": "The Signage Face Rule",
-        "body": "Anything that names a place (a page, a line, a station, a section, a nav destination) is set in Barlow Condensed. Running text, descriptions and button labels are Barlow.",
+        "name": "The Mono Is Data Rule",
+        "body": "Geist Mono appears only for code and for data labels: dates, read times, column heads, table headers. Never for headings, buttons, navigation or prose, and never uppercase-tracked as an eyebrow.",
         "section": "typography"
       },
       {
-        "name": "The Mono Is Code Rule",
-        "body": "Geist Mono appears only in code. Dates, counts and metadata use condensed signage with tabular figures, never mono.",
-        "section": "typography"
-      },
-      {
-        "name": "The Printed Map Rule",
-        "body": "Surfaces are printed, not lifted. No box-shadow, no glow, no blur, no gradients. The only gradient-built mark is the dashed rail of a station still being built (a repeating hard-stop gradient, 10px dash, 6px gap on the map; 8px/5px vertical on strip maps).",
+        "name": "The No-Shadow Rule",
+        "body": "Nothing casts a shadow. The only box-shadow in the system is the station ring, and it appears only as a response to hover, focus or \"you are here\".",
         "section": "elevation"
       },
       {
-        "name": "The Interchange Is Today Rule",
-        "body": "The ink-ringed white circle or pill means the present: the multi-tenant SaaS platform, or the reader's current station. Use it for nothing else.",
+        "name": "The Filled Station Rule",
+        "body": "A filled dot is a station with a post and is a link; an open dot (panel-coloured centre) is a station without one. Never fill a dot that does not lead to a post.",
         "section": "shapes"
       },
       {
-        "name": "The Dashed Is Unbuilt Rule",
-        "body": "A dashed rail ending in an open circle means a station still under construction. Solid rails are built history. Never dash a line for style.",
+        "name": "The Interchange Is Today Rule",
+        "body": "Every line runs into one interchange, and it means the present: today's multi-tenant SaaS platform. It is drawn in ink, never in a line colour, and nothing sits beyond it except work still being built.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Dashed Track Rule",
+        "body": "Dashed rail and open dots past the interchange mean \"still being built\". Never dash a line for decoration, and never draw finished work dashed.",
+        "section": "shapes"
+      },
+      {
+        "name": "The One Arrow Rule",
+        "body": "Every directional cue is the same inline SVG arrow (`Arrow.astro`: square caps, miter joins, stroke 3, 1em), rotated for \"back\". No text-glyph arrows, chevrons or second icon set for direction.",
         "section": "shapes"
       }
     ],
     "dos": [
-      "Do open every page with the navy sign band and its title in white Barlow Condensed 700.",
-      "Do give each line exactly one colour and use it for that line's rails, ticks, bullet, markers and cover, nothing else.",
-      "Do list posts only on the departure board, with date, line bullet, title and minutes.",
-      "Do mark the present with the ink-ringed white interchange and unbuilt work with a dashed rail ending in an open circle.",
-      "Do use the one SVG arrow for direction and calls to action.",
-      "Do keep rails 6px, plates 4px and bullets 5px or 7px.",
-      "Do keep content visible by default; the only motion is the 200ms line highlight, off under reduced motion."
+      "Do treat each line colour as data: use it only where its line is meant (rails, dots, bullets, a post's own markers and TOC).",
+      "Do fill a station dot only when that station links to a post; leave it open otherwise.",
+      "Do run every line into the single \"Today\" interchange, drawn in ink, and dash only work still being built.",
+      "Do build structure from 1px hairlines and 12px bordered panels on the near-black ground.",
+      "Do use the one SVG arrow (`Arrow.astro`, square-ended, stroke 3) for every directional cue, flipped for \"back\".",
+      "Do keep the primary button for LinkedIn; everything else is secondary or a plain muted link.",
+      "Do keep dark as the default and change themes by swapping tokens only."
     ],
     "donts": [
-      "Don't use shadows, glows or gradients; the only gradient is the dashed under-construction rail.",
-      "Don't use a line colour as decoration, an accent, a button fill or a section background.",
-      "Don't put eyebrow or kicker labels above headings.",
-      "Don't put coloured side borders on cards or panels, and don't build card grids.",
-      "Don't use text arrow glyphs; use the SVG arrow.",
-      "Don't set anything but code in mono.",
-      "Don't dash a rail or draw an interchange circle for style; both carry meaning.",
-      "Don't return to the near-black console with a neon accent, or a hero plus card grid."
+      "Don't add colour bands, tinted sections, sign-style navy headers or a yellow board; that was the first rendition and it read as dated.",
+      "Don't introduce a saturated colour outside the six lines, or use a line colour as decoration.",
+      "Don't use Geist Mono for headings, buttons, navigation or uppercase eyebrows.",
+      "Don't add shadows to panels, buttons or cards; the station ring is the only one.",
+      "Don't use text-glyph arrows (→, ›) or a second icon style for direction.",
+      "Don't let anything scroll horizontally at 320px."
     ]
   }
 }
